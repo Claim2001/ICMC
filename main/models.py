@@ -8,7 +8,6 @@ from django.contrib.auth.models import AbstractUser
 # TODO: create normal README so people can see what I am doing
 
 class Owner(AbstractUser):
-    name = models.CharField(max_length=250)
     second_name = models.CharField(max_length=250)
     gender = models.CharField(max_length=20, choices=[("male", "Мужской"),
                                                       ("female", "Женский")])
