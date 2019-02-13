@@ -9,8 +9,8 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager
 
 class Owner(AbstractUser):
     second_name = models.CharField(max_length=250)
-    gender = models.CharField(max_length=20, choices=[("male", "Мужской"),
-                                                      ("female", "Женский")])
+    gender = models.CharField(max_length=20, choices=[("Мужской", "Мужской"),
+                                                      ("Женский", "Женский")])
     name_of_organiszation = models.CharField(max_length=250)
     address = models.CharField(max_length=300)
     mail_index = models.CharField(max_length=100)
