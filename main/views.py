@@ -34,3 +34,11 @@ class Login(View):
             return redirect("main:index")
         
         return redirect("main:login")
+
+
+class SignUp(View):
+    def get(self, request):
+        return render(request, "main/signup.html", {})
+
+    def post(self, request):
+        return HttpResponse("soon")
