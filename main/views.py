@@ -1,6 +1,9 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views.generic import View
+from django.contrib.auth import authenticate, login
+
+from .models import Owner
 
 
 def index(request):
@@ -20,4 +23,14 @@ class Login(View):
         return render(request, "main/login.html", {})
 
     def post(self, request):
-        return HttpResponse("soon...")
+        email = request.POST['email']
+        password = request.POST['password']
+
+        user = Owner.objects.get(email=email)
+        user_authenticated = authenticate(username=user.username, password=password)
+        
+        if user_authenticated is not None:
+            login(request, user_authenticated)
+            return redirect("main:index")
+        
+        return redirect("main:login")

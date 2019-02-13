@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, BaseUserManager
 
 # TODO: read whole documentation and build the skeleton for the project
 # TODO: build models
@@ -18,7 +18,7 @@ class Owner(AbstractUser):
     inn = models.CharField(max_length=250)
     country = models.CharField(max_length=250)
     city = models.CharField(max_length=250)
-    email = models.EmailField(max_length=300)
+    email = models.EmailField(max_length=300, unique=True, null=False)
     is_inspector = models.BooleanField(default=False)
 
     def __str__(self):
