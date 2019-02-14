@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, QueryDict
 from django.views.generic import View
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 
 from .models import Owner
 from .forms import UserForm
@@ -14,8 +14,13 @@ def index(request):
             return HttpResponse("Inspector!")
 
         # redirect to user page
-        return HttpResponse(f"Welcome, { request.user.username }")
+        return render(request, "main/user.html", { "user": request.user })
 
+    return redirect("main:login")
+
+
+def logout_user(request):
+    logout(request)
     return redirect("main:login")
 
 
@@ -51,7 +56,7 @@ def remove_useless_elements_from_post(post):
     post_copy.pop("csrfmiddlewaretoken")
     post_copy.pop("password")
 
-    result = {}
+    result = {} # don't know why that worked... really :)
     for key in post_copy:
         result[key] = post_copy[key]
 
@@ -71,7 +76,6 @@ class SignUp(View):
 
         password = request.POST['password']
         user.set_password(password)
-
         user.save()
 
         login(request, user)
