@@ -1,6 +1,7 @@
 <h1>Sigh up</h1>
 
 <form action="" method="POST">
+
     <!-- this is for another shit :( -->
     <!-- <p>Тип и модель <input type="text" placeholder=""></p>
     <p>Название <input type="text" placeholder=""></p>
@@ -29,24 +30,26 @@
     <p>Место прежней регистрации судна <input type="text" placeholder=""></p>
     <p>Место постоянной стоянки судна <input type="text" placeholder=""></p> -->
 
+    {% csrf_token %}
+
     <p>
         Пол 
-        <select>
+        <select name="gender">
             <option value="Мужской">Мужской</option>
             <option value="Женский">Женский</option>
         </select>
     </p>
-    <p>Фамилия <input type="text"></p>
-    <p>Имя <input type="text"></p>
-    <p>Название организации (при регистрации юрлица)<input type="text"></p>
-    <p>Улица и номер дома <input type="text"></p>
-    <p>Почтовый индекс <input type="text"></p>
-    <p>Серия № и дата выдачи паспорта <input type="text"></p>
-    <p>ИНН <input type="text"></p>
-    <p>Страна <input type="text"></p>
-    <p>Город <input type="text"></p>
-    <p>Адрес электронной почты <input type="text"></p>
-    <p>Номер телефона <input type="text"></p>
+    <p>Фамилия <input type="text" name="second_name"></p>
+    <p>Имя <input type="text" name="username"></p>
+    <p>Название организации (при регистрации юрлица)<input type="text" name="organization_name"></p>
+    <p>Улица и номер дома <input type="text" name="address"></p>
+    <p>Почтовый индекс <input type="text" name="mail_index"></p>
+    <p>Серия № и дата выдачи паспорта <input type="text" name="date_of_passport"></p>
+    <p>ИНН <input type="text" name="inn"></p>
+    <p>Страна <input type="text" name="country"></p>
+    <p>Город <input type="text" name="city"></p>
+    <p>Адрес электронной почты <input type="email" name="email"></p>
+    <p>Номер телефона <input type="text" name="phone_number"></p>
 
     <button type="submit">Submit</button>
 
