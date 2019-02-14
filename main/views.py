@@ -55,6 +55,7 @@ class SignUp(View):
         city = request.POST['city']
         email = request.POST['email']
         phone_number = request.POST['phone_number']
+        password = request.POST['password']
 
         user = Owner(
             username=username,
@@ -71,6 +72,9 @@ class SignUp(View):
             phone_number=phone_number
         )
 
+        user.set_password(password)
         user.save()
 
-        return render(request, "main/signup.html", {})
+        login(request, user)
+
+        return redirect("main:index")

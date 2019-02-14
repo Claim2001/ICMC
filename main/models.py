@@ -3,9 +3,10 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager
 
 # TODO: read whole documentation and build the skeleton for the project
 # TODO: build models
-# TODO: custom authentication
 # 
 # TODO: create normal README so people can see what I am doing
+
+# TODO: make username not unique
 
 class Owner(AbstractUser):
     second_name = models.CharField(max_length=250)
