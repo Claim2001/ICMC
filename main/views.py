@@ -14,7 +14,7 @@ def index(request):
             return HttpResponse("Inspector!")
 
         # redirect to user page
-        return HttpResponse("Authenticated user!")
+        return HttpResponse(f"Welcome, { request.user.username }")
 
     return redirect("main:login")
 
@@ -51,10 +51,13 @@ def remove_useless_elements_from_post(post):
     post_copy.pop("csrfmiddlewaretoken")
     post_copy.pop("password")
 
-    qdict = QueryDict('', mutable=True)
-    qdict.update(post_copy)
+    result = {}
+    for key in post_copy:
+        result[key] = post_copy[key]
 
-    return qdict
+    print(post_copy)
+
+    return result
 
 
 class SignUp(View):
@@ -62,6 +65,7 @@ class SignUp(View):
         return render(request, "main/signup.html", {})
 
     def post(self, request):
+        # TODO: check if user with the same email exists
         post = remove_useless_elements_from_post(request.POST)
         user = Owner(**post)
 
