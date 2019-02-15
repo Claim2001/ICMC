@@ -1,6 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser, BaseUserManager
-# from django.contrib.auth.base_user import AbstractBaseUser
+from django.contrib.auth.models import AbstractUser
 
 # TODO: read whole documentation and build the skeleton for the project
 # TODO: build models
@@ -8,6 +7,7 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager
 # TODO: create normal README so people can see what I am doing
 
 # TODO: make username not unique
+
 
 class Owner(AbstractUser):
     gender = models.CharField(max_length=20, choices=[("Мужской", "Мужской"),
@@ -32,6 +32,7 @@ BOAT_MATERIAL_TYPES = [
     ("wood", "wood"),
     ("other", "other"),
 ]
+
 
 class Boat(models.Model):
     owner = models.ForeignKey(Owner, on_delete=models.CASCADE)
