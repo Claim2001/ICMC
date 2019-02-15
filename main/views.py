@@ -4,8 +4,8 @@ from django.views.generic import View
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 
-from .models import Owner
-from .forms import UserForm
+from .models import Owner, Boat
+from .forms import UserForm, BoatForm
 
 
 def index(request):
@@ -14,8 +14,14 @@ def index(request):
             # redirect to inspector page
             return HttpResponse("Inspector!")
 
-        # redirect to user page
-        return render(request, "main/user.html", { "user": request.user })
+        boats = Boat.objects.filter(owner=request.user)
+
+        context = {
+            "user": request.user,
+            "boats": boats
+        }
+
+        return render(request, "main/user.html", context)
 
     return redirect("main:login")
 
@@ -62,3 +68,24 @@ class SignUp(View):
 
         messages.add_message(request, messages.INFO, "User with this email exists")
         return render(request, "main/signup.html", { "form": form })
+
+
+class RegistrateBoat(View):
+    def get(self, request):
+        if request.user.is_authenticated:
+            form = BoatForm()
+            return render(request, "main/register_boat.html", { "form": form })
+
+        return redirect("main:login")
+
+    def post(self, request):
+        if request.user.is_authenticated:
+            form = BoatForm(request.POST or None)
+            if form.is_valid():
+                boat = form.save(commit=False)
+                boat.owner = request.user
+                boat.save()
+                
+                return redirect("main:index")
+        
+        return redirect("main:login")

@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import ModelForm
 
-from .models import Owner
+from .models import Owner, Boat
 
 
 class UserForm(ModelForm):
@@ -20,5 +20,14 @@ class UserForm(ModelForm):
             "groups",
             "date_joined",
             "is_inspector"
+        )
+        fields = '__all__'
+
+
+class BoatForm(ModelForm):
+    class Meta:
+        model = Boat
+        exclude = (
+            "owner",
         )
         fields = '__all__'
