@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, reverse
 from django.http import HttpResponse
 from django.views.generic import View
 from django.contrib.auth import authenticate, login, logout
@@ -61,5 +61,4 @@ class SignUp(View):
             return redirect("main:index")
 
         messages.add_message(request, messages.INFO, "User with this email exists")
-        return redirect("main:signup")
-
+        return render(request, "main/signup.html", { "form": form })
