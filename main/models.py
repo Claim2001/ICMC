@@ -25,3 +25,39 @@ class Owner(AbstractUser):
 
     def __str__(self):
         return self.username
+
+
+BOAT_MATERIAL_TYPES = [
+    ("wood", "wood"),
+    ("other", "other"),
+]
+
+class Boat(models.Model):
+    owner = models.ForeignKey(Owner, on_delete=models.CASCADE)
+    model_type = models.CharField(max_length=300)
+    name = models.CharField(max_length=250)
+    imo = models.CharField(max_length=250)
+    build_place = models.CharField(max_length=300)
+    build_year = models.IntegerField()
+    material = models.CharField(max_length=200, choices=BOAT_MATERIAL_TYPES)
+    length = models.IntegerField()
+    width = models.IntegerField()
+    height_board = models.IntegerField()
+    height_second_board = models.IntegerField()
+    capacity = models.IntegerField()
+    capacity_load = models.IntegerField()
+    passenger_awn = models.IntegerField()
+    swimming_place = models.CharField(max_length=300)
+    engine_type = models.CharField(max_length=300) # TODO: add choices
+    engine_model = models.CharField(max_length=300)
+    engine_power = models.IntegerField()
+    # engine_type = models.CharField(max_length=300) WTF? Again?
+    sails_amount = models.IntegerField()
+    sail_area = models.IntegerField()
+    prev_numbers_or_name = models.CharField(max_length=300)
+    prev_registration_place = models.CharField(max_length=300)
+    parking_place = models.CharField(max_length=300)
+
+    def __str__(self):
+        return f"{ self.name } - { self.model_type }"
+    

@@ -1,16 +1,15 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, QueryDict
+from django.http import HttpResponse
 from django.views.generic import View
 from django.contrib.auth import authenticate, login, logout
 
 from .models import Owner
-from .forms import UserForm
 
 
 def index(request):
     if request.user.is_authenticated:
         if request.user.is_inspector:
-            # redirect to inpector page
+            # redirect to inspector page
             return HttpResponse("Inspector!")
 
         # redirect to user page
