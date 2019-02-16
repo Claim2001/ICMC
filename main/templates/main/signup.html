@@ -1,57 +1,9 @@
 <h1>Sigh up</h1>
 
-<form action="" method="POST">
+{% if messages %}
+    {% for message in messages %}
+        <p>{{ message }}</p>
+    {% endfor %}
+{% endif %}
 
-    <!-- this is for another shit :( -->
-    <!-- <p>Тип и модель <input type="text" placeholder=""></p>
-    <p>Название <input type="text" placeholder=""></p>
-    <p>Идентификационн ый (IMO) <input type="text" placeholder=""></p>
-    <p>Место постройки <input type="text" placeholder=""></p>
-    <p>Год постройки <input type="text" placeholder=""></p>
-    <p>Стр.(3ав.) № <input type="text" placeholder=""></p>
-    <p>Материал корпуса <input type="text" placeholder=""></p>
-    <p>Длина(м) <input type="text" placeholder=""></p>
-    <p>Ширина (м) <input type="text" placeholder=""></p>
-    <p>Высота борта (м) <input type="text" placeholder=""></p>
-    <p>высота надв. Борта (м) <input type="text" placeholder=""></p>
-    <p>Вместимость (per. тонн) <input type="text" placeholder=""></p>
-    <p>Грузоподъемность (кг) <input type="text" placeholder=""></p>
-    <p>Пассажировместим ость (чел.) <input type="text" placeholder=""></p>
-    <p>Район и условия плавания <input type="text" placeholder=""></p>
-    <p>Тип главного двигателя или подвесного лодочного мотора <input type="text" placeholder=""></p>
-    <p>Марка двигателя или подвесного лодочного мотор <input type="text" placeholder=""></p>
-    <p>Количество (4.17- 4.18) <input type="text" placeholder=""></p>
-    <p>Заводские номера двигателей <input type="text" placeholder=""></p>
-    <p>Мощность двигателя/ей (суммарная) (кВт/л.с.) <input type="text" placeholder=""></p>
-    <p>Тип движителя <input type="text" placeholder=""></p>
-    <p>Количество парусов <input type="text" placeholder=""></p>
-    <p>Площадь парусов (суммарная) (м2) <input type="text" placeholder=""></p>
-    <p>Прежние регистр. № и название судна (если таковые имелись) <input type="text" placeholder=""></p>
-    <p>Место прежней регистрации судна <input type="text" placeholder=""></p>
-    <p>Место постоянной стоянки судна <input type="text" placeholder=""></p> -->
-
-    {% csrf_token %}
-
-    <p>
-        Пол 
-        <select name="gender">
-            <option value="Мужской">Мужской</option>
-            <option value="Женский">Женский</option>
-        </select>
-    </p>
-    <p>Фамилия <input type="text" name="second_name"></p>
-    <p>Имя <input type="text" name="username"></p>
-    <p>Название организации (при регистрации юрлица)<input type="text" name="name_of_organization"></p>
-    <p>Улица и номер дома <input type="text" name="address"></p>
-    <p>Почтовый индекс <input type="text" name="mail_index"></p>
-    <p>Серия № и дата выдачи паспорта <input type="text" name="date_of_passport"></p>
-    <p>ИНН <input type="text" name="inn"></p>
-    <p>Страна <input type="text" name="country"></p>
-    <p>Город <input type="text" name="city"></p>
-    <p>Адрес электронной почты <input type="email" name="email"></p>
-    <p>Номер телефона <input type="text" name="phone_number"></p>
-    <p>Пароль <input type="password" name="password"></p>
-
-    <button type="submit">Submit</button>
-
-</form>
+{% include "main/form_template.html" %}

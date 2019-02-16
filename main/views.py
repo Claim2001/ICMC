@@ -1,20 +1,27 @@
-from django.shortcuts import render, redirect
-from django.http import HttpResponse, QueryDict
+from django.shortcuts import render, redirect, reverse
+from django.http import HttpResponse
 from django.views.generic import View
 from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
 
-from .models import Owner
-from .forms import UserForm
+from .models import Owner, Boat
+from .forms import UserForm, BoatForm
 
 
 def index(request):
     if request.user.is_authenticated:
         if request.user.is_inspector:
-            # redirect to inpector page
+            # redirect to inspector page
             return HttpResponse("Inspector!")
 
-        # redirect to user page
-        return render(request, "main/user.html", { "user": request.user })
+        boats = Boat.objects.filter(owner=request.user)
+
+        context = {
+            "user": request.user,
+            "boats": boats
+        }
+
+        return render(request, "main/user.html", context)
 
     return redirect("main:login")
 
@@ -32,52 +39,53 @@ class Login(View):
         email = request.POST['email']
         password = request.POST['password']
 
-        user = Owner.objects.get(email=email)
-        user_authenticated = authenticate(username=user.username, password=password)
+        authenticated_user = authenticate(username=email, password=password)
         
-        if user_authenticated:
-            login(request, user_authenticated)
+        if authenticated_user:
+            login(request, authenticated_user)
             return redirect("main:index")
         
         return redirect("main:login")
 
 
-def remove_useless_elements_from_post(post):
-    """
-    I wrote this function because I wanted to 
-    use nice ```user = Owner(**post)``` syntax instead
-    of extracting every field one by one but 
-    ```request.POST``` has a bunch of elements
-    that should not be passed as arguments when create
-    an instance of a model
-    """
-    post_copy = post.copy()
-
-    post_copy.pop("csrfmiddlewaretoken")
-    post_copy.pop("password")
-
-    result = {} # don't know why that worked... really :)
-    for key in post_copy:
-        result[key] = post_copy[key]
-
-    print(post_copy)
-
-    return result
-
-
 class SignUp(View):
     def get(self, request):
-        return render(request, "main/signup.html", {})
+        form = UserForm()
+        return render(request, "main/signup.html", { "form": form })
 
     def post(self, request):
-        # TODO: check if user with the same email exists
-        post = remove_useless_elements_from_post(request.POST)
-        user = Owner(**post)
+        form = UserForm(request.POST)
 
-        password = request.POST['password']
-        user.set_password(password)
-        user.save()
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.username = form.cleaned_data['email']
+            user.set_password(form.cleaned_data['password'])
+            user.save()
 
-        login(request, user)
+            login(request, user)
 
-        return redirect("main:index")
+            return redirect("main:index")
+
+        messages.add_message(request, messages.INFO, "User with this email exists")
+        return render(request, "main/signup.html", { "form": form })
+
+
+class RegistrateBoat(View):
+    def get(self, request):
+        if request.user.is_authenticated:
+            form = BoatForm()
+            return render(request, "main/register_boat.html", { "form": form })
+
+        return redirect("main:login")
+
+    def post(self, request):
+        if request.user.is_authenticated:
+            form = BoatForm(request.POST or None)
+            if form.is_valid():
+                boat = form.save(commit=False)
+                boat.owner = request.user
+                boat.save()
+                
+                return redirect("main:index")
+        
+        return redirect("main:login")
