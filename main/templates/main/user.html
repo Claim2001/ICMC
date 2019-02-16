@@ -1,2 +1,7 @@
 <h1>{{ user.first_name}} {{ user.last_name }}</h1>
 <a href="{% url 'main:logout' %}">Logout</a>
+
+<h3>Boats</h3>
+{% for boat in boats %}
+<p>{{ boat }}</p>
+{% endfor %}
