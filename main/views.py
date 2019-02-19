@@ -70,7 +70,7 @@ class SignUp(View):
         return render(request, "main/signup.html", { "form": form })
 
 
-class RegistrateBoat(View):
+class RegisterBoat(View):
     def get(self, request):
         if request.user.is_authenticated:
             form = BoatForm()
