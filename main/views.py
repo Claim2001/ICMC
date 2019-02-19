@@ -11,8 +11,7 @@ from .forms import UserForm, BoatForm
 def index(request):
     if request.user.is_authenticated:
         if request.user.is_inspector:
-            # redirect to inspector page
-            return HttpResponse("Inspector!")
+            return redirect("main:inspector")
 
         boats = Boat.objects.filter(owner=request.user)
 
@@ -24,6 +23,10 @@ def index(request):
         return render(request, "main/user.html", context)
 
     return redirect("main:login")
+
+
+def inspector_page(request):
+    return HttpResponse("inspector!")
 
 
 def logout_user(request):
@@ -45,6 +48,7 @@ class Login(View):
             login(request, authenticated_user)
             return redirect("main:index")
         
+        messages.add_message(request, messages.ERROR, "Login or password is wrong")
         return redirect("main:login")
 
 

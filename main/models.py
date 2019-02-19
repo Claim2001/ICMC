@@ -31,7 +31,16 @@ BOAT_MATERIAL_TYPES = [
     ("other", "other"),
 ]
 
+BOAT_STATUS = [
+    ("wait", "wait"),
+    ("look", "look"),
+    ("rejected", "rejected"),
+    ("payment", "waiting for payment"),
+    ("accepted", "accepted"),
+]
 
+
+# TODO: add date
 class Boat(models.Model):
     owner = models.ForeignKey(Owner, on_delete=models.CASCADE)
     model_type = models.CharField(max_length=300)
@@ -57,6 +66,7 @@ class Boat(models.Model):
     prev_numbers_or_name = models.CharField(max_length=300)
     prev_registration_place = models.CharField(max_length=300)
     parking_place = models.CharField(max_length=300)
+    status = models.CharField(max_length=100, choices=BOAT_STATUS)
 
     def __str__(self):
         return f"{ self.name } - { self.model_type }"
