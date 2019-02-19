@@ -5,6 +5,7 @@ from django.contrib.auth.forms import ReadOnlyPasswordHashField, UserChangeForm
 
 from .models import Owner, Boat
 
+# TODO: can't change password in admin panel
 
 class OwnerAdminForm(UserChangeForm):
     password = ReadOnlyPasswordHashField(label=("Password"),
@@ -17,7 +18,7 @@ class OwnerAdminForm(UserChangeForm):
         fields = "__all__"
 
 
-class OwnerAdmin(UserAdmin):
+class OwnerAdmin(admin.ModelAdmin):
     form = OwnerAdminForm
 
 

@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, reverse
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import View
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
@@ -12,6 +12,9 @@ def index(request):
     if request.user.is_authenticated:
         if request.user.is_inspector:
             return redirect("main:inspector")
+
+        if request.user.is_superuser:
+            return HttpResponseRedirect("/admin")
 
         boats = Boat.objects.filter(owner=request.user)
 
@@ -26,7 +29,16 @@ def index(request):
 
 
 def inspector_page(request):
-    return HttpResponse("inspector!")
+    if not request.user.is_authenticated:
+        return redirect("main:login")
+
+    waiting_requests = Boat.objects.filter(status="wait")
+
+    context = {
+        "requests": waiting_requests
+    }
+
+    return render(request, "main/inspector.html", context)
 
 
 def logout_user(request):
