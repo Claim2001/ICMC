@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, reverse
+from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import View
 from django.contrib.auth import authenticate, login, logout
@@ -28,6 +28,11 @@ def index(request):
     return redirect("main:login")
 
 
+def logout_user(request):
+    logout(request)
+    return redirect("main:login")
+
+
 def inspector_page(request):
     if not request.user.is_authenticated:
         return redirect("main:login")
@@ -41,9 +46,9 @@ def inspector_page(request):
     return render(request, "main/inspector.html", context)
 
 
-def logout_user(request):
-    logout(request)
-    return redirect("main:login")
+def boat_request(request, id):
+    boat_request = get_object_or_404(Boat, pk=id)
+    return render(request, "main/request.html", { "request": boat_request})
 
 
 class Login(View):
