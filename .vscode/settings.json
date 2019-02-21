@@ -1,5 +1,5 @@
 {
-    "python.pythonPath": "venv/bin/python",
+    "python.pythonPath": "C:\\Program Files (x86)\\Python36-32\\python.exe",
     "python.linting.pylintEnabled": true,
     "python.linting.enabled": true
 }
