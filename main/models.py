@@ -1,5 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, PermissionsMixin
+from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 
 # TODO: read whole documentation and build the skeleton for the project
 # TODO: build models
@@ -7,7 +8,35 @@ from django.contrib.auth.models import AbstractUser
 # TODO: create normal README so people can see what I am doing
 
 
-class Owner(AbstractUser):
+class UserManager(BaseUserManager):
+    use_in_migerations = True
+
+    def _create_user(self, email, password, **extra_fields):
+        if not email:
+            raise ValueError("Email must be set!")
+
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save()
+
+        return user
+
+    def create_user(self, email, password, **extra_fields):
+        extra_fields.setdefault("is_superuser", False)
+        return self._create_user(email, password, **extra_fields)
+
+    def create_superuser(self, email, password, **extra_fields):
+        extra_fields.setdefault("is_superuser", True)
+        extra_fields.setdefault("is_staff", True)
+
+        if extra_fields.get("is_superuser") is not True:
+            raise ValueError("Super user must have is_superuser equals to True")
+
+        return self._create_user(email, password, **extra_fields)
+
+
+class Owner(AbstractBaseUser, PermissionsMixin):
     gender = models.CharField(max_length=20, choices=[("Мужской", "Мужской"),
                                                       ("Женский", "Женский")])
     name_of_organization = models.CharField(max_length=250)
@@ -20,10 +49,17 @@ class Owner(AbstractUser):
     email = models.EmailField(max_length=300, unique=True, null=False)
     is_inspector = models.BooleanField(default=False)
     phone_number = models.CharField(max_length=100, default="")
-    password = models.CharField(max_length=300)
+    is_staff = models.BooleanField(default=False)
+
+    objects = UserManager()
+
+    USERNAME_FIELD = "email"
+
+    REQUIRED_FIELDS = [
+    ]
 
     def __str__(self):
-        return self.username
+        return self.email
 
 
 BOAT_MATERIAL_TYPES = [
