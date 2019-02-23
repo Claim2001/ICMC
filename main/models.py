@@ -37,6 +37,8 @@ class UserManager(BaseUserManager):
 
 
 class Owner(AbstractBaseUser, PermissionsMixin):
+    first_name = models.CharField(max_length=250)
+    last_name = models.CharField(max_length=250)
     gender = models.CharField(max_length=20, choices=[("Мужской", "Мужской"),
                                                       ("Женский", "Женский")])
     name_of_organization = models.CharField(max_length=250)
