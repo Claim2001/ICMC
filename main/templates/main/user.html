@@ -1,7 +1,45 @@
-<h1>{{ user.first_name}} {{ user.last_name }}</h1>
-<a href="{% url 'main:logout' %}">Logout</a>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ICMC</title>
 
-<h3>Boats</h3>
-{% for boat in boats %}
-<p>{{ boat }}</p>
-{% endfor %}
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+
+    <div class="main">
+
+        <header class="user">
+
+            <div class="container">
+
+                <div class="navigation">
+                    <h1><a href="#">Личный кабинет</a></h1>
+                    <a href="#" class="logout">Выход</a>
+                </div>
+
+            </div>
+
+        </header>
+
+        <div class="container">
+
+            <aside class="user-navigation">
+
+                <ul class="user-navigation-list">
+                    <li class="selected"><a href="#">Регистрация маломерного судна</a></li>
+                    <li><a href="#">Мои заявления</a></li>
+                    <li><a href="#">Мои судна</a></li>
+                    <li><a href="#">Технический осмотр маломерного судна</a></li>
+                    <li><a href="#">Мои нарушения</a></li>
+                </ul>
+
+            </aside>
+
+        </div>
+
+    </div>
+    
+</body>
+</html>
