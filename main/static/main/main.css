@@ -57,8 +57,6 @@ ul.user-navigation-list {
 }
 
 .content {
-    /* padding-top: 70px;
-    padding-left: 50px; */
     padding: 70px 50px;
     max-height: 100vh;
     overflow-y: scroll;
