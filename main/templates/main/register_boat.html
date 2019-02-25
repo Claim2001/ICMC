@@ -7,23 +7,24 @@
     {% csrf_token %}
 
     <div class="row">
-
-        <div class="col-lg-3">
+        <div class="col-lg-4 form-column">
 
         {% for field in form %}
 
-        {% if forloop.counter|divisibleby:6 %}
-
-        </div>
-        <div class="col-lg-3">
-        {% endif %}
 
         <div class="form-element">
             <p>{{ field.label }}</p>
             {{ field }}
         </div>
 
+        {% if forloop.counter|divisibleby:6 %}
+
+        </div>
+        <div class="col-lg-4 form-column">
+        {% endif %}
+
         {% endfor %}
+        </div> <!-- Don't forget to remove this closing tag -->
 
     </div>
 

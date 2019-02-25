@@ -3,12 +3,17 @@
     padding: 0;
 }
 
+h1, p, a {
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
 html {
     font-family: sans-serif;
 }
 
 .container {
-    max-width: 1200px;
+    max-width: 1500px;
     margin: 0 auto;
     padding: 0 20px;
 }
@@ -18,6 +23,7 @@ header.user {
     color: #ffffff;
     padding: 10px 0;
     position: absolute;
+    z-index: 3;
     top: 0;
     left: 0;
     width: 100%;
@@ -41,7 +47,7 @@ header.user .navigation {
 
 header.user a.logout {
     margin-left: auto;
-    line-height: 20px;
+    /* line-height: 20px; */
 }
 
 aside.user-navigation {
@@ -57,9 +63,11 @@ ul.user-navigation-list {
 }
 
 .content {
-    padding: 70px 50px;
+    padding-top: 70px;
+    padding-left: 50px;
     max-height: 100vh;
     overflow-y: scroll;
+    overflow-x: hidden;
     flex: 1;
 }
 
@@ -86,6 +94,19 @@ ul.user-navigation-list li.selected a {
 
 .form-element {
     margin-bottom: 20px;
+}
+
+.form-element input {
+    width: 100%;
+    background-color: #ffffff;
+    border: 1px solid lightgray;
+    padding: 5px;
+    border-radius: 7px;
+    margin-top: 10px;
+}
+
+.form-column {
+    padding-right: 80px;
 }
 
 /* ************************************* */
