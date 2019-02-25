@@ -8,24 +8,37 @@ from .models import Boat
 from .forms import UserForm, BoatForm
 
 
-def index(request):
-    if request.user.is_authenticated:
-        if request.user.is_inspector:
-            return redirect("main:inspector")
+class IndexView(View):
+    def get(self, request):
+        if request.user.is_authenticated:
+            if request.user.is_inspector:
+                return redirect("main:inspector")
 
-        if request.user.is_superuser:
-            return HttpResponseRedirect("/admin")
+            if request.user.is_superuser:
+                return HttpResponseRedirect("/admin")
 
-        boats = Boat.objects.filter(owner=request.user)
+            form = BoatForm()
 
-        context = {
-            "user": request.user,
-            "boats": boats
-        }
+            context = {
+                "user": request.user,
+                "form": form
+            }
 
-        return render(request, "main/user.html", context)
+            return render(request, "main/register_boat.html", context)
 
-    return redirect("main:login")
+        return redirect("main:login")
+
+    def post(self, request):
+        if request.user.is_authenticated:
+            form = BoatForm(request.POST or None)
+            if form.is_valid():
+                boat = form.save(commit=False)
+                boat.owner = request.user
+                boat.save()
+                
+                return redirect("main:index")
+        
+        return redirect("main:login")
 
 
 def logout_user(request):

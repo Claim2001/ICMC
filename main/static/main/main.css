@@ -57,7 +57,12 @@ ul.user-navigation-list {
 }
 
 .content {
-    padding: 70px 20px;
+    /* padding-top: 70px;
+    padding-left: 50px; */
+    padding: 70px 50px;
+    max-height: 100vh;
+    overflow-y: scroll;
+    flex: 1;
 }
 
 ul.user-navigation-list li {
@@ -78,6 +83,11 @@ ul.user-navigation-list li.selected a {
 .main {
     display: flex;
     flex-direction: row;
+    /* justify-content: space-between; */
+}
+
+.form-element {
+    margin-bottom: 20px;
 }
 
 /* ************************************* */

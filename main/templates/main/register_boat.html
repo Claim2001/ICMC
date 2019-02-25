@@ -1,3 +1,36 @@
-<h1>Register boat</h1>
+{% extends 'main/user_base.html' %}
 
-{% include "main/form_template.html" %}
+{% block content %}
+
+<form action="" method="POST">
+
+    {% csrf_token %}
+
+    <div class="row">
+
+        <div class="col-lg-3">
+
+        {% for field in form %}
+
+        {% if forloop.counter|divisibleby:6 %}
+
+        </div>
+        <div class="col-lg-3">
+        {% endif %}
+
+        <div class="form-element">
+            <p>{{ field.label }}</p>
+            {{ field }}
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    <button type="submit">Submit</button>
+
+</form>
+
+
+
+{% endblock %}
