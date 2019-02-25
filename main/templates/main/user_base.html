@@ -1,0 +1,49 @@
+{% extends 'main/base.html' %}
+
+{% block body %}
+
+<div>
+
+    <header class="user">
+
+        <div class="container">
+
+            <div class="navigation">
+                <h1><a href="{% url 'main:index' %}">Личный кабинет</a></h1>
+                <a href="{% url 'main:logout' %}" class="logout">Выход</a>
+            </div>
+
+        </div>
+
+    </header>
+
+    <div class="container">
+
+        <div class="main">
+
+            <aside class="user-navigation">
+
+                <ul class="user-navigation-list">
+                    <li class="selected"><a href="#">Регистрация маломерного судна</a></li>
+                    <li><a href="#">Мои заявления</a></li>
+                    <li><a href="#">Мои судна</a></li>
+                    <li><a href="#">Технический осмотр маломерного судна</a></li>
+                    <li><a href="#">Мои нарушения</a></li>
+                </ul>
+
+            </aside>
+
+            <div class="content">
+
+                {% block content %}
+                {% endblock %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

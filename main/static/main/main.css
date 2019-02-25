@@ -5,7 +5,6 @@
 
 html {
     font-family: sans-serif;
-    color: darkgray;
 }
 
 .container {
@@ -58,7 +57,7 @@ ul.user-navigation-list {
 }
 
 .content {
-    padding-top: 70px;
+    padding: 70px 20px;
 }
 
 ul.user-navigation-list li {
@@ -76,6 +75,15 @@ ul.user-navigation-list li.selected a {
     color: #2962ff;
 }
 
-#main {
-    background-color: cyan;    
+.main {
+    display: flex;
+    flex-direction: row;
 }
+
+/* ************************************* */
+/* just for a moment */
+h1 {
+    font-weight: 100;
+}
+
+/* ************************************ */

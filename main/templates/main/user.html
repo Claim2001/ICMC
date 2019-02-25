@@ -1,46 +1,7 @@
-{% extends 'main/base.html' %}
+{% extends 'main/user_base.html' %}
 
-{% block body %}
+{% block content %}
 
-<div>
-
-    <header class="user">
-
-        <div class="container">
-
-            <div class="navigation">
-                <h1><a href="#">Личный кабинет</a></h1>
-                <a href="#" class="logout">Выход</a>
-            </div>
-
-        </div>
-
-    </header>
-
-    <div class="container">
-
-        <div class="main">
-
-            <aside class="user-navigation">
-
-                <ul class="user-navigation-list">
-                    <li class="selected"><a href="#">Регистрация маломерного судна</a></li>
-                    <li><a href="#">Мои заявления</a></li>
-                    <li><a href="#">Мои судна</a></li>
-                    <li><a href="#">Технический осмотр маломерного судна</a></li>
-                    <li><a href="#">Мои нарушения</a></li>
-                </ul>
-
-            </aside>
-
-            <div class="content">
-                <h1>{{ user.first_name }}</h1>
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
+<h1>{{ user.first_name }}</h1>
 
 {% endblock %}
