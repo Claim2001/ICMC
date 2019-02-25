@@ -2,11 +2,6 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser, PermissionsMixin
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 
-# TODO: read whole documentation and build the skeleton for the project
-# TODO: build models
-# 
-# TODO: create normal README so people can see what I am doing
-
 
 class UserManager(BaseUserManager):
     use_in_migerations = True

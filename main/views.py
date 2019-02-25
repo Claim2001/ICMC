@@ -1,10 +1,10 @@
-from django.shortcuts import render, redirect, reverse, get_object_or_404
-from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponseRedirect
 from django.views.generic import View
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 
-from .models import Owner, Boat
+from .models import Boat
 from .forms import UserForm, BoatForm
 
 
@@ -46,9 +46,20 @@ def inspector_page(request):
     return render(request, "main/inspector.html", context)
 
 
-def boat_request(request, id):
-    boat_request = get_object_or_404(Boat, pk=id)
-    return render(request, "main/request.html", { "request": boat_request})
+def boat_request(request, pk):
+    if not request.user.is_authenticated:
+        return redirect("main:login")
+
+    boat_request = get_object_or_404(Boat, pk=pk)
+    return render(request, "main/request.html", {"request": boat_request})
+
+
+def user_boat_requests(request):
+    if not request.user.is_authenticated:
+        return redirect("main:login")
+
+    boats = Boat.objects.filter(owner=request.user)
+    return render(request, "main/user_requests.html", {"boats": boats})
 
 
 class Login(View):
@@ -72,7 +83,7 @@ class Login(View):
 class SignUp(View):
     def get(self, request):
         form = UserForm()
-        return render(request, "main/signup.html", { "form": form })
+        return render(request, "main/signup.html", {"form": form})
 
     def post(self, request):
         form = UserForm(request.POST)
@@ -88,14 +99,14 @@ class SignUp(View):
             return redirect("main:index")
 
         messages.add_message(request, messages.INFO, "User with this email exists")
-        return render(request, "main/signup.html", { "form": form })
+        return render(request, "main/signup.html", {"form": form})
 
 
 class RegisterBoat(View):
     def get(self, request):
         if request.user.is_authenticated:
             form = BoatForm()
-            return render(request, "main/register_boat.html", { "form": form })
+            return render(request, "main/register_boat.html", {"form": form})
 
         return redirect("main:login")
 

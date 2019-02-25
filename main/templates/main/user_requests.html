@@ -1,0 +1,13 @@
+{% extends 'main/user_base.html' %}
+
+{% block content %}
+
+<h1>Here is gonna be requests page</h1>
+
+<ul>
+    {% for boat in boats %}
+    <li>{{ boat }}</li>
+    {% endfor %}
+</ul>
+
+{% endblock %}

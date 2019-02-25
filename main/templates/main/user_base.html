@@ -24,11 +24,13 @@
             <aside class="user-navigation">
 
                 <ul class="user-navigation-list">
-                    <li class="selected"><a href="#">Регистрация маломерного судна</a></li>
-                    <li><a href="#">Мои заявления</a></li>
-                    <li><a href="#">Мои судна</a></li>
-                    <li><a href="#">Технический осмотр маломерного судна</a></li>
-                    <li><a href="#">Мои нарушения</a></li>
+                    {% with url_name=request.resolver_match.url_name %}
+                    <li class="{% if url_name == 'index' %}selected{% endif %}"><a href="{% url 'main:index' %}">Регистрация маломерного судна</a></li>
+                    <li class="{% if url_name == 'boat_requests' %}selected{% endif %}"><a href="{% url 'main:boat_requests' %}">Мои заявления</a></li>
+                    <li class="{% if url_name == 'boats' %}selected{% endif %}"><a href="#">Мои судна</a></li>
+                    <li class="{% if url_name == 'notready' %}selected{% endif %}"><a href="#">Технический осмотр маломерного судна</a></li>
+                    <li class="{% if url_name == 'notready1' %}selected{% endif %}"><a href="#">Мои нарушения</a></li>
+                    {% endwith %}
                 </ul>
 
             </aside>
