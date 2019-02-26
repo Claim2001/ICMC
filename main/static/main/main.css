@@ -22,7 +22,7 @@ header.user {
     background-color: #2962ff;
     color: #ffffff;
     padding: 10px 0;
-    position: absolute;
+    position: fixed;
     z-index: 3;
     top: 0;
     left: 0;
@@ -53,8 +53,9 @@ header.user a.logout {
 aside.user-navigation {
     width: 200px;
     height: 100vh;
-    overflow: hidden;
     border-right: 1px solid lightgray;
+    position: fixed;
+
 }
 
 ul.user-navigation-list {
@@ -65,9 +66,10 @@ ul.user-navigation-list {
 .content {
     padding-top: 70px;
     padding-left: 50px;
-    max-height: 100vh;
+    /* max-height: 100vh;
     overflow-y: scroll;
-    overflow-x: hidden;
+    overflow-x: hidden; */
+    margin-left: 200px;
     flex: 1;
 }
 
@@ -89,7 +91,6 @@ ul.user-navigation-list li.selected a {
 .main {
     display: flex;
     flex-direction: row;
-    /* justify-content: space-between; */
 }
 
 .form-element {
