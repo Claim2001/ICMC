@@ -50,6 +50,9 @@ def inspector_page(request):
     if not request.user.is_authenticated:
         return redirect("main:login")
 
+    if not request.user.is_inspector:
+        return redirect("main:index")
+
     waiting_requests = Boat.objects.filter(status="wait")
 
     context = {
