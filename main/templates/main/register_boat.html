@@ -6,7 +6,9 @@
 
     {% csrf_token %}
 
-    <div class="row">
+    <div class="page selectedPage">
+        <div class="row">
+
         <div class="col-lg-4 form-column">
 
         {% for field in form %}
@@ -20,15 +22,29 @@
         {% if forloop.counter|divisibleby:6 %}
 
         </div>
+
+        {% if forloop.counter|divisibleby:18 %}
+
+            <button class="btn" type="button" id="nextFormPage">Далее</button>
+
+            </div>
+        </div>
+
+        <div class="page">
+            <div class="row">
+
+        {% endif %}
+
         <div class="col-lg-4 form-column">
         {% endif %}
 
         {% endfor %}
-        </div> <!-- Don't forget to remove this closing tag -->
+        </div>
 
     </div>
 
-    <button type="submit">Submit</button>
+    <button class="btn" type="submit">Сохранить</button>
+    <button class="btn" type="button" id="prevFormPage">Назад</button>
 
 </form>
 

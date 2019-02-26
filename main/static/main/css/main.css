@@ -66,9 +66,6 @@ ul.user-navigation-list {
 .content {
     padding-top: 70px;
     padding-left: 50px;
-    /* max-height: 100vh;
-    overflow-y: scroll;
-    overflow-x: hidden; */
     margin-left: 200px;
     flex: 1;
 }
@@ -91,23 +88,59 @@ ul.user-navigation-list li.selected a {
 .main {
     display: flex;
     flex-direction: row;
+    padding-bottom: 30px;
 }
 
 .form-element {
     margin-bottom: 20px;
 }
 
+.form-element p {
+    margin-bottom: 10px;
+}
+
 .form-element input {
     width: 100%;
     background-color: #ffffff;
     border: 1px solid lightgray;
-    padding: 5px;
+    padding: 5px 10px;
     border-radius: 7px;
-    margin-top: 10px;
 }
 
 .form-column {
     padding-right: 80px;
+}
+
+button.btn, button.btn:hover {
+    background-color: #2962ff;
+    color: #ffffff;
+    padding: 5px 40px;
+    border-radius: 20px;
+}
+
+.row {
+    margin: 0;
+    padding: 0;
+}
+
+.col-md-4, .col-lg-4 {
+    margin: 0;
+    padding-left: 0;
+
+}
+
+.page {
+    display: none;
+}
+
+.page.selectedPage {
+    display: block;
+}
+
+form button.btn {
+    display: inline-block;
+    margin-top: 40px;
+    margin-right: 20px;
 }
 
 /* ************************************* */
