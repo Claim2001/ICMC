@@ -131,10 +131,17 @@ button.btn, button.btn:hover {
 
 .page {
     display: none;
+    flex-direction: column;
+    justify-content: flex-start;
+    min-height: 700px;
+}
+
+.form-buttons {
+    margin-top: auto;
 }
 
 .page.selectedPage {
-    display: block;
+    display: flex;
 }
 
 form button.btn {

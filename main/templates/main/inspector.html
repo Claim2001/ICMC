@@ -1,4 +1,8 @@
-<h1>Inspector!</h1>
+{% extends "main/base.html" %}
+
+{% block body %}
+
+<h1>Inspector! <small><a href="{% url 'main:logout' %}">Logout</a></small></h1>
 
 <h3>Requests:</h3>
 {% for request in requests %}
@@ -6,3 +10,5 @@
 <p><a href="request/{{ request.id }}">{{ request }}</a></p>
 
 {% endfor %}
+
+{% endblock %}
