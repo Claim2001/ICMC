@@ -70,7 +70,7 @@ def boat_request(request, pk):
 
     if request.user.is_inspector:
         # notify user that his request is inspected now
-        notification = Notification(boat=boat_request)
+        notification = Notification(owner=boat_request.owner, boat=boat_request)
         notification.save()
 
     return render(request, "main/request.html", {"request": boat_request})
@@ -79,6 +79,9 @@ def boat_request(request, pk):
 def user_boat_requests(request):
     if not request.user.is_authenticated:
         return redirect("main:login")
+
+    if request.user.is_inspector:
+        return redirect("main:inspector")
 
     boats = Boat.objects.filter(owner=request.user)
     return render(request, "main/user_requests.html", {"boats": boats})
