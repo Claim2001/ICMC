@@ -76,29 +76,30 @@ BOAT_STATUS = [
 # TODO: add date
 class Boat(models.Model):
     owner = models.ForeignKey(Owner, on_delete=models.CASCADE)
-    model_type = models.CharField(max_length=300)
-    name = models.CharField(max_length=250)
-    imo = models.CharField(max_length=250)
-    build_place = models.CharField(max_length=300)
-    build_year = models.PositiveIntegerField()
-    material = models.CharField(max_length=200, choices=BOAT_MATERIAL_TYPES)
-    length = models.PositiveIntegerField()
-    width = models.PositiveIntegerField()
-    height_board = models.PositiveIntegerField()
-    height_second_board = models.PositiveIntegerField()
-    capacity = models.PositiveIntegerField()
-    capacity_load = models.PositiveIntegerField()
-    passenger_awn = models.PositiveIntegerField()
-    swimming_place = models.CharField(max_length=300)
-    engine_type = models.CharField(max_length=300) # TODO: add choices
-    engine_model = models.CharField(max_length=300)
-    engine_power = models.PositiveIntegerField()
-    # engine_type = models.CharField(max_length=300) WTF? Again?
-    sails_amount = models.PositiveIntegerField()
-    sail_area = models.PositiveIntegerField()
-    prev_numbers_or_name = models.CharField(max_length=300)
-    prev_registration_place = models.CharField(max_length=300)
-    parking_place = models.CharField(max_length=300)
+    model_type = models.CharField("Тип и модель", max_length=300) # need choices here 
+    name = models.CharField("Наименование", max_length=250)
+    imo = models.CharField("Идентификационный (IMO)", max_length=250)
+    build_place = models.CharField("Место постройки", max_length=300)
+    build_year = models.PositiveIntegerField("Год постройки")
+    material = models.CharField("Материал корпуса", max_length=200, choices=BOAT_MATERIAL_TYPES)
+    length = models.PositiveIntegerField("Длина (м)")
+    width = models.PositiveIntegerField("Ширина (м)")
+    height_board = models.PositiveIntegerField("Высота борта (м)")
+    height_second_board = models.PositiveIntegerField("высота надв. Борта (м)")
+    capacity = models.PositiveIntegerField("Вместимость (тонн)")
+    capacity_load = models.PositiveIntegerField("Грузоподъемность (кг)")
+    passenger_awn = models.PositiveIntegerField("Пассажировместимость (чел.)")
+    swimming_place = models.CharField("Район и условия плавания", max_length=300)
+    engine_type = models.CharField("Тип главного двигателя", max_length=300) # TODO: add choices
+    engine_model = models.CharField("Марка двигателя", max_length=300)
+    engine_number = models.CharField("Заводские номера двигателей", max_length=300)
+    engine_power = models.PositiveIntegerField("Мощность двигателя/ей (кВт/л.с.)")
+    # engine_type = models.CharField("Тип движителя", max_length=300) WTF? Again?
+    sails_amount = models.PositiveIntegerField("Количество парусов")
+    sail_area = models.PositiveIntegerField("Площадь парусов (м2)")
+    prev_numbers_or_name = models.CharField("Прежние регистр. No и название судна", max_length=300)
+    prev_registration_place = models.CharField("Место прежней регистрации судна", max_length=300)
+    parking_place = models.CharField("Место постоянной стоянки судна", max_length=300)
     status = models.CharField(max_length=100, choices=BOAT_STATUS)
 
     def __str__(self):
