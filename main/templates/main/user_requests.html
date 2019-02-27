@@ -2,10 +2,10 @@
 
 {% block content %}
 
-<ul>
-    {% for boat in boats %}
-    <li>{{ boat }}</li>
-    {% endfor %}
-</ul>
+{% for boat in boats %}
+
+<p><a href="request/{{ boat.id }}">{{ boat }}</a></p>
+
+{% endfor %}
 
 {% endblock %}

@@ -36,7 +36,7 @@ class IndexView(View):
                 boat.owner = request.user
                 boat.save()
                 
-                return redirect("main:index")
+                return redirect("main:boat_requests")
         
         return redirect("main:login")
 
