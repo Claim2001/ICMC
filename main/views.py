@@ -4,7 +4,7 @@ from django.views.generic import View
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 
-from .models import Boat
+from .models import Boat, Notification
 from .forms import UserForm, BoatForm
 
 
@@ -67,6 +67,12 @@ def boat_request(request, pk):
         return redirect("main:login")
 
     boat_request = get_object_or_404(Boat, pk=pk)
+
+    if request.user.is_inspector:
+        # notify user that his request is inspected now
+        notification = Notification(boat=boat_request)
+        notification.save()
+
     return render(request, "main/request.html", {"request": boat_request})
 
 
@@ -137,3 +143,4 @@ class RegisterBoat(View):
                 return redirect("main:index")
         
         return redirect("main:login")
+

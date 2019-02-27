@@ -103,4 +103,14 @@ class Boat(models.Model):
 
     def __str__(self):
         return f"{ self.name } - { self.model_type }"
+
+
+# TODO: think how this model gotta look
+class Notification(models.Model):
+    owner = models.ForeignKey(Owner, on_delete=models.CASCADE)
+    boat = models.ForeignKey(Boat, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.boat.owner.email
+
     
