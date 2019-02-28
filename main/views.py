@@ -66,14 +66,14 @@ def boat_request(request, pk):
     if not request.user.is_authenticated:
         return redirect("main:login")
 
-    boat_request = get_object_or_404(Boat, pk=pk)
+    boat = get_object_or_404(Boat, pk=pk)
 
     if request.user.is_inspector:
         # notify user that his request is inspected now
-        notification = Notification(owner=boat_request.owner, boat=boat_request)
+        notification = Notification(owner=boat.owner, boat=boat)
         notification.save()
 
-    return render(request, "main/request.html", {"request": boat_request})
+    return render(request, "main/request.html", {"request": boat})
 
 
 def user_boat_requests(request):
