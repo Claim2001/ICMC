@@ -114,4 +114,10 @@ class Notification(models.Model):
     def __str__(self):
         return self.boat.owner.email
 
-    
+
+class Fine(models.Model):
+    owner = models.ForeignKey(Owner, on_delete=models.CASCADE)
+    amount = models.PositiveIntegerField("Сумма")
+
+    def __str__(self):
+        return f"{self.owner.email} - {str(self.amount)}"

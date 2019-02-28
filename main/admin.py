@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField, UserChangeForm
 
-from .models import Owner, Boat, Notification
+from .models import Owner, Boat, Notification, Fine
 from .forms import UserForm
 
 # TODO: can't change password in admin panel
@@ -22,3 +22,4 @@ from .forms import UserForm
 admin.site.register(Owner)
 admin.site.register(Boat)
 admin.site.register(Notification)
+admin.site.register(Fine)
