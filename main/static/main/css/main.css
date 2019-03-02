@@ -99,7 +99,7 @@ ul.user-navigation-list li.selected a {
     margin-bottom: 10px;
 }
 
-.form-element input {
+.form-element input, .form-element .fileBox {
     width: 100%;
     background-color: #ffffff;
     border: 1px solid lightgray;
@@ -157,6 +157,40 @@ form button.btn {
     margin-top: 40px;
     margin-right: 20px;
 }
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-family: sans-serif;
+}
+
+.fileBox {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  border: 1px solid lightgray;
+  color: lightgray;
+  font-weight: 100;
+  margin: 10px;
+  cursor: pointer;
+  margin: 0;
+  width: 100%;
+  text-align: center;
+  height: 305px;
+}
+
+.fileBox p {
+    font-size: 80px;
+    font-weight: 100;
+}
+
+input.formFileInput {
+    display: none;
+}
+
 
 /* ************************************* */
 /* just for a moment */

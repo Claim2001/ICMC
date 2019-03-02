@@ -1,4 +1,4 @@
-var pages = Array.from(document.querySelectorAll(".page")),
+let pages = Array.from(document.querySelectorAll(".page")),
     nextFormPageButton = document.querySelector("#nextFormPage"),
     prevFormPageButton = document.querySelector("#prevFormPage");
 
@@ -21,3 +21,14 @@ function movePage(isNext) {
     var nextIndex = isNext ? 1 : -1;
     pages[indexOfSelectedPage + nextIndex].className = "page selectedPage";
 }
+
+
+let fileBoxes = Array.from(document.querySelectorAll(".fileBox"));
+
+fileBoxes.map(function (box) {
+    box.addEventListener('click', function () {
+        console.log('clicked');
+        let fileInput = box.parentElement.getElementsByClassName("formFileInput")[0];
+        fileInput.click();
+    });
+});
