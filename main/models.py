@@ -66,6 +66,8 @@ class Boat(models.Model):
     prev_numbers_or_name = models.CharField("Прежние регистр. No и название судна", max_length=300)
     prev_registration_place = models.CharField("Место прежней регистрации судна", max_length=300)
     parking_place = models.CharField("Место постоянной стоянки судна", max_length=300)
+    passport_image = models.FileField(null=False, blank=False)
+    other_files = models.FileField(null=True, blank=False)
     status = models.CharField(max_length=100, choices=BOAT_STATUS)
 
     def __str__(self):
