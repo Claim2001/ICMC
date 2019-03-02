@@ -191,6 +191,66 @@ input.formFileInput {
     display: none;
 }
 
+.login {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+}
+
+.login-window {
+    background-color: #ffffff;
+    width: 500px;
+    margin: 0 auto;
+    padding: 70px 50px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+}
+
+.loginButton {
+    display: block;
+    background-color: #287ac3;
+    color: #ffffff;
+    border: none;
+    border-radius: 25px;
+    width: 100%;
+    padding: 10px;
+    margin-top: 40px;
+}
+
+.login-form-element {
+    margin-bottom: 20px;
+}
+
+.login-window h2.loginTitle {
+    color: #287ac3;
+    text-align: center;
+    font-weight: 100;
+}
+
+.loginForm {
+    margin: 100px 0;
+    padding: 0 20px;
+}
+
+.loginInput {
+    border: 1px solid lightgray;
+    font-size: 18px;
+    padding: 5px 10px;
+}
+
+.loginInput input {
+    outline: none;
+    display: block;
+    width: 100%;
+    border: none
+}
+
+input:focus {
+    outline: none;
+}
+
 
 /* ************************************* */
 /* just for a moment */

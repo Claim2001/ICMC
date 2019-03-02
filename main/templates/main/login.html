@@ -1,4 +1,6 @@
-<h1>Login</h1>
+{% extends 'main/base.html' %}
+
+{% block body %}
 
 {% for message in messages %}
 
@@ -6,12 +8,39 @@
 
 {% endfor %}
 
-<form action="" method="POST">
-    {% csrf_token %}
-    <input type="email" name="email" placeholder="email">
-    <input type="password" name="password" placeholder="password">
+<div class="login">
 
-    <button type="submit">Login</button>
-</form>
+    <div class="login-window">
 
-<a href="{% url 'main:signup' %}">Sign up</a>
+        <h2 class="loginTitle">Информационная система <br> маломерных судов</h2>
+
+        <form action="" method="POST" class="loginForm">
+            {% csrf_token %}
+
+
+            <div class="login-form-element">
+                <p>Login</p>
+                <div class="loginInput">
+                    <input type="email" name="email">
+                </div>
+            </div>
+
+            <div class="login-form-element">
+                <p>Password</p>
+                <div class="loginInput">
+                    <input type="password" name="password">
+                </div>
+            </div>
+
+            <button type="submit" class="loginButton">Вход в систему</button>
+        </form>
+
+        <a href="{% url 'main:signup' %}">Sign up</a>
+
+    </div>
+
+</div>
+
+
+
+{% endblock %}
