@@ -130,8 +130,7 @@ class SignUp(View):
 class RegisterBoat(View):
     def get(self, request):
         if request.user.is_authenticated:
-            form = BoatForm()
-            return render(request, "main/register_boat.html", {"form": form})
+            return render(request, "main/register_boat.html", {})
 
         return redirect("main:login")
 
@@ -146,4 +145,3 @@ class RegisterBoat(View):
                 return redirect("main:index")
         
         return redirect("main:login")
-

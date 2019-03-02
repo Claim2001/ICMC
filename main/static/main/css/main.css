@@ -133,7 +133,7 @@ button.btn, button.btn:hover {
     display: none;
     flex-direction: column;
     justify-content: flex-start;
-    min-height: 600px;
+    min-height: 700px;
 }
 
 .form-buttons {
