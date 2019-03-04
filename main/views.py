@@ -29,7 +29,6 @@ class IndexView(View):
         return redirect("main:login")
 
     def post(self, request):
-        print(str(request.user.is_authenticated))
         if request.user.is_authenticated:
             form = BoatForm(request.POST, request.FILES)
             if form.is_valid():
@@ -89,6 +88,11 @@ def user_boat_requests(request):
 
     boats = Boat.objects.filter(owner=request.user)
     return render(request, "main/user_requests.html", {"boats": boats})
+
+
+def boats(request):
+    boats = Boat.objects.filter(owner=request.user)
+    return render(request, "main/my_boats.html", {"boats": boats})
 
 
 class Login(View):

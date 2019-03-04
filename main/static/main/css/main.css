@@ -117,11 +117,15 @@ ul.user-navigation-list li.selected a {
     padding-right: 80px;
 }
 
-button.btn, button.btn:hover {
+.btn, .btn:hover {
     background-color: #138cff;
     color: #ffffff;
     padding: 5px 40px;
     border-radius: 20px;
+}
+
+.btn-warn, .btn-warn:hover {
+    background-color: #ff7d1b
 }
 
 .row {
@@ -270,6 +274,26 @@ input.formFileInput {
 
 input:focus {
     outline: none;
+}
+
+.control-block {
+    background-color: #f6f6f6;
+    padding: 20px 40px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+}
+
+.control-block .control-title {
+    margin-right: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.control-block .btn {
+    margin-left: 40px;
 }
 
 

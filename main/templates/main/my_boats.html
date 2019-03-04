@@ -1,0 +1,17 @@
+{% extends 'main/user_base.html' %}
+
+{% block content %}
+
+{% for boat in boats %}
+<div class="control-block">
+    <div class="control-title">
+        <p>{{ boat.name }}</p>
+    </div>
+
+    <a href="#{{ boat.pk }}" class="btn">Технический осмотр</a>
+    <a href="#{{ boat.pk }}" class="btn btn-warn">Снять с учета</a>
+</div>
+{% endfor %}
+
+
+{% endblock %}
