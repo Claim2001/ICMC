@@ -241,6 +241,7 @@ input.formFileInput {
     text-align: center;
     /* font-weight: 100; */
     font-size: 26px;
+    line-height: 40px;
 }
 
 .login-window .loginFormLink {
