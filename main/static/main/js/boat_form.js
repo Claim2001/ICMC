@@ -23,12 +23,22 @@ function movePage(isNext) {
 }
 
 
-let fileBoxes = Array.from(document.querySelectorAll(".fileBox"));
+let fileBoxes = Array.from(document.querySelectorAll(".fileBox")),
+    fileFields = Array.from(document.querySelectorAll("input"));
 
 fileBoxes.map(function (box) {
-    box.addEventListener('click', function () {
-        console.log('clicked');
+    box.addEventListener("click", function () {
         let fileInput = box.parentElement.getElementsByClassName("formFileInput")[0];
         fileInput.click();
     });
 });
+
+fileFields.map(function (field) {
+    field.addEventListener("change", function () {
+        let fileBox = field.parentElement.getElementsByClassName("fileBox")[0];
+
+        // if user selected a file then change the class name
+        let className = field.value == "" ? "fileBox" : "fileBox filled";
+        fileBox.className = className;
+    })
+})

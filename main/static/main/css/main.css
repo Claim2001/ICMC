@@ -192,6 +192,12 @@ html {
   height: 305px;
 }
 
+.fileBox.filled {
+    border: 1px solid green;
+    background-color: lightgreen;
+    color: green;
+}
+
 .fileBox p {
     font-size: 80px;
     font-weight: 100;

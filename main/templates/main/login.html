@@ -3,12 +3,6 @@
 
 {% block body %}
 
-{% for message in messages %}
-
-<p>{{ message }}</p>
-
-{% endfor %}
-
 <div class="login">
 
     <div class="login-window">
@@ -16,6 +10,13 @@
         <h2 class="loginTitle">Информационная система <br> маломерных судов</h2>
 
         <form action="" method="POST" class="loginForm">
+
+            {% for message in messages %}
+            <div class="alert alert-danger" role="alert">
+                {{ message }}
+            </div>
+            {% endfor %}
+
             {% csrf_token %}
 
 
