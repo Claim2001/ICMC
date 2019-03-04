@@ -29,14 +29,18 @@ class IndexView(View):
         return redirect("main:login")
 
     def post(self, request):
+        print(str(request.user.is_authenticated))
         if request.user.is_authenticated:
-            form = BoatForm(request.POST or None)
+            form = BoatForm(request.POST, request.FILES)
             if form.is_valid():
                 boat = form.save(commit=False)
                 boat.owner = request.user
                 boat.save()
                 
                 return redirect("main:boat_requests")
+            
+            else:
+                return redirect("main:index")
         
         return redirect("main:login")
 

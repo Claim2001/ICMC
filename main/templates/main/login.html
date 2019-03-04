@@ -1,4 +1,5 @@
 {% extends 'main/base.html' %}
+{% load staticfiles %}
 
 {% block body %}
 
@@ -21,6 +22,9 @@
             <div class="login-form-element">
                 <p>Email</p>
                 <div class="loginInput">
+                    <div class="inputIcon">
+                        <img src="{% static 'main/img/icon_accaunt.png' %}" alt="">
+                    </div>
                     <input type="email" name="email">
                 </div>
             </div>
@@ -28,6 +32,9 @@
             <div class="login-form-element">
                 <p>Пароль</p>
                 <div class="loginInput">
+                    <div class="inputIcon">
+                        <img src="{% static 'main/img/icon_lock.png' %}" alt="">
+                    </div>
                     <input type="password" name="password">
                 </div>
             </div>

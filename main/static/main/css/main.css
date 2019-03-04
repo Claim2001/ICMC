@@ -254,13 +254,16 @@ input.formFileInput {
     border: 1px solid lightgray;
     padding: 6px 12px;
     margin-top: 12px;
+    display: flex;
+    flex-direction: row;
 }
 
 .loginInput input {
     outline: none;
     display: block;
     width: 100%;
-    border: none
+    border: none;
+    margin-left: 10px;
 }
 
 input:focus {
