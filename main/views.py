@@ -91,8 +91,11 @@ def user_boat_requests(request):
 
 
 def boats(request):
-    boats = Boat.objects.filter(owner=request.user)
-    return render(request, "main/my_boats.html", {"boats": boats})
+    if request.user.is_authenticated:
+        boats = Boat.objects.filter(owner=request.user)
+        return render(request, "main/my_boats.html", {"boats": boats})
+    
+    return redirect("main:login")
 
 
 class Login(View):
