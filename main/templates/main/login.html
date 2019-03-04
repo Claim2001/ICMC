@@ -19,23 +19,29 @@
 
 
             <div class="login-form-element">
-                <p>Login</p>
+                <p>Email</p>
                 <div class="loginInput">
                     <input type="email" name="email">
                 </div>
             </div>
 
             <div class="login-form-element">
-                <p>Password</p>
+                <p>Пароль</p>
                 <div class="loginInput">
                     <input type="password" name="password">
                 </div>
             </div>
 
             <button type="submit" class="loginButton">Вход в систему</button>
+
+            <div class="loginFormLink">
+                <a href="#forgotPassword">Забыли пароль?</a>
+            </div>
         </form>
 
-        <a href="{% url 'main:signup' %}">Sign up</a>
+        <div class="loginFormLink">
+            <p>Еще нет профиля? <a href="{% url 'main:signup' %}">Зарегестрируйтесь</a></p>
+        </div>
 
     </div>
 

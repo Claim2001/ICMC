@@ -207,10 +207,9 @@ input.formFileInput {
 .login-window {
     background-color: #ffffff;
     width: 500px;
-    /* height: 650px; */
     margin: 0 auto;
     padding: 80px;
-    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
 }
 
 .loginButton {
@@ -220,8 +219,9 @@ input.formFileInput {
     border: none;
     border-radius: 25px;
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     margin-top: 40px;
+    margin-bottom: 25px;
 }
 
 .login-form-element {
@@ -235,15 +235,23 @@ input.formFileInput {
     font-size: 26px;
 }
 
+.login-window .loginFormLink {
+    text-align: center;
+    display: block;
+}
+
+.loginFormLink p, .loginFormLink a {
+    font-size: 14px;
+}
+
 .loginForm {
     margin: 72px 0;
-    padding: 0 20px;
+    /* padding: 0 20px; */
 }
 
 .loginInput {
     border: 1px solid lightgray;
-    font-size: 18px;
-    padding: 5px 10px;
+    padding: 12px;
     margin-top: 12px;
 }
 
