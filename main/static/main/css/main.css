@@ -24,6 +24,8 @@ html {
 
 header.user {
     background-color: #287ac3;
+    background: -moz-linear-gradient(top, #46a5e5,  #287ac3); 
+    background: -webkit-gradient(linear, left top, left bottom, from(#46A5E5), to(#287ac3));
     color: #ffffff;
     padding: 10px 0;
     position: fixed;
