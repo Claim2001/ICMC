@@ -23,7 +23,7 @@ html {
 }
 
 header.user {
-    background-color: #2962ff;
+    background-color: #287ac3;
     color: #ffffff;
     padding: 10px 0;
     position: fixed;
@@ -86,7 +86,7 @@ ul.user-navigation-list li a, ul.user-navigation-list li:hover {
 }
 
 ul.user-navigation-list li.selected a {
-    color: #2962ff;
+    color: #287ac3;
 }
 
 .main {
@@ -116,7 +116,7 @@ ul.user-navigation-list li.selected a {
 }
 
 button.btn, button.btn:hover {
-    background-color: #2962ff;
+    background-color: #138cff;
     color: #ffffff;
     padding: 5px 40px;
     border-radius: 20px;
@@ -222,6 +222,8 @@ input.formFileInput {
     padding: 12px;
     margin-top: 40px;
     margin-bottom: 25px;
+    background: -moz-linear-gradient(top, #46a5e5,  #287ac3); 
+    background: -webkit-gradient(linear, left top, left bottom, from(#46A5E5), to(#287ac3));
 }
 
 .login-form-element {
@@ -246,12 +248,11 @@ input.formFileInput {
 
 .loginForm {
     margin: 72px 0;
-    /* padding: 0 20px; */
 }
 
 .loginInput {
     border: 1px solid lightgray;
-    padding: 12px;
+    padding: 6px 12px;
     margin-top: 12px;
 }
 
