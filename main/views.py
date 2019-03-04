@@ -4,7 +4,7 @@ from django.views.generic import View
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 
-from .models import Boat, Notification
+from .models import Boat, Notification, Fine
 from .forms import UserForm, BoatForm
 
 
@@ -93,8 +93,16 @@ def user_boat_requests(request):
 def boats(request):
     if request.user.is_authenticated:
         boats = Boat.objects.filter(owner=request.user)
-        return render(request, "main/my_boats.html", {"boats": boats})
+        return render(request, "main/user_boats.html", {"boats": boats})
     
+    return redirect("main:login")
+
+
+def fines(request):
+    if request.user.is_authenticated:
+        fines = Fine.objects.filter(owner=request.user)
+        return render(request, "main/user_fines.html", {"fines": fines})
+        
     return redirect("main:login")
 
 

@@ -28,7 +28,7 @@
                     <li class="{% if url_name == 'index' %}selected{% endif %}"><a href="{% url 'main:index' %}">Регистрация маломерного судна</a></li>
                     <li class="{% if url_name == 'boat_requests' %}selected{% endif %}"><a href="{% url 'main:boat_requests' %}">Мои заявления</a></li>
                     <li class="{% if url_name == 'boats' %}selected{% endif %}"><a href="{% url 'main:boats' %}">Мои судна</a></li>
-                    <li class="{% if url_name == 'notready1' %}selected{% endif %}"><a href="#">Мои нарушения</a></li>
+		    <li class="{% if url_name == 'fines' %}selected{% endif %}"><a href="{% url 'main:fines'  %}">Мои нарушения</a></li>
                     {% endwith %}
                 </ul>
 

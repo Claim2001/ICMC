@@ -1,0 +1,16 @@
+{% extends 'main/user_base.html'  %}
+
+{% block content %}
+
+{% for fine in fines%}
+<div class="control-block">
+    <div class="control-title">
+        <p>Протокол нарушения</p>
+    </div>
+
+    <a href="#{{ fine.pk }}" class="btn">Посмотреть</a>
+    <a href="#{{ fine.pk }}" class="btn btn-warn">Оплатить</a>
+</div>
+{% endfor %}
+
+{% endblock  %}
