@@ -8,6 +8,10 @@ h1, p, a {
     padding-bottom: 0;
 }
 
+p {
+    font-size: 16px;
+}
+
 html {
     font-family: sans-serif;
 }
@@ -203,8 +207,9 @@ input.formFileInput {
 .login-window {
     background-color: #ffffff;
     width: 500px;
+    /* height: 650px; */
     margin: 0 auto;
-    padding: 70px 50px;
+    padding: 80px;
     box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
 }
 
@@ -223,14 +228,15 @@ input.formFileInput {
     margin-bottom: 20px;
 }
 
-.login-window h2.loginTitle {
+.login-window .loginTitle {
     color: #287ac3;
     text-align: center;
-    font-weight: 100;
+    /* font-weight: 100; */
+    font-size: 26px;
 }
 
 .loginForm {
-    margin: 100px 0;
+    margin: 72px 0;
     padding: 0 20px;
 }
 
@@ -238,6 +244,7 @@ input.formFileInput {
     border: 1px solid lightgray;
     font-size: 18px;
     padding: 5px 10px;
+    margin-top: 12px;
 }
 
 .loginInput input {
