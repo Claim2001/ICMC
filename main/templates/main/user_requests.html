@@ -2,9 +2,9 @@
 
 {% block content %}
 
-{% for boat in boats %}
+{% for notification in notifications %}
 
-<p><a href="request/{{ boat.id }}">{{ boat }}</a></p>
+<p><a href="request/{{ notification.id }}">{{ notification.status }}</a></p>
 
 {% endfor %}
 

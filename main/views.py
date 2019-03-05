@@ -36,7 +36,7 @@ class IndexView(View):
                 boat.owner = request.user
                 boat.save()
                 
-                return redirect("main:boat_requests")
+                return redirect("main:boats")
             
             else:
                 return redirect("main:index")
@@ -72,14 +72,14 @@ def boat_request(request, pk):
     boat = get_object_or_404(Boat, pk=pk)
 
     if request.user.is_inspector:
-        # notify user that his request is inspected now
-        notification = Notification(owner=boat.owner, boat=boat)
+        notification = Notification(owner=boat.owner, boat=boat, status=boat.status)
         notification.save()
+
+        return render(request, "main/inspector_request.html", {"boat": boat})
 
     return render(request, "main/request.html", {"request": boat})
 
 
-# TODO: that's going to be notifications
 def user_boat_requests(request):
     if request.user.is_authenticated:
         notifications = Notification.objects.filter(owner=request.user)

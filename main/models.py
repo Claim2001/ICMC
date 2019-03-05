@@ -77,6 +77,7 @@ class Boat(models.Model):
 class Notification(models.Model):
     owner = models.ForeignKey(Owner, on_delete=models.CASCADE)
     boat = models.ForeignKey(Boat, on_delete=models.CASCADE)
+    status = models.CharField(max_length=250, choices=BOAT_STATUS)
 
     def __str__(self):
         return self.boat.owner.email
