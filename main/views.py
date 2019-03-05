@@ -83,12 +83,12 @@ def boat_request(request, pk):
 def user_boat_requests(request):
     if request.user.is_authenticated:
         notifications = Notification.objects.filter(owner=request.user)
-        return render(request, "main/user_requests.html", {"boats": boats})
+        return render(request, "main/user_requests.html", {"notifications": notifications})
 
     return redirect("main:login")
 
 
-def boats(request):
+def user_boats(request):
     if request.user.is_authenticated:
         boats = Boat.objects.filter(owner=request.user)
         return render(request, "main/user_boats.html", {"boats": boats})

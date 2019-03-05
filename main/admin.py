@@ -7,10 +7,8 @@ from .models import Owner, Boat, Notification, Fine
 
 class OwnerAdmin(UserAdmin):
     form = OwnerChangeForm
-    add_form = OwnerChangeForm
 
     fieldsets = ()
-    add_fieldsets = ()
 
 
 admin.site.register(Owner, OwnerAdmin)

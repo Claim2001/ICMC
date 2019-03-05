@@ -7,7 +7,7 @@ class Owner(AbstractUser):
     first_name = models.CharField("Имя", max_length=250)
     last_name = models.CharField("Фамилия", max_length=250)
     gender = models.CharField("Пол", max_length=20, choices=[("Мужской", "Мужской"),
-                                                      ("Женский", "Женский")])
+                                                             ("Женский", "Женский")])
     name_of_organization = models.CharField(max_length=250)
     address = models.CharField(max_length=300)
     mail_index = models.CharField(max_length=100)
@@ -19,7 +19,6 @@ class Owner(AbstractUser):
     is_inspector = models.BooleanField(default=False)
     phone_number = models.CharField(max_length=100, default="")
     is_staff = models.BooleanField(default=False)
-    password = models.CharField(max_length=250)
 
     def __str__(self):
         return self.email
@@ -42,7 +41,7 @@ BOAT_STATUS = [
 # TODO: add date
 class Boat(models.Model):
     owner = models.ForeignKey(Owner, on_delete=models.CASCADE)
-    model_type = models.CharField("Тип и модель", max_length=300) # need choices here 
+    model_type = models.CharField("Тип и модель", max_length=300)  # need choices here
     name = models.CharField("Наименование", max_length=250)
     imo = models.CharField("Идентификационный (IMO)", max_length=250)
     build_place = models.CharField("Место постройки", max_length=300)
@@ -56,7 +55,7 @@ class Boat(models.Model):
     capacity_load = models.PositiveIntegerField("Грузоподъемность (кг)")
     passenger_awn = models.PositiveIntegerField("Пассажировместимость (чел.)")
     swimming_place = models.CharField("Район и условия плавания", max_length=300)
-    engine_type = models.CharField("Тип главного двигателя", max_length=300) # TODO: add choices
+    engine_type = models.CharField("Тип главного двигателя", max_length=300)  # TODO: add choices
     engine_model = models.CharField("Марка двигателя", max_length=300)
     engine_number = models.CharField("Заводские номера двигателей", max_length=300)
     engine_power = models.PositiveIntegerField("Мощность двигателя/ей (кВт/л.с.)")
@@ -71,7 +70,7 @@ class Boat(models.Model):
     status = models.CharField(max_length=100, choices=BOAT_STATUS)
 
     def __str__(self):
-        return f"{ self.name } - { self.model_type }"
+        return f"{self.name} - {self.model_type}"
 
 
 # TODO: think how this model gotta look
