@@ -96,7 +96,7 @@ def user_boats(request):
     return redirect("main:login")
 
 
-def fines(request):
+def user_fines(request):
     if request.user.is_authenticated:
         fines = Fine.objects.filter(owner=request.user)
         return render(request, "main/user_fines.html", {"fines": fines})

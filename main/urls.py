@@ -15,5 +15,5 @@ urlpatterns = [
     path('request/<int:pk>', views.boat_request, name="boat_request"),
     path('requests', views.user_boat_requests, name="boat_requests"),
     path('ships', views.user_boats, name="boats"),
-    path('fines', views.fines, name="fines"),
+    path('fines', views.user_fines, name="fines"),
 ]
