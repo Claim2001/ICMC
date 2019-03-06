@@ -1,4 +1,5 @@
 {% extends 'main/header_template.html' %}
+{% load staticfiles %}
 
 {% block header %}
 
@@ -12,11 +13,15 @@
     <div class="container">
         {% if messages %}
             {% for message in messages %}
-                <p>{{ message }}</p>
+                <div class="alert alert-danger" role="alert" id="backendErrorMessage">
+                    {{ message }}
+                </div>
             {% endfor %}
         {% endif %}
+        <div class="alert alert-danger" role="alert" id="clientErrorMessage">
+        </div>
 
-        <form action="" method="POST">
+        <form action="" method="POST" name="signup">
 
             {% csrf_token %}
 
@@ -107,11 +112,16 @@
                         <input type="password" name="password" required id="id_password">
                     </div>
 
+                    <div class="form-element">
+                        <p><label for="id_password">Check password:</label></p>
+                        <input type="password" id="passwordCheck">
+                    </div>
+
                 </div>
 
 
                 <div class="form-buttons signup-buttons">
-                    <button class="btn" type="submit">Сохранить</button>
+                    <button class="btn" type="submit" id="submitButton">Сохранить</button>
                     <a href="{% url 'main:index' %}" class="btn">Отменить</a>
                 </div>
 
@@ -122,6 +132,8 @@
     </div>
 
 </div>
+
+<script src="{% static 'main/js/signupPasswordCheck.js' %}"></script>
 
 {% endblock %}
 

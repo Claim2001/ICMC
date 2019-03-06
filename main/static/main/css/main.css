@@ -332,6 +332,14 @@ input:focus {
     border: 1px solid #287ac3;
 }
 
+input.incorrect {
+    border: 1px solid red;
+}
+
+#clientErrorMessage {
+    display: none;
+}
+
 
 /* ************************************* */
 /* just for a moment */
