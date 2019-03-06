@@ -126,7 +126,6 @@ class SignUp(View):
     def get(self, request):
         form = UserForm()
         return render(request, "main/signup.html", {"form": form})
-        # return HttpResponse("something")
 
     def post(self, request):
         form = UserForm(request.POST)

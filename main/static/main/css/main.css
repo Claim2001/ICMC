@@ -165,7 +165,7 @@ ul.user-navigation-list li.selected a {
     display: flex;
 }
 
-form button.btn {
+form button.btn, form a.btn {
     display: inline-block;
     margin-top: 40px;
     margin-right: 20px;
