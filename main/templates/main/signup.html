@@ -1,9 +1,120 @@
-<h1>Sigh up</h1>
+{% extends 'main/header_template.html' %}
 
-{% if messages %}
-    {% for message in messages %}
-        <p>{{ message }}</p>
-    {% endfor %}
-{% endif %}
+{% block header %}
 
-{% include "main/form_template.html" %}
+<h1><a href="{% url 'main:signup' %}">Регистрация</a></h1>
+
+{% endblock %}
+
+{% block main %}
+
+<div class="content">
+    <div class="container">
+    {% if messages %}
+        {% for message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+
+    <div class="row">
+
+        <div class="col-lg-4 form-column">
+
+
+        <div class="form-element ">
+            <p><label for="id_first_name">Имя:</label></p>
+            <input type="text" name="first_name" maxlength="250" required id="id_first_name">
+        </div>
+
+        <div class="form-element">
+            <p><label for="id_last_name">Фамилия:</label></p>
+            <input type="text" name="last_name" maxlength="250" required id="id_last_name">
+        </div>
+
+        <div class="form-element">
+            <p><label for="id_name_of_organization">Name of organization:</label></p>
+            <input type="text" name="name_of_organization" maxlength="250" required id="id_name_of_organization">
+        </div>
+
+        <div class="form-element">
+            <p><label for="id_mail_index">Mail index:</label></p>
+            <input type="text" name="mail_index" maxlength="100" required id="id_mail_index">
+        </div>
+
+        <div class="form-element">
+            <p><label for="id_address">Address:</label></p>
+            <input type="text" name="address" maxlength="300" required id="id_address">
+        </div>
+
+        <div class="form-element">
+            <p><label for="id_gender">Пол:</label></p>
+            <select name="gender" required id="id_gender">
+                <option value="" selected>---------</option>
+
+                <option value="Мужской">Мужской</option>
+
+                <option value="Женский">Женский</option>
+
+            </select>
+        </div>
+
+        </div>
+
+        <div class="col-lg-4 form-column">
+
+
+        <div class="form-element">
+            <p><label for="id_date_of_passport">Date of passport:</label></p>
+            <input type="text" name="date_of_passport" maxlength="200" required id="id_date_of_passport">
+        </div>
+
+        <div class="form-element">
+            <p><label for="id_inn">Inn:</label></p>
+            <input type="text" name="inn" maxlength="250" required id="id_inn">
+        </div>
+
+        <div class="form-element">
+            <p><label for="id_country">Country:</label></p>
+            <input type="text" name="country" maxlength="250" required id="id_country">
+        </div>
+
+        <div class="form-element">
+            <p><label for="id_city">City:</label></p>
+            <input type="text" name="city" maxlength="250" required id="id_city">
+        </div>
+
+        <div class="form-element">
+            <p><label for="id_phone_number">Phone number:</label></p>
+            <input type="text" name="phone_number" maxlength="100" required id="id_phone_number">
+        </div>
+
+        </div>
+
+        <div class="col-lg-4 form-column">
+
+            <div class="form-element">
+                <p><label for="id_email">Email:</label></p>
+                <input type="email" name="email" maxlength="300" required id="id_email">
+            </div>
+
+
+            <div class="form-element">
+                <p><label for="id_password">Password:</label></p>
+                <input type="password" name="password" required id="id_password">
+            </div>
+
+        </div>
+
+
+        <div class="form-buttons signup-buttons">
+            <button class="btn" type="submit">Сохранить</button>
+            <a href="{% url 'main:index' %}" class="btn">Отменить</a>
+        </div>
+
+    </div>
+
+    {% endblock %}
+
+
+    </div>
+</div>

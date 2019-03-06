@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.views.generic import View
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
@@ -126,6 +126,7 @@ class SignUp(View):
     def get(self, request):
         form = UserForm()
         return render(request, "main/signup.html", {"form": form})
+        # return HttpResponse("something")
 
     def post(self, request):
         form = UserForm(request.POST)

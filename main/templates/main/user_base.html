@@ -1,21 +1,16 @@
-{% extends 'main/base.html' %}
-
-{% block body %}
+{% extends 'main/header_template.html' %}
 
 <div>
 
-    <header class="user">
+    {% block header %}
 
-        <div class="container">
+    <h1><a href="{% url 'main:index' %}">Личный кабинет</a></h1>
+    <a href="{% url 'main:logout' %}" class="logout">Выход</a>
 
-            <div class="navigation">
-                <h1><a href="{% url 'main:index' %}">Личный кабинет</a></h1>
-                <a href="{% url 'main:logout' %}" class="logout">Выход</a>
-            </div>
+    {% endblock %}
 
-        </div>
 
-    </header>
+    {% block main %}
 
     <div class="container">
 
@@ -28,13 +23,13 @@
                     <li class="{% if url_name == 'index' %}selected{% endif %}"><a href="{% url 'main:index' %}">Регистрация маломерного судна</a></li>
                     <li class="{% if url_name == 'boat_requests' %}selected{% endif %}"><a href="{% url 'main:boat_requests' %}">Мои заявления</a></li>
                     <li class="{% if url_name == 'boats' %}selected{% endif %}"><a href="{% url 'main:boats' %}">Мои судна</a></li>
-		    <li class="{% if url_name == 'fines' %}selected{% endif %}"><a href="{% url 'main:fines'  %}">Мои нарушения</a></li>
+        		    <li class="{% if url_name == 'fines' %}selected{% endif %}"><a href="{% url 'main:fines'  %}">Мои нарушения</a></li>
                     {% endwith %}
                 </ul>
 
             </aside>
 
-            <div class="content">
+            <div class="content user-content">
 
                 {% block content %}
                 {% endblock %}
@@ -44,7 +39,7 @@
         </div>
 
     </div>
+    {% endblock %}
 
 </div>
 
-{% endblock %}
