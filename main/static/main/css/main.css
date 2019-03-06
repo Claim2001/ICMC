@@ -305,6 +305,19 @@ input:focus {
     margin-left: 40px;
 }
 
+.steps {
+    margin-bottom: 30px;
+}
+
+.steps p {
+    font-size: 20px;
+    color: lightgray;
+}
+
+.currentStep {
+    color: #287ac3;
+}
+
 
 /* ************************************* */
 /* just for a moment */

@@ -1,4 +1,5 @@
 let pages = Array.from(document.querySelectorAll(".page")),
+    steps = Array.from(document.querySelectorAll(".step")),
     nextFormPageButton = document.querySelector("#nextFormPage"),
     prevFormPageButton = document.querySelector("#prevFormPage");
 
@@ -14,12 +15,15 @@ prevFormPageButton.addEventListener("click", function() {
 
 function movePage(isNext) {
     var selectedPage = document.querySelector(".selectedPage"),
+        currentStep = document.querySelector(".currentStep"),
         indexOfSelectedPage = pages.indexOf(selectedPage);
 
     selectedPage.className = "page";
+    currentStep.className = "step";
 
     var nextIndex = isNext ? 1 : -1;
     pages[indexOfSelectedPage + nextIndex].className = "page selectedPage";
+    steps[indexOfSelectedPage + nextIndex].className = "step currentStep";
 }
 
 
