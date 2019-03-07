@@ -19,6 +19,8 @@ class Owner(AbstractUser):
     is_inspector = models.BooleanField(default=False)
     phone_number = models.CharField(max_length=100, default="")
     is_staff = models.BooleanField(default=False)
+    activation_code = models.PositiveIntegerField(null=True, blank=True)
+    activated = models.BooleanField(default=False)
 
     def __str__(self):
         return self.email

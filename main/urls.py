@@ -16,4 +16,5 @@ urlpatterns = [
     path('requests', views.user_boat_requests, name="boat_requests"),
     path('ships', views.user_boats, name="boats"),
     path('fines', views.user_fines, name="fines"),
+    path('activate', views.ActivateAccount.as_view(), name="activate_account"),
 ]

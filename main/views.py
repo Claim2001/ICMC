@@ -3,8 +3,9 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.views.generic import View
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
+from random import randint
 
-from .models import Boat, Notification, Fine
+from .models import Boat, Notification, Fine, Owner
 from .forms import UserForm, BoatForm
 
 
@@ -16,6 +17,9 @@ class IndexView(View):
 
             if request.user.is_superuser:
                 return HttpResponseRedirect("/admin")
+
+            if request.user.activated is not True:
+                return redirect("main:activate_account")
 
             form = BoatForm()
 
@@ -35,12 +39,12 @@ class IndexView(View):
                 boat = form.save(commit=False)
                 boat.owner = request.user
                 boat.save()
-                
+
                 return redirect("main:boats")
-            
+
             else:
                 return redirect("main:index")
-        
+
         return redirect("main:login")
 
 
@@ -77,31 +81,43 @@ def boat_request(request, pk):
 
         return render(request, "main/inspector_request.html", {"boat": boat})
 
+    if not request.user.activated:
+        return redirect("main:activate_account")
+
     return render(request, "main/request.html", {"request": boat})
 
 
 def user_boat_requests(request):
-    if request.user.is_authenticated:
-        notifications = Notification.objects.filter(owner=request.user)
-        return render(request, "main/user_requests.html", {"notifications": notifications})
+    if not request.user.is_authenticated:
+        return redirect("main:login")
 
-    return redirect("main:login")
+    if not request.user.activated:
+        return redirect("main:activate_account")
+
+    notifications = Notification.objects.filter(owner=request.user)
+    return render(request, "main/user_requests.html", {"notifications": notifications})
 
 
 def user_boats(request):
-    if request.user.is_authenticated:
-        boats = Boat.objects.filter(owner=request.user)
-        return render(request, "main/user_boats.html", {"boats": boats})
-    
-    return redirect("main:login")
+    if not request.user.is_authenticated:
+        return redirect("main:login")
+
+    if not request.user.activated:
+        return redirect("main:activate_account")
+
+    boats = Boat.objects.filter(owner=request.user)
+    return render(request, "main/user_boats.html", {"boats": boats})
 
 
 def user_fines(request):
-    if request.user.is_authenticated:
-        fines = Fine.objects.filter(owner=request.user)
-        return render(request, "main/user_fines.html", {"fines": fines})
-        
-    return redirect("main:login")
+    if not request.user.is_authenticated:
+        return redirect("main:login")
+
+    if not request.user.activated:
+        return redirect("main:activate_account")
+
+    fines = Fine.objects.filter(owner=request.user)
+    return render(request, "main/user_fines.html", {"fines": fines})
 
 
 class Login(View):
@@ -113,11 +129,11 @@ class Login(View):
         password = request.POST['password']
 
         authenticated_user = authenticate(username=email, password=password)
-        
+
         if authenticated_user:
             login(request, authenticated_user)
             return redirect("main:index")
-        
+
         messages.add_message(request, messages.ERROR, "Login or password is wrong")
         return redirect("main:login")
 
@@ -131,21 +147,45 @@ class SignUp(View):
         form = UserForm(request.POST)
 
         if form.is_valid():
+            user_with_same_email = Owner.objects.filter(email=form.cleaned_data['email'])
+            if user_with_same_email:
+                messages.add_message(request, messages.INFO, "User with this email exists")
+                return render(request, "main/signup.html", {"form": form})
+
+            user_with_same_number = Owner.objects.filter(phone_number=form.cleaned_data['phone_number'])
+            if user_with_same_number:
+                messages.add_message(request, messages.INFO, "User with this email exists")
+                return render(request, "main/signup.html", {"form": form})
+
             user = form.save(commit=False)
             user.username = form.cleaned_data['email']
             user.set_password(form.cleaned_data['password'])
+            user.activation_code = randint(1000, 9999)
             user.save()
+
+            # TODO: send sms here
 
             login(request, user)
 
-            return redirect("main:index")
+            return redirect("main:activate_account")
 
-        messages.add_message(request, messages.INFO, "User with this email exists")
+        messages.add_message(request, messages.INFO, "Some error")
         return render(request, "main/signup.html", {"form": form})
+
+
+class ActivateAccount(View):
+    def get(self, request):
+        return HttpResponse("here is gonna be activation")
+
+    def post(self, request):
+        return HttpResponse("activation this is POST request")
 
 
 class RegisterBoat(View):
     def get(self, request):
+        if not request.user.activated:
+            return redirect("main:activate_account")
+
         if request.user.is_authenticated:
             return render(request, "main/register_boat.html", {})
 
@@ -158,7 +198,7 @@ class RegisterBoat(View):
                 boat = form.save(commit=False)
                 boat.owner = request.user
                 boat.save()
-                
+
                 return redirect("main:index")
-        
+
         return redirect("main:login")
