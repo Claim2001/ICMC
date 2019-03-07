@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect
 from django.views.generic import View
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
@@ -175,10 +175,10 @@ class SignUp(View):
 
 class ActivateAccount(View):
     def get(self, request):
-        return HttpResponse("here is gonna be activation")
+        return render(request, "main/activation.html", {})
 
     def post(self, request):
-        return HttpResponse("activation this is POST request")
+        return render(request, "main/activation.html", {})
 
 
 class RegisterBoat(View):
