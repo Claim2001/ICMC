@@ -1,9 +1,14 @@
 {% extends "main/base.html" %}
 
 {% block body %}
-Введите код активации:
-<input type="text" name="activation_code"><br>
+<form action="" method="POST">
+    {% csrf_token %}
+    Введите код активации:
+    <input type="text" name="activation_code">
+    <button type="submit">Submit</button>
+    <br>
 
-<a href="#">Отправить код повторно</a>
+    <a href="#">Отправить код повторно</a>
+</form>
 
 {% endblock %}

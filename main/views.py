@@ -178,6 +178,18 @@ class ActivateAccount(View):
         return render(request, "main/activation.html", {})
 
     def post(self, request):
+        user_code = int(request.POST['activation_code'])
+
+        if request.user.activation_code == user_code:
+            user = Owner.objects.get(email=request.user.email)
+            user.activated = True
+            user.save()
+
+            print(str(request.user.activation_code))
+
+            return redirect("main:index")
+
+        messages.add_message(request, messages.ERROR, "Wrong code")
         return render(request, "main/activation.html", {})
 
 
