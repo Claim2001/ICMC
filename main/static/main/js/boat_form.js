@@ -14,14 +14,14 @@ prevFormPageButton.addEventListener("click", function() {
 
 
 function movePage(isNext) {
-    var selectedPage = document.querySelector(".selectedPage"),
+    let selectedPage = document.querySelector(".selectedPage"),
         currentStep = document.querySelector(".currentStep"),
         indexOfSelectedPage = pages.indexOf(selectedPage);
 
     selectedPage.className = "page";
     currentStep.className = "step";
 
-    var nextIndex = isNext ? 1 : -1;
+    let nextIndex = isNext ? 1 : -1;
     pages[indexOfSelectedPage + nextIndex].className = "page selectedPage";
     steps[indexOfSelectedPage + nextIndex].className = "step currentStep";
 }
@@ -42,7 +42,6 @@ fileFields.map(function (field) {
         let fileBox = field.parentElement.getElementsByClassName("fileBox")[0];
 
         // if user selected a file then change the class name
-        let className = field.value == "" ? "fileBox" : "fileBox filled";
-        fileBox.className = className;
+        fileBox.className = field.value === "" ? "fileBox" : "fileBox filled";
     })
 })

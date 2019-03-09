@@ -11,7 +11,7 @@ submitButton.addEventListener('click', function (evt) {
         areInputsFilled = true;
 
     inputs.map(function (input) {
-        if (input.value == "") {
+        if (input.value === "") {
             input.className += " incorrect";
 
             showErrorMessage("Заполните поля");
@@ -26,7 +26,7 @@ submitButton.addEventListener('click', function (evt) {
     }
 
     // check if passwords are no the same
-    if (passwordInput.value != passwordCheckInput.value) {
+    if (passwordInput.value !== passwordCheckInput.value) {
         passwordInput.className += " incorrect";
         passwordCheckInput.className += " incorrect";
 
