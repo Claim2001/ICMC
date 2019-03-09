@@ -156,7 +156,7 @@ class SignUp(View):
 
             user_with_same_number = Owner.objects.filter(phone_number=form.cleaned_data['phone_number'])
             if user_with_same_number:
-                messages.add_message(request, messages.INFO, "User with this email exists")
+                messages.add_message(request, messages.INFO, "User with this phone number exists")
                 return render(request, "main/signup.html", {"form": form})
 
             user = form.save(commit=False)
