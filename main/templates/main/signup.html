@@ -32,27 +32,27 @@
 
                     <div class="form-element ">
                         <p><label for="id_first_name">Имя:</label></p>
-                        <input type="text" name="first_name" maxlength="250" required id="id_first_name">
+                        <input type="text" name="first_name" maxlength="250" required id="id_first_name" value="{{ form.first_name.value|default_if_none:"" }}">
                     </div>
 
                     <div class="form-element">
                         <p><label for="id_last_name">Фамилия:</label></p>
-                        <input type="text" name="last_name" maxlength="250" required id="id_last_name">
+                        <input type="text" name="last_name" maxlength="250" required id="id_last_name" value="{{ form.last_name.value|default_if_none:"" }}">
                     </div>
 
                     <div class="form-element">
                         <p><label for="id_name_of_organization">Name of organization:</label></p>
-                        <input type="text" name="name_of_organization" maxlength="250" required id="id_name_of_organization">
+                        <input type="text" name="name_of_organization" maxlength="250" required id="id_name_of_organization" value="{{ form.name_of_organization.value|default_if_none:"" }}">
                     </div>
 
                     <div class="form-element">
                         <p><label for="id_mail_index">Mail index:</label></p>
-                        <input type="text" name="mail_index" maxlength="100" required id="id_mail_index">
+                        <input type="text" name="mail_index" maxlength="100" required id="id_mail_index" value="{{ form.mail_index.value|default_if_none:"" }}">
                     </div>
 
                     <div class="form-element">
                         <p><label for="id_address">Address:</label></p>
-                        <input type="text" name="address" maxlength="300" required id="id_address">
+                        <input type="text" name="address" maxlength="300" required id="id_address" value="{{ form.address.value|default_if_none:"" }}">
                     </div>
 
                     <div class="form-element">
@@ -74,27 +74,27 @@
 
                     <div class="form-element">
                         <p><label for="id_date_of_passport">Date of passport:</label></p>
-                        <input type="text" name="date_of_passport" maxlength="200" required id="id_date_of_passport">
+                        <input type="text" name="date_of_passport" maxlength="200" required id="id_date_of_passport" value="{{ form.date_of_passport.value|default_if_none:"" }}">
                     </div>
 
                     <div class="form-element">
                         <p><label for="id_inn">Inn:</label></p>
-                        <input type="text" name="inn" maxlength="250" required id="id_inn">
+                        <input type="text" name="inn" maxlength="250" required id="id_inn" value="{{ form.inn.value|default_if_none:"" }}">
                     </div>
 
                     <div class="form-element">
                         <p><label for="id_country">Country:</label></p>
-                        <input type="text" name="country" maxlength="250" required id="id_country">
+                        <input type="text" name="country" maxlength="250" required id="id_country" value="{{ form.country.value|default_if_none:"" }}">
                     </div>
 
                     <div class="form-element">
                         <p><label for="id_city">City:</label></p>
-                        <input type="text" name="city" maxlength="250" required id="id_city">
+                        <input type="text" name="city" maxlength="250" required id="id_city" value="{{ form.city.value|default_if_none:"" }}">
                     </div>
 
                     <div class="form-element">
                         <p><label for="id_phone_number">Phone number:</label></p>
-                        <input type="text" name="phone_number" maxlength="100" required id="id_phone_number">
+                        <input type="text" name="phone_number" maxlength="100" required id="id_phone_number" value="{{ form.phone_number.value|default_if_none:"" }}">
                     </div>
 
                 </div>
@@ -103,18 +103,18 @@
 
                     <div class="form-element">
                         <p><label for="id_email">Email:</label></p>
-                        <input type="email" name="email" maxlength="300" required id="id_email">
+                        <input type="email" name="email" maxlength="300" required id="id_email" value="{{ form.email.value|default_if_none:"" }}">
                     </div>
 
 
                     <div class="form-element">
                         <p><label for="id_password">Password:</label></p>
-                        <input type="password" name="password" required id="id_password">
+                        <input type="password" name="password" required id="id_password" value="{{ form.password.value|default_if_none:"" }}">
                     </div>
 
                     <div class="form-element">
-                        <p><label for="id_password">Check password:</label></p>
-                        <input type="password" id="passwordCheck">
+                        <p><label for="passwordCheck">Check password:</label></p>
+                        <input type="password" id="passwordCheck" value="{{ form.password.value|default_if_none:"" }}">
                     </div>
 
                 </div>

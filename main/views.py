@@ -149,15 +149,6 @@ class SignUp(View):
         form = UserForm(request.POST)
 
         if form.is_valid():
-            user_with_same_email = Owner.objects.filter(email=form.cleaned_data['email'])
-            if user_with_same_email:
-                messages.add_message(request, messages.INFO, "User with this email exists")
-                return render(request, "main/signup.html", {"form": form})
-
-            user_with_same_number = Owner.objects.filter(phone_number=form.cleaned_data['phone_number'])
-            if user_with_same_number:
-                messages.add_message(request, messages.INFO, "User with this phone number exists")
-                return render(request, "main/signup.html", {"form": form})
 
             user = form.save(commit=False)
             user.username = form.cleaned_data['email']
@@ -180,6 +171,16 @@ class SignUp(View):
             login(request, user)
 
             return redirect("main:activate_account")
+
+        user_with_same_email = Owner.objects.filter(email=request.POST['email'])
+        if user_with_same_email:
+            messages.add_message(request, messages.INFO, "User with this email exists")
+            return render(request, "main/signup.html", {"form": form})
+
+        user_with_same_number = Owner.objects.filter(phone_number=request.POST['phone_number'])
+        if user_with_same_number:
+            messages.add_message(request, messages.INFO, "User with this phone number exists")
+            return render(request, "main/signup.html", {"form": form})
 
         messages.add_message(request, messages.INFO, "Some error")
         return render(request, "main/signup.html", {"form": form})
