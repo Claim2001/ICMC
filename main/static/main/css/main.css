@@ -340,6 +340,11 @@ input.incorrect {
     display: none;
 }
 
+.arrow {
+    margin: 0 5px;
+    width: 15px;
+}
+
 
 /* ************************************* */
 /* just for a moment */
