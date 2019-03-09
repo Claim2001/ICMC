@@ -1,14 +1,21 @@
 {% extends "main/base.html" %}
 
 {% block body %}
-<form action="" method="POST">
-    {% csrf_token %}
-    Введите код активации:
-    <input type="text" name="activation_code">
-    <button type="submit">Submit</button>
-    <br>
 
-    <a href="#">Отправить код повторно</a>
-</form>
+    {% if messages %}
+        {% for message in message %}
+            <p>{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+
+    <form action="" method="POST">
+        {% csrf_token %}
+        Введите код активации:
+        <input type="text" name="activation_code">
+        <button type="submit">Submit</button>
+        <br>
+
+        <a href="#">Отправить код повторно</a>
+    </form>
 
 {% endblock %}

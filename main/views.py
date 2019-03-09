@@ -1,9 +1,11 @@
+import requests
+from random import randint
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.views.generic import View
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from random import randint
 
 from .models import Boat, Notification, Fine, Owner
 from .forms import UserForm, BoatForm
@@ -163,7 +165,17 @@ class SignUp(View):
             user.activation_code = randint(1000, 9999)
             user.save()
 
-            # TODO: send sms here
+            # TODO: make it async
+            # Sens sms with activation code
+            link = "https://cdn.osg.uz/sms/"
+
+            params = {
+                "phone_number": user.phone_number,
+                "id": user.pk,
+                "message": user.activation_code
+            }
+
+            requests.get(link, params=params)
 
             login(request, user)
 
@@ -175,22 +187,27 @@ class SignUp(View):
 
 class ActivateAccount(View):
     def get(self, request):
-        return render(request, "main/activation.html", {})
+        if request.user.is_authenticated and not request.user.activated:
+            return render(request, "main/activation.html", {})
+        return redirect("main:index")
 
     def post(self, request):
-        user_code = int(request.POST['activation_code'])
+        if request.user.is_authenticated:
+            user_code = int(request.POST['activation_code'])
 
-        if request.user.activation_code == user_code:
-            user = Owner.objects.get(email=request.user.email)
-            user.activated = True
-            user.save()
+            if request.user.activation_code == user_code:
+                user = Owner.objects.get(email=request.user.email)
+                user.activated = True
+                user.save()
 
-            print(str(request.user.activation_code))
+                print(str(request.user.activation_code))
 
-            return redirect("main:index")
+                return redirect("main:index")
 
-        messages.add_message(request, messages.ERROR, "Wrong code")
-        return render(request, "main/activation.html", {})
+            messages.add_message(request, messages.ERROR, "Wrong code")
+            return render(request, "main/activation.html", {})
+
+        return redirect("main:login")
 
 
 class RegisterBoat(View):
