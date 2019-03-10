@@ -121,6 +121,20 @@ def user_fines(request):
     fines = Fine.objects.filter(owner=request.user)
     return render(request, "main/user_fines.html", {"fines": fines})
 
+def reactivate(request):
+    if not request.user.is_authenticated:
+        return redirect("main:login")
+
+    request.user.activation_code = randint(1000, 9999)
+    request.user.save()
+
+    # TODO: format this line
+    link = f"https://cdn.osg.uz/sms/?phone={request.user.phone_number}&id=2342&message={str(request.user.activation_code)}"
+    print(link)
+    requests.get(link)
+
+    return redirect("main:activate_account")
+
 
 class Login(View):
     def get(self, request):
@@ -157,16 +171,10 @@ class SignUp(View):
             user.save()
 
             # TODO: make it async
+            # TODO: fuck this method up this shit doesn't work
             # Sens sms with activation code
-            link = "https://cdn.osg.uz/sms/"
-
-            params = {
-                "phone_number": user.phone_number,
-                "id": user.pk,
-                "message": user.activation_code
-            }
-
-            requests.get(link, params=params)
+            link = f"https://cdn.osg.uz/sms/?phone={request.user.phone_number}&id=2342&message={str(request.user.activation_code)}"
+            requests.get(link)
 
             login(request, user)
 
