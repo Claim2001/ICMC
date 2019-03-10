@@ -170,13 +170,13 @@ class SignUp(View):
             user.activation_code = randint(1000, 9999)
             user.save()
 
-            # TODO: make it async
-            # TODO: fuck this method up this shit doesn't work
+            login(request, user)
+
+            # TODO: make this shit async
             # Sens sms with activation code
             link = f"https://cdn.osg.uz/sms/?phone={request.user.phone_number}&id=2342&message={str(request.user.activation_code)}"
             requests.get(link)
 
-            login(request, user)
 
             return redirect("main:activate_account")
 
