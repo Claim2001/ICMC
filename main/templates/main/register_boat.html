@@ -3,13 +3,18 @@
 
 {% block content %}
 
-<form action="" method="POST" autocomplete="off" enctype="multipart/form-data">
+<form action="" method="POST" autocomplete="off" name="boatForm" enctype="multipart/form-data">
 
     <div class="steps">
         <p>
             <span class="step currentStep">Шаг 1</span>
             <img src="{% static 'main/img/arrow-right.svg' %}" class="arrow" alt="">
-            <span class="step">Шаг 2</span></p>
+            <span class="step">Шаг 2</span>
+        </p>
+    </div>
+
+    <div class="alert alert-danger" id="clientErrorMessage" role="alert">
+        Заполните все поля
     </div>
 
     {% csrf_token %}
@@ -201,7 +206,7 @@
 
         <div class="form-buttons">
             <button class="btn" type="button" id="prevFormPage">Назад</button>
-            <button class="btn" type="submit">Сохранить</button>
+            <button class="btn" type="submit" id="submitButton">Сохранить</button>
         </div>
     </div>
 

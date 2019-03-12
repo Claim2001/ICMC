@@ -11,6 +11,11 @@ from .models import Boat, Notification, Fine, Owner
 from .forms import UserForm, BoatForm
 
 
+def send_sms(number, message):
+    link = f"https://cdn.osg.uz/sms/?phone={number}&id=2342&message={message}"
+    requests.get(link)
+
+
 class IndexView(View):
     def get(self, request):
         if request.user.is_authenticated:
@@ -120,11 +125,6 @@ def user_fines(request):
 
     fines = Fine.objects.filter(owner=request.user)
     return render(request, "main/user_fines.html", {"fines": fines})
-
-
-def send_sms(number, message):
-    link = f"https://cdn.osg.uz/sms/?phone={number}&id=2342&message={message}"
-    requests.get(link)
 
 
 def reactivate(request):

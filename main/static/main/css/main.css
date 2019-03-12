@@ -187,9 +187,7 @@ html {
   border: 1px solid lightgray;
   color: lightgray;
   font-weight: 100;
-  margin: 10px;
   cursor: pointer;
-  margin: 0;
   width: 100%;
   text-align: center;
   height: 305px;
@@ -199,6 +197,10 @@ html {
     border: 1px solid green;
     background-color: lightgreen;
     color: green;
+}
+
+.fileBox.incorrect {
+    border: 1px solid red;
 }
 
 .fileBox p {
