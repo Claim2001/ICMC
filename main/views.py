@@ -121,6 +121,12 @@ def user_fines(request):
     fines = Fine.objects.filter(owner=request.user)
     return render(request, "main/user_fines.html", {"fines": fines})
 
+
+def send_sms(number, message):
+    link = f"https://cdn.osg.uz/sms/?phone={number}&id=2342&message={message}"
+    requests.get(link)
+
+
 def reactivate(request):
     if not request.user.is_authenticated:
         return redirect("main:login")
@@ -128,10 +134,7 @@ def reactivate(request):
     request.user.activation_code = randint(1000, 9999)
     request.user.save()
 
-    # TODO: format this line
-    link = f"https://cdn.osg.uz/sms/?phone={request.user.phone_number}&id=2342&message={str(request.user.activation_code)}"
-    print(link)
-    requests.get(link)
+    send_sms(request.user.phone_number, str(request.user.activation_code))
 
     return redirect("main:activate_account")
 
@@ -163,7 +166,6 @@ class SignUp(View):
         form = UserForm(request.POST)
 
         if form.is_valid():
-
             user = form.save(commit=False)
             user.username = form.cleaned_data['email']
             user.set_password(form.cleaned_data['password'])
@@ -172,11 +174,7 @@ class SignUp(View):
 
             login(request, user)
 
-            # TODO: make this shit async
-            # Sens sms with activation code
-            link = f"https://cdn.osg.uz/sms/?phone={request.user.phone_number}&id=2342&message={str(request.user.activation_code)}"
-            requests.get(link)
-
+            send_sms(request.user.phone_number, str(request.user.activation_code))
 
             return redirect("main:activate_account")
 
