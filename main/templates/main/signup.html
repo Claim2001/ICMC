@@ -58,11 +58,9 @@
                     <div class="form-element">
                         <p><label for="id_gender">Пол:</label></p>
                         <select name="gender" required id="id_gender">
-                            <option value="" selected>---------</option>
+                            <option value="Мужской" {% if form.gender.value|default_if_none:"Мужской" == "Мужской" %}selected{% endif %}>Мужской</option>
 
-                            <option value="Мужской">Мужской</option>
-
-                            <option value="Женский">Женский</option>
+                            <option value="Женский" {% if form.gender.value|default_if_none:"Мужской" == "Женский" %}selected{% endif %}>Женский</option>
 
                         </select>
                     </div>
