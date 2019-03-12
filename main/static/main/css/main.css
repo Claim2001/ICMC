@@ -347,6 +347,22 @@ input.incorrect {
     width: 15px;
 }
 
+.count {
+    color: #fff;
+    background-color: #FF7D1B;
+    padding-top: 3px;
+    font-size: 10px;
+    width: 16px;
+    height: 16px;
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    text-align: center;
+    border-radius: 50%;
+    bottom: 8px;
+}
+
 
 /* ************************************* */
 /* just for a moment */

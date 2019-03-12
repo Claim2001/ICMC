@@ -233,6 +233,8 @@ class RegisterBoat(View):
                 boat.owner = request.user
                 boat.save()
 
-                return redirect("main:index")
+                # TODO: create a notification
+
+                return redirect("main:index")  # TODO: redirect to notifications page
 
         return redirect("main:login")
