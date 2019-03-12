@@ -14,7 +14,7 @@
     </div>
 
     <div class="alert alert-danger" id="clientErrorMessage" role="alert">
-        Заполните все поля
+        Некоторые поля заполнены неверно
     </div>
 
     {% csrf_token %}
@@ -52,7 +52,6 @@
                 <div class="form-element">
                     <p>Материал корпуса</p>
                     <select name="material" required id="id_material">
-                        <option value="" selected>---------</option>
                         <option value="wood">wood</option>
                         <option value="other">other</option>
                     </select>

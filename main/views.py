@@ -207,8 +207,6 @@ class ActivateAccount(View):
                 user.activated = True
                 user.save()
 
-                print(str(request.user.activation_code))
-
                 return redirect("main:index")
 
             messages.add_message(request, messages.ERROR, "Wrong code")
