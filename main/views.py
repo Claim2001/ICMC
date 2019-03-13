@@ -29,10 +29,12 @@ class IndexView(View):
                 return redirect("main:activate_account")
 
             form = BoatForm()
+            unwatched_notifications_count = len(Notification.objects.filter(watched=False))
 
             context = {
                 "user": request.user,
-                "form": form
+                "form": form,
+                "notifications_count": unwatched_notifications_count,
             }
 
             return render(request, "main/register_boat.html", context)
@@ -105,7 +107,14 @@ def user_boat_requests(request):
         return redirect("main:activate_account")
 
     notifications = Notification.objects.filter(owner=request.user)
-    return render(request, "main/user_requests.html", {"notifications": notifications})
+    unwatched_notifications_count = len(Notification.objects.filter(watched=False))
+
+    context = {
+        "notifications": notifications,
+        "notifications_count": unwatched_notifications_count,
+    }
+
+    return render(request, "main/user_requests.html", context)
 
 
 def user_boats(request):
@@ -115,8 +124,15 @@ def user_boats(request):
     if not request.user.activated:
         return redirect("main:activate_account")
 
+    unwatched_notifications_count = len(Notification.objects.filter(watched=False))
     boats = Boat.objects.filter(owner=request.user)
-    return render(request, "main/user_boats.html", {"boats": boats})
+
+    context = {
+        "boats": boats,
+        "notifications_count": unwatched_notifications_count
+    }
+    
+    return render(request, "main/user_boats.html", context)
 
 
 def user_fines(request):
@@ -126,8 +142,15 @@ def user_fines(request):
     if not request.user.activated:
         return redirect("main:activate_account")
 
+    unwatched_notifications_count = len(Notification.objects.filter(watched=False))
     fines = Fine.objects.filter(owner=request.user)
-    return render(request, "main/user_fines.html", {"fines": fines})
+
+    context = {
+        "fines": fines,
+        "notifications_count": unwatched_notifications_count,
+    }
+
+    return render(request, "main/user_fines.html", context)
 
 
 def reactivate(request):
