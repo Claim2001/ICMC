@@ -131,7 +131,7 @@ def user_boats(request):
         "boats": boats,
         "notifications_count": unwatched_notifications_count
     }
-    
+
     return render(request, "main/user_boats.html", context)
 
 
