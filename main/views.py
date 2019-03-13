@@ -164,7 +164,7 @@ def reactivate(request):
     request.user.activation_code = randint(1000, 9999)
     request.user.save()
 
-    send_sms(request.user.phone_number, str(request.user.activation_code))
+    send_sms(request.user.phone_number, message=str(request.user.activation_code))
 
     return redirect("main:activate_account")
 
@@ -204,7 +204,7 @@ class SignUp(View):
 
             login(request, user)
 
-            send_sms(request.user.phone_number, str(request.user.activation_code))
+            send_sms(request.user.phone_number, message=str(request.user.activation_code))
 
             return redirect("main:activate_account")
 
