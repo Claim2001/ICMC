@@ -376,6 +376,42 @@ input.incorrect {
     color: #287AC3;
 }
 
+.popup-window {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.popup-window-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: 3;
+}
+
+.popup-window .popup {
+    width: 500px;
+    height: 300px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #ffffff;
+    position: fixed;
+    z-index: 5;
+    padding: 10px;
+}
+
+.closeButton {
+    background-color: transparent;
+    border: none;
+    outline: none;
+}
+
+.closeButton img {
+    width: 25px;
+}
 
 /* ************************************* */
 /* just for a moment */
