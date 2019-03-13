@@ -6,18 +6,9 @@ let popupWindow = document.querySelector(".popup-window"),
 openButtons.map(function (button) {
    button.addEventListener('click', function () {
        popupWindow.style.display = "flex";
-
-       setTimeout(function () {
-           popupWindow.style.opacity = "1";
-       }, 100);
    });
 });
 
 closeButton.addEventListener("click", function () {
-    // popupWindow.style.display = "none";
-    popupWindow.style.opacity = "0";
-
-    setTimeout(function () {
-        popupWindow.style.display = "none";
-    }, 200);
+    popupWindow.style.display = "none";
 });

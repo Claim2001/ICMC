@@ -29,10 +29,10 @@ header.main {
     color: #ffffff;
     padding: 10px 0;
     position: fixed;
-    /*z-index: 1;*/
     top: 0;
     left: 0;
     width: 100%;
+    z-index: 1;
 }
 
 header.main h1 {
@@ -61,7 +61,6 @@ aside.user-navigation {
     height: 100vh;
     border-right: 1px solid lightgray;
     position: fixed;
-    z-index: -1;
 }
 
 ul.user-navigation-list {
@@ -377,9 +376,6 @@ input.incorrect {
 }
 
 .popup-window {
-    transition: all;
-    transition-duration: 0.2s;
-    opacity: 0;
     display: none;
     flex-direction: column;
     justify-content: center;
