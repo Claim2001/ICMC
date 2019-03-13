@@ -62,7 +62,8 @@ function checkInputsFilled() {
             input.className = input.value === "" ? "incorrect" : "";
         }
 
-        inputsFilled = !(input.value === "");
+	if (input.value === "")
+	    inputsFilled = false
     });
 
     return inputsFilled;

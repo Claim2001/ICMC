@@ -47,7 +47,10 @@ class IndexView(View):
                 boat.owner = request.user
                 boat.save()
 
-                return redirect("main:boats")
+                notification = Notification(owner=request.user, boat=boat, status="wait")
+                notification.save()
+
+                return redirect("main:boat_requests")
 
             else:
                 return redirect("main:index")
@@ -233,8 +236,9 @@ class RegisterBoat(View):
                 boat.owner = request.user
                 boat.save()
 
-                # TODO: create a notification
+                notification = Notification(owner=request.user, status="wait")
+                notification.save()
 
-                return redirect("main:index")  # TODO: redirect to notifications page
+                return redirect("main:boat_requests")
 
         return redirect("main:login")
