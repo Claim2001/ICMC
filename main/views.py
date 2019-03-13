@@ -29,7 +29,7 @@ class IndexView(View):
                 return redirect("main:activate_account")
 
             form = BoatForm()
-            unwatched_notifications_count = len(Notification.objects.filter(watched=False))
+            unwatched_notifications_count = len(Notification.objects.filter(owner=request.user, watched=False))
 
             context = {
                 "user": request.user,
@@ -106,13 +106,17 @@ def user_boat_requests(request):
     if not request.user.activated:
         return redirect("main:activate_account")
 
-    notifications = Notification.objects.filter(owner=request.user)
-    unwatched_notifications_count = len(Notification.objects.filter(watched=False))
+    notifications = list(Notification.objects.filter(owner=request.user)).copy()
+    unwatched_notifications = Notification.objects.filter(owner=request.user, watched=False)
 
     context = {
         "notifications": notifications,
-        "notifications_count": unwatched_notifications_count,
+        "notifications_count": len(unwatched_notifications),
     }
+
+    for notification in unwatched_notifications:
+        notification.watched = True
+        notification.save()
 
     return render(request, "main/user_requests.html", context)
 
@@ -124,7 +128,7 @@ def user_boats(request):
     if not request.user.activated:
         return redirect("main:activate_account")
 
-    unwatched_notifications_count = len(Notification.objects.filter(watched=False))
+    unwatched_notifications_count = len(Notification.objects.filter(owner=request.user, watched=False))
     boats = Boat.objects.filter(owner=request.user)
 
     context = {
@@ -142,7 +146,7 @@ def user_fines(request):
     if not request.user.activated:
         return redirect("main:activate_account")
 
-    unwatched_notifications_count = len(Notification.objects.filter(watched=False))
+    unwatched_notifications_count = len(Notification.objects.filter(owner=request.user, watched=False))
     fines = Fine.objects.filter(owner=request.user)
 
     context = {
