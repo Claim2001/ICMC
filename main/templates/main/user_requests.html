@@ -1,10 +1,29 @@
 {% extends 'main/user_base.html' %}
+{% load staticfiles %}
 
 {% block content %}
 
 {% for notification in notifications %}
 
-<p><a href="request/{{ notification.id }}">{{ notification.status }}</a></p>
+{#    <p><a href="request/{{ notification.id }}">{{ notification.status }}</a></p>#}
+
+
+    <div class="control-block{% if notification.watched == False %} unwatched {% endif %}">
+        {# TODO: check the height in PS #}
+        {% if notification.status == "wait" %}
+            <img src="{% static 'main/img/ship.svg' %}" alt="">
+        {% endif %}
+
+        <div class="control-title">
+{#            <p>{{ notification.status }}</p>#}
+            {% if notification.status == "wait" %}
+                Ваше заявление находится в очереди
+            {% endif %}
+        </div>
+
+{#        <a href="#{{ notification.pk }}" class="btn">Технический осмотр</a>#}
+{#        <a href="#{{ notification.pk }}" class="btn btn-warn">Снять с учета</a>#}
+    </div>
 
 {% endfor %}
 

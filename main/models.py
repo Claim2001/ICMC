@@ -69,7 +69,7 @@ class Boat(models.Model):
     parking_place = models.CharField("Место постоянной стоянки судна", max_length=300)
     passport_image = models.FileField(null=False, blank=False)
     other_files = models.FileField(null=True, blank=False)
-    status = models.CharField(max_length=100, choices=BOAT_STATUS)
+    status = models.CharField(max_length=100, choices=BOAT_STATUS, default="wait")
 
     def __str__(self):
         return f"{self.name} - {self.model_type}"

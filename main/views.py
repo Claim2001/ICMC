@@ -29,13 +29,18 @@ class IndexView(View):
                 return redirect("main:activate_account")
 
             form = BoatForm()
+            unwatched_notifications_count = len(Notification.objects.filter(owner=request.user, watched=False))
 
             notification_count = Notification.objects.all(watched=False)
 
             context = {
                 "user": request.user,
                 "form": form,
+<<<<<<< HEAD
                 "notification_cout": notification_count,
+=======
+                "notifications_count": unwatched_notifications_count,
+>>>>>>> 90865ebc8bfcf328b9d3ea59c71773692bea052d
             }
 
             return render(request, "main/register_boat.html", context)
@@ -50,7 +55,10 @@ class IndexView(View):
                 boat.owner = request.user
                 boat.save()
 
-                return redirect("main:boats")
+                notification = Notification(owner=request.user, boat=boat, status="wait")
+                notification.save()
+
+                return redirect("main:boat_requests")
 
             else:
                 return redirect("main:index")
@@ -104,8 +112,19 @@ def user_boat_requests(request):
     if not request.user.activated:
         return redirect("main:activate_account")
 
-    notifications = Notification.objects.filter(owner=request.user)
-    return render(request, "main/user_requests.html", {"notifications": notifications})
+    notifications = list(Notification.objects.filter(owner=request.user)).copy()
+    unwatched_notifications = Notification.objects.filter(owner=request.user, watched=False)
+
+    context = {
+        "notifications": notifications,
+        "notifications_count": len(unwatched_notifications),
+    }
+
+    for notification in unwatched_notifications:
+        notification.watched = True
+        notification.save()
+
+    return render(request, "main/user_requests.html", context)
 
 
 def user_boats(request):
@@ -115,8 +134,15 @@ def user_boats(request):
     if not request.user.activated:
         return redirect("main:activate_account")
 
+    unwatched_notifications_count = len(Notification.objects.filter(owner=request.user, watched=False))
     boats = Boat.objects.filter(owner=request.user)
-    return render(request, "main/user_boats.html", {"boats": boats})
+
+    context = {
+        "boats": boats,
+        "notifications_count": unwatched_notifications_count
+    }
+
+    return render(request, "main/user_boats.html", context)
 
 
 def user_fines(request):
@@ -126,8 +152,15 @@ def user_fines(request):
     if not request.user.activated:
         return redirect("main:activate_account")
 
+    unwatched_notifications_count = len(Notification.objects.filter(owner=request.user, watched=False))
     fines = Fine.objects.filter(owner=request.user)
-    return render(request, "main/user_fines.html", {"fines": fines})
+
+    context = {
+        "fines": fines,
+        "notifications_count": unwatched_notifications_count,
+    }
+
+    return render(request, "main/user_fines.html", context)
 
 
 def reactivate(request):
@@ -137,7 +170,7 @@ def reactivate(request):
     request.user.activation_code = randint(1000, 9999)
     request.user.save()
 
-    send_sms(request.user.phone_number, str(request.user.activation_code))
+    send_sms(request.user.phone_number, message=str(request.user.activation_code))
 
     return redirect("main:activate_account")
 
@@ -177,7 +210,7 @@ class SignUp(View):
 
             login(request, user)
 
-            send_sms(request.user.phone_number, str(request.user.activation_code))
+            send_sms(request.user.phone_number, message=str(request.user.activation_code))
 
             return redirect("main:activate_account")
 
@@ -236,8 +269,9 @@ class RegisterBoat(View):
                 boat.owner = request.user
                 boat.save()
 
-                # TODO: create a notification
+                notification = Notification(owner=request.user, status="wait")
+                notification.save()
 
-                return redirect("main:index")  # TODO: redirect to notifications page
+                return redirect("main:boat_requests")
 
         return redirect("main:login")
