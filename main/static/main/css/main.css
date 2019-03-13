@@ -187,9 +187,7 @@ html {
   border: 1px solid lightgray;
   color: lightgray;
   font-weight: 100;
-  margin: 10px;
   cursor: pointer;
-  margin: 0;
   width: 100%;
   text-align: center;
   height: 305px;
@@ -199,6 +197,10 @@ html {
     border: 1px solid green;
     background-color: lightgreen;
     color: green;
+}
+
+.fileBox.incorrect {
+    border: 1px solid red;
 }
 
 .fileBox p {
@@ -343,6 +345,22 @@ input.incorrect {
 .arrow {
     margin: 0 5px;
     width: 15px;
+}
+
+.count {
+    color: #fff;
+    background-color: #FF7D1B;
+    padding-top: 3px;
+    font-size: 10px;
+    width: 16px;
+    height: 16px;
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    text-align: center;
+    border-radius: 50%;
+    bottom: 8px;
 }
 
 

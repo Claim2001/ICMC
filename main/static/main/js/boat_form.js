@@ -1,15 +1,33 @@
 let pages = Array.from(document.querySelectorAll(".page")),
     steps = Array.from(document.querySelectorAll(".step")),
     nextFormPageButton = document.querySelector("#nextFormPage"),
-    prevFormPageButton = document.querySelector("#prevFormPage");
+    prevFormPageButton = document.querySelector("#prevFormPage"),
+    submitButton = document.querySelector("#submitButton"),
+    errorMessage = document.querySelector("#clientErrorMessage");
 
 
 nextFormPageButton.addEventListener("click", function () {
-    movePage(true);
+    if (checkInputsFilled()) {
+        toggleErrorMessage(false);
+        movePage(true);
+    } else {
+        toggleErrorMessage(true);
+    }
 });
 
-prevFormPageButton.addEventListener("click", function() {
+prevFormPageButton.addEventListener("click", function () {
     movePage(false);
+});
+
+submitButton.addEventListener("click", function (evt) {
+    evt.preventDefault();
+
+    if (checkInputsFilled()) {
+        toggleErrorMessage(false);
+        document.boatForm.submit();
+    } else {
+        toggleErrorMessage(true);
+    }
 });
 
 
@@ -24,6 +42,30 @@ function movePage(isNext) {
     let nextIndex = isNext ? 1 : -1;
     pages[indexOfSelectedPage + nextIndex].className = "page selectedPage";
     steps[indexOfSelectedPage + nextIndex].className = "step currentStep";
+}
+
+function toggleErrorMessage(visible) {
+    errorMessage.style.display = visible ? "block" : "none";
+}
+
+function checkInputsFilled() {
+    let currentPage = document.querySelector(".selectedPage"),
+        inputs = Array.from(currentPage.getElementsByTagName("input"));
+
+    let inputsFilled = true;
+
+    inputs.map(function (input) {
+        if (input.type === "file") {
+            let fileBox = input.parentElement.getElementsByClassName("fileBox")[0];
+            fileBox.className = input.value === "" ? "fileBox incorrect" : "fileBox filled";
+        } else {
+            input.className = input.value === "" ? "incorrect" : "";
+        }
+
+        inputsFilled = !(input.value === "");
+    });
+
+    return inputsFilled;
 }
 
 
@@ -44,4 +86,4 @@ fileFields.map(function (field) {
         // if user selected a file then change the class name
         fileBox.className = field.value === "" ? "fileBox" : "fileBox filled";
     })
-})
+});
