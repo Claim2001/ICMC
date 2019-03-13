@@ -25,9 +25,12 @@ class IndexView(View):
 
             form = BoatForm()
 
+            notification_count = Notification.objects.all(watched=False)
+
             context = {
                 "user": request.user,
-                "form": form
+                "form": form,
+                "notification_cout": notification_count,
             }
 
             return render(request, "main/register_boat.html", context)
