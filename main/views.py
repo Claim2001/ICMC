@@ -87,6 +87,9 @@ def user_boat_requests(request):
     if not request.user.is_authenticated:
         return redirect("main:login")
 
+    if request.user.is_superuser:
+        return redirect("main:index")
+
     if not request.user.activated:
         return redirect("main:activate_account")
 
@@ -109,6 +112,9 @@ def user_boats(request):
     if not request.user.is_authenticated:
         return redirect("main:login")
 
+    if request.user.is_superuser:
+        return redirect("main:index")
+
     if not request.user.activated:
         return redirect("main:activate_account")
 
@@ -126,6 +132,9 @@ def user_boats(request):
 def make_remove_boat_request(request, pk):
     if not request.user.is_authenticated:
         return redirect("main:login")
+
+    if request.user.is_superuser:
+        return redirect("main:index")
 
     if not request.user.activated:
         return redirect("main:activate_account")
@@ -148,6 +157,9 @@ def user_fines(request):
     if not request.user.is_authenticated:
         return redirect("main:login")
 
+    if request.user.is_superuser:
+        return redirect("main:index")
+
     if not request.user.activated:
         return redirect("main:activate_account")
 
@@ -166,6 +178,9 @@ def inspector_page(request):
     if not request.user.is_authenticated:
         return redirect("main:login")
 
+    if request.user.is_superuser:
+        return redirect("main:index")
+
     if not request.user.is_inspector:
         return redirect("main:index")
 
@@ -183,6 +198,9 @@ def inspecting_requests(request):
     if not request.user.is_authenticated:
         return redirect("main:login")
 
+    if request.user.is_superuser:
+        return redirect("main:index")
+
     if not request.user.is_inspector:
         return redirect("main:index")
 
@@ -199,6 +217,9 @@ def remove_requests(request):
     if not request.user.is_authenticated:
         return redirect("main:login")
 
+    if request.user.is_superuser:
+        return redirect("main:index")
+
     if not request.user.is_inspector:
         return redirect("")
 
@@ -214,6 +235,9 @@ def remove_requests(request):
 def add_request_to_looking(request, pk):
     if not request.user.is_authenticated:
         return redirect("main:login")
+
+    if request.user.is_superuser:
+        return redirect("main:index")
 
     if not request.user.is_inspector:
         return redirect("main:index")
