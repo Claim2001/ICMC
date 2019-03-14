@@ -223,10 +223,10 @@ def remove_requests(request):
     if not request.user.is_inspector:
         return redirect("")
 
-    requests = RemoveRequest.objects.all()
+    remove_boat_request = RemoveRequest.objects.all()
 
     context = {
-        "requests": requests
+        "requests": remove_boat_request
     }
 
     return render(request, "main/inspector_remove_requests.html", context)
