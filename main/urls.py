@@ -13,6 +13,7 @@ urlpatterns = [
     path('register', views.RegisterBoat.as_view(), name="register"),
     path('inspector', views.inspector_page, name="inspector"),
     path('request/<int:pk>', views.boat_request, name="boat_request"),
+    path('request/<int:pk>/remove', views.make_remove_boat_request, name="remove_boat"),
     path('requests', views.user_boat_requests, name="boat_requests"),
     path('ships', views.user_boats, name="boats"),
     path('fines', views.user_fines, name="fines"),

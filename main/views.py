@@ -7,7 +7,7 @@ from django.views.generic import View
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 
-from .models import Boat, Notification, Fine, Owner
+from .models import Boat, Notification, Fine, Owner, RemoveRequest
 from .forms import UserForm, BoatForm
 
 # TODO: add admin check everywhere
@@ -121,6 +121,27 @@ def user_boats(request):
     }
 
     return render(request, "main/user_boats.html", context)
+
+
+def make_remove_boat_request(request, pk):
+    if not request.user.is_authenticated:
+        return redirect("main:login")
+
+    if not request.user.activated:
+        return redirect("main:activate_account")
+
+    boat = get_object_or_404(Boat, owner=request.user, pk=pk)
+
+    if not RemoveRequest.objects.filter(boat=boat):
+        remove_request = RemoveRequest(boat=boat, reason="broke")
+        remove_request.save()
+
+        messages.add_message(request, messages.SUCCESS, "Ваше заявление на снятие судна с учета отправлено!")
+
+    else:
+        messages.add_message(request, messages.WARNING, "Ваше заявление на снятие судна с учета уже отправлено!")
+
+    return redirect("main:boats")
 
 
 def user_fines(request):

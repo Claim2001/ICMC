@@ -75,6 +75,21 @@ class Boat(models.Model):
         return f"{self.name} - {self.model_type}"
 
 
+REMOVE_BOAT_REASONS = (
+    ("change", "Изменение владельца или места жительства"),
+    ("broke", "Износ или поломка судна"),
+    ("ticket", "Утеря или порча судового билета"),
+)
+
+
+class RemoveRequest(models.Model):
+    boat = models.ForeignKey(Boat, on_delete=models.CASCADE)
+    reason = models.CharField(max_length=300, choices=REMOVE_BOAT_REASONS)
+
+    def __str__(self):
+        return self.boat.name
+
+
 # TODO: think how this model gotta look
 class Notification(models.Model):
     owner = models.ForeignKey(Owner, on_delete=models.CASCADE)
