@@ -36,11 +36,7 @@ class IndexView(View):
             context = {
                 "user": request.user,
                 "form": form,
-<<<<<<< HEAD
-                "notification_cout": notification_count,
-=======
                 "notifications_count": unwatched_notifications_count,
->>>>>>> 90865ebc8bfcf328b9d3ea59c71773692bea052d
             }
 
             return render(request, "main/register_boat.html", context)
