@@ -17,5 +17,7 @@ urlpatterns = [
     path('ships', views.user_boats, name="boats"),
     path('fines', views.user_fines, name="fines"),
     path('activate', views.ActivateAccount.as_view(), name="activate_account"),
-    path('reactivate', views.reactivate, name="reactivate")
+    path('reactivate', views.reactivate, name="reactivate"),
+    path('inspector/request/<int:pk>/looking', views.add_request_to_looking, name="add_looking_request"),
+    path('inspector/inspectingRequests', views.inspecting_requests, name="inspecting_requests"),
 ]

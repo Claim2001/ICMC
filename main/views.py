@@ -65,22 +65,6 @@ def logout_user(request):
     return redirect("main:login")
 
 
-def inspector_page(request):
-    if not request.user.is_authenticated:
-        return redirect("main:login")
-
-    if not request.user.is_inspector:
-        return redirect("main:index")
-
-    waiting_requests = Boat.objects.filter(status="wait")
-
-    context = {
-        "requests": waiting_requests
-    }
-
-    return render(request, "main/inspector.html", context)
-
-
 def boat_request(request, pk):
     if not request.user.is_authenticated:
         return redirect("main:login")
@@ -155,6 +139,60 @@ def user_fines(request):
     }
 
     return render(request, "main/user_fines.html", context)
+
+
+def inspector_page(request):
+    if not request.user.is_authenticated:
+        return redirect("main:login")
+
+    if not request.user.is_inspector:
+        return redirect("main:index")
+
+    waiting_requests = Boat.objects.filter(status="wait").order_by("-pk")
+    print(waiting_requests)
+
+    context = {
+        "requests": waiting_requests
+    }
+
+    return render(request, "main/inspector.html", context)
+
+
+def inspecting_requests(request):
+    if not request.user.is_authenticated:
+        return redirect("main:login")
+
+    if not request.user.is_inspector:
+        return redirect("main:index")
+
+    inspecting_boat_requests = Boat.objects.filter(status="looking").order_by("-pk")
+
+    context = {
+        "requests": inspecting_boat_requests,
+    }
+
+    return render(request, "main/inspector_inspecting_requests.html", context)
+
+
+def add_request_to_looking(request, pk):
+    if not request.user.is_authenticated:
+        return redirect("main:login")
+
+    if not request.user.is_inspector:
+        return redirect("main:index")
+
+    # TODO: refactor this code: every time we change status of a boat we gotta send a notification
+    # TODO: so we can just write a function what will change status and send notifications to the user
+    boat = get_object_or_404(Boat, pk=pk)
+
+    if boat.status is not "looking":
+        boat.status = "looking"
+        boat.save()
+
+        notification = Notification(owner=boat.owner, boat=boat, status=boat.status)
+        notification.save()
+
+    return redirect("main:inspector")
 
 
 def reactivate(request):

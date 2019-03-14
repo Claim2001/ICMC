@@ -2,12 +2,15 @@
 
 {% block content %}
 
-<h1>Inspector! <small><a href="{% url 'main:logout' %}">Logout</a></small></h1>
 
-<h3>Requests:</h3>
 {% for request in requests %}
 
-<p><a href="request/{{ request.id }}">{{ request }}</a></p>
+    <div class="control-block">
+        <div class="control-title">
+            <p>{{ request.owner.first_name }} {{ request.owner.last_name }} - {{ request.name }}</p>
+        </div>
+        <a href="{% url 'main:add_looking_request' pk=request.pk %}" class="btn">Добавить</a>
+    </div>
 
 {% endfor %}
 
