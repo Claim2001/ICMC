@@ -395,7 +395,8 @@ input.incorrect {
     width: 500px;
     height: 300px;
     left: 50%;
-    transform: translateX(-50%);
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
     background-color: #ffffff;
     position: fixed;
     z-index: 5;

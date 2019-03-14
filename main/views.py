@@ -7,8 +7,10 @@ from django.views.generic import View
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 
-from .models import Boat, Notification, Fine, Owner
+from .models import Boat, Notification, Fine, Owner, RemoveRequest
 from .forms import UserForm, BoatForm
+
+# TODO: add admin check everywhere
 
 
 def send_sms(number, message):
@@ -16,7 +18,7 @@ def send_sms(number, message):
     requests.get(link)
 
 
-class IndexView(View):
+class RegisterBoat(View):
     def get(self, request):
         if request.user.is_authenticated:
             if request.user.is_inspector:
@@ -51,10 +53,8 @@ class IndexView(View):
                 boat.owner = request.user
                 boat.save()
 
-                notification = Notification(owner=request.user, boat=boat, status="wait")
-                notification.save()
-
-                return redirect("main:boat_requests")
+                messages.add_message(request, messages.SUCCESS, "Ваше заявление принято и находится в очереди")
+                return redirect("main:index")
 
             else:
                 return redirect("main:index")
@@ -65,22 +65,6 @@ class IndexView(View):
 def logout_user(request):
     logout(request)
     return redirect("main:login")
-
-
-def inspector_page(request):
-    if not request.user.is_authenticated:
-        return redirect("main:login")
-
-    if not request.user.is_inspector:
-        return redirect("main:index")
-
-    waiting_requests = Boat.objects.filter(status="wait")
-
-    context = {
-        "requests": waiting_requests
-    }
-
-    return render(request, "main/inspector.html", context)
 
 
 def boat_request(request, pk):
@@ -105,6 +89,9 @@ def user_boat_requests(request):
     if not request.user.is_authenticated:
         return redirect("main:login")
 
+    if request.user.is_superuser:
+        return redirect("main:index")
+
     if not request.user.activated:
         return redirect("main:activate_account")
 
@@ -127,6 +114,9 @@ def user_boats(request):
     if not request.user.is_authenticated:
         return redirect("main:login")
 
+    if request.user.is_superuser:
+        return redirect("main:index")
+
     if not request.user.activated:
         return redirect("main:activate_account")
 
@@ -141,9 +131,36 @@ def user_boats(request):
     return render(request, "main/user_boats.html", context)
 
 
+def make_remove_boat_request(request, pk):
+    if not request.user.is_authenticated:
+        return redirect("main:login")
+
+    if request.user.is_superuser:
+        return redirect("main:index")
+
+    if not request.user.activated:
+        return redirect("main:activate_account")
+
+    boat = get_object_or_404(Boat, owner=request.user, pk=pk)
+
+    if not RemoveRequest.objects.filter(boat=boat):
+        remove_request = RemoveRequest(boat=boat, reason="broke")
+        remove_request.save()
+
+        messages.add_message(request, messages.SUCCESS, "Ваше заявление на снятие судна с учета отправлено!")
+
+    else:
+        messages.add_message(request, messages.WARNING, "Ваше заявление на снятие судна с учета уже отправлено!")
+
+    return redirect("main:boats")
+
+
 def user_fines(request):
     if not request.user.is_authenticated:
         return redirect("main:login")
+
+    if request.user.is_superuser:
+        return redirect("main:index")
 
     if not request.user.activated:
         return redirect("main:activate_account")
@@ -157,6 +174,88 @@ def user_fines(request):
     }
 
     return render(request, "main/user_fines.html", context)
+
+
+def inspector_page(request):
+    if not request.user.is_authenticated:
+        return redirect("main:login")
+
+    if request.user.is_superuser:
+        return redirect("main:index")
+
+    if not request.user.is_inspector:
+        return redirect("main:index")
+
+    waiting_requests = Boat.objects.filter(status="wait").order_by("-pk")
+    print(waiting_requests)
+
+    context = {
+        "requests": waiting_requests
+    }
+
+    return render(request, "main/inspector.html", context)
+
+
+def inspecting_requests(request):
+    if not request.user.is_authenticated:
+        return redirect("main:login")
+
+    if request.user.is_superuser:
+        return redirect("main:index")
+
+    if not request.user.is_inspector:
+        return redirect("main:index")
+
+    inspecting_boat_requests = Boat.objects.filter(status="looking").order_by("-pk")
+
+    context = {
+        "requests": inspecting_boat_requests,
+    }
+
+    return render(request, "main/inspector_inspecting_requests.html", context)
+
+
+def remove_requests(request):
+    if not request.user.is_authenticated:
+        return redirect("main:login")
+
+    if request.user.is_superuser:
+        return redirect("main:index")
+
+    if not request.user.is_inspector:
+        return redirect("")
+
+    remove_boat_request = RemoveRequest.objects.all()
+
+    context = {
+        "requests": remove_boat_request
+    }
+
+    return render(request, "main/inspector_remove_requests.html", context)
+
+
+def add_request_to_looking(request, pk):
+    if not request.user.is_authenticated:
+        return redirect("main:login")
+
+    if request.user.is_superuser:
+        return redirect("main:index")
+
+    if not request.user.is_inspector:
+        return redirect("main:index")
+
+    # TODO: refactor this code: every time we change status of a boat we gotta send a notification
+    # TODO: so we can just write a function what will change status and send notifications to the user
+    boat = get_object_or_404(Boat, pk=pk)
+
+    if boat.status is not "looking":
+        boat.status = "looking"
+        boat.save()
+
+        notification = Notification(owner=boat.owner, boat=boat, status=boat.status)
+        notification.save()
+
+    return redirect("main:inspector")
 
 
 def reactivate(request):
@@ -243,31 +342,5 @@ class ActivateAccount(View):
 
             messages.add_message(request, messages.ERROR, "Wrong code")
             return render(request, "main/activation.html", {})
-
-        return redirect("main:login")
-
-
-class RegisterBoat(View):
-    def get(self, request):
-        if not request.user.activated:
-            return redirect("main:activate_account")
-
-        if request.user.is_authenticated:
-            return render(request, "main/register_boat.html", {})
-
-        return redirect("main:login")
-
-    def post(self, request):
-        if request.user.is_authenticated:
-            form = BoatForm(request.POST or None)
-            if form.is_valid():
-                boat = form.save(commit=False)
-                boat.owner = request.user
-                boat.save()
-
-                notification = Notification(owner=request.user, status="wait")
-                notification.save()
-
-                return redirect("main:boat_requests")
 
         return redirect("main:login")

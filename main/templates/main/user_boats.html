@@ -3,6 +3,12 @@
 
 {% block content %}
 
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+
     {% for boat in boats %}
         <div class="control-block">
             <div class="control-title">
@@ -10,7 +16,7 @@
             </div>
 
             <a href="#{{ boat.pk }}" class="btn">Технический осмотр</a>
-            <button class="btn btn-warn openButton">Снять с учета</button>
+            <button class="btn btn-warn openButton" data-id="{{ boat.pk }}">Снять с учета</button>
         </div>
     {% endfor %}
 
@@ -22,6 +28,8 @@
                     <img src="{% static 'main/img/cancel.svg' %}" alt="">
                 </button>
             </div>
+
+            <a href="#" class="btn btn-warn" id="removeConfirmLink">Remove</a>
         </div>
     </div>
 

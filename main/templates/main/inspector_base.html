@@ -1,11 +1,45 @@
-{% extends 'main/base.html'  %}
+{% extends 'main/header_template.html' %}
 
-{% block body  %}
+<div>
 
-<div class="container">
-	{% block content  %}
-	{% endblock %}
+    {% block header %}
+
+        <h1><a href="{% url 'main:index' %}">Инспектор</a></h1>
+        <a href="{% url 'main:logout' %}" class="logout">Выход</a>
+
+    {% endblock %}
+
+
+    {% block main %}
+
+        <div class="container">
+
+            <div class="main">
+
+                <aside class="user-navigation">
+
+                    <ul class="user-navigation-list">
+                        {% with url_name=request.resolver_match.url_name %}
+                            <li class="{% if url_name == 'inspector' %}selected{% endif %}"><a href="{% url 'main:inspector' %}">Поступившие заявления</a></li>
+                            <li class="{% if url_name == 'inspecting_requests' %}selected{% endif %}"><a href="{% url 'main:inspecting_requests' %}">Рассматриваемые заявления</a></li>
+                            <li class="{% if url_name == 'remove_requests' %}selected{% endif %}"><a href="{% url 'main:remove_requests' %}">Заявления на снятие с учета</a></li>
+                        {% endwith %}
+                    </ul>
+
+                </aside>
+
+                <div class="content user-content">
+
+                    {% block content %}
+                    {% endblock %}
+
+                </div>
+
+            </div>
+
+        </div>
+    {% endblock %}
+
 </div>
 
 
-{% endblock  %}

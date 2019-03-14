@@ -1,0 +1,17 @@
+{% extends "main/inspector_base.html" %}
+
+{% block content %}
+
+
+    {% for request in requests %}
+
+        <div class="control-block">
+            <div class="control-title">
+                <p>{{ request.boat.owner.first_name }} {{ request.boat.owner.last_name }} - {{ request.boat.name }}</p>
+            </div>
+            <a href="#" class="btn">Просмотреть</a>
+        </div>
+
+    {% endfor %}
+
+{% endblock %}
