@@ -10,14 +10,14 @@
 
     <div class="control-block{% if notification.watched == False %} unwatched {% endif %}">
         {# TODO: check the height in PS #}
-        {% if notification.status == "wait" %}
+        {% if notification.status == "looking" %}
             <img src="{% static 'main/img/ship.svg' %}" alt="">
         {% endif %}
 
         <div class="control-title">
 {#            <p>{{ notification.status }}</p>#}
-            {% if notification.status == "wait" %}
-                Ваше заявление находится в очереди
+            {% if notification.status == "looking" %}
+                Ваше заявление находится на стадии рассмотрения
             {% endif %}
         </div>
 

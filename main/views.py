@@ -10,13 +10,15 @@ from django.contrib import messages
 from .models import Boat, Notification, Fine, Owner
 from .forms import UserForm, BoatForm
 
+# TODO: add admin check everywhere
+
 
 def send_sms(number, message):
     link = f"https://cdn.osg.uz/sms/?phone={number}&id=2342&message={message}"
     requests.get(link)
 
 
-class IndexView(View):
+class RegisterBoat(View):
     def get(self, request):
         if request.user.is_authenticated:
             if request.user.is_inspector:
@@ -49,10 +51,8 @@ class IndexView(View):
                 boat.owner = request.user
                 boat.save()
 
-                notification = Notification(owner=request.user, boat=boat, status="wait")
-                notification.save()
-
-                return redirect("main:boat_requests")
+                messages.add_message(request, messages.SUCCESS, "Ваше заявление принято и находится в очереди")
+                return redirect("main:index")
 
             else:
                 return redirect("main:index")
@@ -279,31 +279,5 @@ class ActivateAccount(View):
 
             messages.add_message(request, messages.ERROR, "Wrong code")
             return render(request, "main/activation.html", {})
-
-        return redirect("main:login")
-
-
-class RegisterBoat(View):
-    def get(self, request):
-        if not request.user.activated:
-            return redirect("main:activate_account")
-
-        if request.user.is_authenticated:
-            return render(request, "main/register_boat.html", {})
-
-        return redirect("main:login")
-
-    def post(self, request):
-        if request.user.is_authenticated:
-            form = BoatForm(request.POST or None)
-            if form.is_valid():
-                boat = form.save(commit=False)
-                boat.owner = request.user
-                boat.save()
-
-                notification = Notification(owner=request.user, status="wait")
-                notification.save()
-
-                return redirect("main:boat_requests")
 
         return redirect("main:login")
