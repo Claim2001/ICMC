@@ -21,4 +21,5 @@ urlpatterns = [
     path('reactivate', views.reactivate, name="reactivate"),
     path('inspector/request/<int:pk>/looking', views.add_request_to_looking, name="add_looking_request"),
     path('inspector/inspectingRequests', views.inspecting_requests, name="inspecting_requests"),
+    path('inspector/removeRequests', views.remove_requests, name="remove_requests"),
 ]

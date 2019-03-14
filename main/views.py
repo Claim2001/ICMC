@@ -195,6 +195,22 @@ def inspecting_requests(request):
     return render(request, "main/inspector_inspecting_requests.html", context)
 
 
+def remove_requests(request):
+    if not request.user.is_authenticated:
+        return redirect("main:login")
+
+    if not request.user.is_inspector:
+        return redirect("")
+
+    requests = RemoveRequest.objects.all()
+
+    context = {
+        "requests": requests
+    }
+
+    return render(request, "main/inspector_remove_requests.html", context)
+
+
 def add_request_to_looking(request, pk):
     if not request.user.is_authenticated:
         return redirect("main:login")

@@ -22,6 +22,7 @@
                         {% with url_name=request.resolver_match.url_name %}
                             <li class="{% if url_name == 'inspector' %}selected{% endif %}"><a href="{% url 'main:inspector' %}">Поступившие заявления</a></li>
                             <li class="{% if url_name == 'inspecting_requests' %}selected{% endif %}"><a href="{% url 'main:inspecting_requests' %}">Рассматриваемые заявления</a></li>
+                            <li class="{% if url_name == 'remove_requests' %}selected{% endif %}"><a href="{% url 'main:remove_requests' %}">Заявления на снятие с учета</a></li>
                         {% endwith %}
                     </ul>
 
