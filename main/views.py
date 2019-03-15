@@ -91,8 +91,8 @@ def user_boat_requests(request):
     if not request.user.activated:
         return redirect("main:activate_account")
 
-    notifications = list(Notification.objects.filter(owner=request.user)).copy()
-    unwatched_notifications = Notification.objects.filter(owner=request.user, watched=False).order_by("-pk")
+    notifications = list(Notification.objects.filter(owner=request.user).order_by("-pk")).copy()
+    unwatched_notifications = Notification.objects.filter(owner=request.user, watched=False)
 
     context = {
         "notifications": notifications,
@@ -243,6 +243,7 @@ def add_request_to_looking(request, pk):
     boat = get_object_or_404(Boat, pk=pk)
     boat.change_status("looking")
 
+    messages.add_message(request, messages.SUCCESS, "Добавлено в 'рассматриваемые'")
     return redirect("main:inspector")
 
 

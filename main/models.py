@@ -71,9 +71,9 @@ class Boat(models.Model):
     other_files = models.FileField(null=True, blank=False)
     status = models.CharField(max_length=100, choices=BOAT_STATUS, default="wait")
 
-    def change_status(self, status):
-        if self.status is not status:
-            self.status = status
+    def change_status(self, value):
+        if self.status is not value:
+            self.status = value
             self.save()
 
             notification = Notification(owner=self.owner, boat=self, status=self.status)

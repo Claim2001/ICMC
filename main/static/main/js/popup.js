@@ -1,20 +1,37 @@
-let popupWindow = document.querySelector(".popup-window"),
-    closeButton = document.querySelector(".closeButton"),
-    openButtons = Array.from(document.querySelectorAll(".openButton")),
+let removePopupWindow = document.querySelector(".remove-window"),
+    techCheckPopupWindow = document.querySelector(".techCheck-window"),
+    closeButtons = Array.from(document.querySelectorAll(".closeButton")),
+    removeOpenButtons = Array.from(document.querySelectorAll(".removeOpenButton")),
+    techCheckOpenButtons = Array.from(document.querySelectorAll(".techCheckOpenButton")),
+    techCheckLinks = Array.from(document.querySelectorAll(".techCheckLink")),
     removeConfirmLink = document.querySelector("#removeConfirmLink");
 
 
-openButtons.map(function (button) {
+removeOpenButtons.map(function (button) {
    button.addEventListener('click', function () {
        let boatID = button.dataset.id;
        removeConfirmLink.href = "/request/" + boatID + "/remove";
 
        console.log(removeConfirmLink);
 
-       popupWindow.style.display = "flex";
+       removePopupWindow.style.display = "flex";
    });
 });
 
-closeButton.addEventListener("click", function () {
-    popupWindow.style.display = "none";
+techCheckOpenButtons.map(function (button) {
+    button.addEventListener('click', function () {
+        let boatID = button.dataset.id;
+        techCheckLinks.map(function (link) {
+            link.href = boatID;
+        });
+
+        techCheckPopupWindow.style.display = "flex"
+    });
+});
+
+closeButtons.map(function (button) {
+    button.addEventListener("click", function () {
+        removePopupWindow.style.display = "none";
+        techCheckPopupWindow.style.display = "none";
+    });
 });
