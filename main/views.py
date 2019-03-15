@@ -10,8 +10,6 @@ from django.contrib import messages
 from .models import Boat, Notification, Fine, Owner, RemoveRequest
 from .forms import UserForm, BoatForm
 
-# TODO: add admin check everywhere
-
 
 def send_sms(number, message):
     link = f"https://cdn.osg.uz/sms/?phone={number}&id=2342&message={message}"
@@ -94,7 +92,7 @@ def user_boat_requests(request):
         return redirect("main:activate_account")
 
     notifications = list(Notification.objects.filter(owner=request.user)).copy()
-    unwatched_notifications = Notification.objects.filter(owner=request.user, watched=False)
+    unwatched_notifications = Notification.objects.filter(owner=request.user, watched=False).order_by("-pk")
 
     context = {
         "notifications": notifications,
@@ -242,16 +240,8 @@ def add_request_to_looking(request, pk):
     if not request.user.is_inspector:
         return redirect("main:index")
 
-    # TODO: refactor this code: every time we change status of a boat we gotta send a notification
-    # TODO: so we can just write a function what will change status and send notifications to the user
     boat = get_object_or_404(Boat, pk=pk)
-
-    if boat.status is not "looking":
-        boat.status = "looking"
-        boat.save()
-
-        notification = Notification(owner=boat.owner, boat=boat, status=boat.status)
-        notification.save()
+    boat.change_status("looking")
 
     return redirect("main:inspector")
 
