@@ -61,6 +61,7 @@ aside.user-navigation {
     height: 100vh;
     border-right: 1px solid lightgray;
     position: fixed;
+    background-color: white;
 }
 
 ul.user-navigation-list {
@@ -392,15 +393,23 @@ input.incorrect {
 }
 
 .popup-window .popup {
-    width: 500px;
-    height: 300px;
+    width: 600px;
+    /*height: 300px;*/
     left: 50%;
     top: 50%;
     transform: translateX(-50%) translateY(-50%);
     background-color: #ffffff;
     position: fixed;
     z-index: 5;
-    padding: 10px;
+    padding: 10px 20px 20px 20px;
+    text-align: center;
+}
+
+.closeButtonContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
 }
 
 .closeButton {
@@ -412,6 +421,35 @@ input.incorrect {
 
 .closeButton img {
     width: 25px;
+}
+
+h1.popupTitle {
+    font-size: 20px;
+    margin-bottom: 30px;
+}
+
+.popupLinks {
+    display: flex;
+    flex-direction: row;
+    justify-content: normal;
+    height: 100px;
+}
+
+.popupLink {
+    background-color: #f3f3f3;
+    font-size: 15px;
+    flex: 1;
+    margin: 5px;
+    /*padding: 20px 0;*/
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: rgba(0, 0, 0, 0.7);
+}
+
+.popupLink:hover {
+    text-decoration: none;
+    color: #138cff;
 }
 
 /* ************************************* */
