@@ -412,7 +412,7 @@ input.incorrect {
     justify-content: flex-end;
 }
 
-.closeButton {
+button.closeButton {
     background-color: transparent;
     border: none;
     outline: none;
