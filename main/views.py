@@ -273,8 +273,8 @@ class Login(View):
             login(request, authenticated_user)
             return redirect("main:index")
 
-        messages.add_message(request, messages.ERROR, "Login or password is wrong")
-        return redirect("main:login")
+        messages.add_message(request, messages.ERROR, "Неверный email или пароль")
+        return render(request, "main/login.html", {"email": email})
 
 
 class SignUp(View):
