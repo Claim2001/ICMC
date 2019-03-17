@@ -25,7 +25,7 @@
 			            <a href="{% url 'main:boat_requests' %}">Мои заявления </a>{% if notifications_count > 0 %}
                         <span class="count">{{ notifications_count }}</span>{% endif %}
                     </li>
-                    <li class="{% if url_name == 'boats' %}selected{% endif %}"><a href="{% url 'main:boats' %}">Мои судна</a></li>
+                    <li class="{% if url_name == 'boats' or url_name == 'tech_check' %}selected{% endif %}"><a href="{% url 'main:boats' %}">Мои судна</a></li>
         		    <li class="{% if url_name == 'fines' %}selected{% endif %}"><a href="{% url 'main:fines'  %}">Мои нарушения</a></li>
                     {% endwith %}
                 </ul>

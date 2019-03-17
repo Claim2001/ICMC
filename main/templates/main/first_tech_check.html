@@ -1,0 +1,16 @@
+{% extends 'main/user_base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+
+    <h1 class="formTitle">Ежегодный техосмотр</h1>
+
+    <div class="steps">
+        <p>
+            <span class="step currentStep">Шаг 1</span>
+            <img src="{% static 'main/img/arrow-right.svg' %}" class="arrow" alt="">
+            <span class="step">Шаг 2</span>
+        </p>
+    </div>
+
+{% endblock %}

@@ -335,3 +335,25 @@ class ActivateAccount(View):
             return render(request, "main/activation.html", {})
 
         return redirect("main:login")
+
+
+class TechCheck(View):
+    def get(self, request, pk):
+        if not request.user.is_authenticated:
+            return redirect("main:login")
+
+        if request.user.is_inspector:
+            return redirect("main:inspector")
+
+        boat = get_object_or_404(Boat, pk=pk)
+        unwatched_notifications_count = len(Notification.objects.filter(watched=False))
+
+        context = {
+            "boat": boat,
+            "notifications_count": unwatched_notifications_count
+        }
+
+        return render(request, "main/first_tech_check.html", context)
+
+    def post(self, request):
+        return render(request, "main/first_tech_check.html", {})

@@ -15,7 +15,7 @@
                 <p>{{ boat.name }}</p>
             </div>
 
-            <button class="btn techCheckOpenButton" data-id="{{ boat.pk }}">Технический осмотр</button>
+            <button class="btn techCheckOpenButton" data-id="{% url 'main:tech_check' pk=boat.pk %}">Технический осмотр</button>
             <button class="btn btn-warn removeOpenButton" data-id="{{ boat.pk }}">Снять с учета</button>
         </div>
     {% endfor %}
