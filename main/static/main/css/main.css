@@ -174,10 +174,11 @@ form button.btn, form a.btn {
 * {
   margin: 0;
   padding: 0;
+  font-family: "Open Sans";
 }
 
 html {
-  font-family: sans-serif;
+  font-family: "Open Sans";
 }
 
 .fileBox {
