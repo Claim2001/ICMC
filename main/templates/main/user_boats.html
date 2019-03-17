@@ -15,21 +15,39 @@
                 <p>{{ boat.name }}</p>
             </div>
 
-            <a href="#{{ boat.pk }}" class="btn">Технический осмотр</a>
-            <button class="btn btn-warn openButton" data-id="{{ boat.pk }}">Снять с учета</button>
+            <button class="btn techCheckOpenButton" data-id="{{ boat.pk }}">Технический осмотр</button>
+            <button class="btn btn-warn removeOpenButton" data-id="{{ boat.pk }}">Снять с учета</button>
         </div>
     {% endfor %}
 
-    <div class="popup-window">
+    <div class="popup-window remove-window">
         <div class="popup-window-background"></div>
         <div class="popup">
-            <div class="close">
+            <div class="closeButtonContainer">
                 <button class="closeButton">
                     <img src="{% static 'main/img/cancel.svg' %}" alt="">
                 </button>
             </div>
 
             <a href="#" class="btn btn-warn" id="removeConfirmLink">Remove</a>
+        </div>
+    </div>
+
+    <div class="popup-window techCheck-window">
+        <div class="popup-window-background"></div>
+        <div class="popup">
+            <div class="closeButtonContainer">
+                <button class="closeButton">
+                    <img src="{% static 'main/img/cancel.svg' %}" alt="">
+                </button>
+            </div>
+
+            <h1 class="popupTitle">Выберите тип техосмотра</h1>
+
+            <div class="popupLinks">
+                <a href="#" class="popupLink techCheckLink">Первичный техосмотр</a>
+                <a href="#" class="popupLink techCheckLink">Ежегодный техосмотр</a>
+            </div>
         </div>
     </div>
 

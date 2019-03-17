@@ -6,18 +6,18 @@ from django.contrib.auth.base_user import AbstractBaseUser
 class Owner(AbstractUser):
     first_name = models.CharField("Имя", max_length=250)
     last_name = models.CharField("Фамилия", max_length=250)
-    gender = models.CharField("Пол", max_length=20, choices=[("Мужской", "Мужской"),
-                                                             ("Женский", "Женский")])
-    name_of_organization = models.CharField(max_length=250)
-    address = models.CharField(max_length=300)
-    mail_index = models.CharField(max_length=100)
-    date_of_passport = models.CharField(max_length=200)
-    inn = models.CharField(max_length=250)
-    country = models.CharField(max_length=250)
-    city = models.CharField(max_length=250)
+    gender = models.CharField("Пол", max_length=20, null=True, blank=True, choices=[("Мужской", "Мужской"),
+                                                                                    ("Женский", "Женский")])
+    name_of_organization = models.CharField(max_length=250, null=True, blank=True)
+    address = models.CharField(max_length=300, null=True, blank=True)
+    mail_index = models.CharField(max_length=100, null=True, blank=True)
+    date_of_passport = models.CharField(max_length=200, null=True, blank=True)
+    inn = models.CharField(max_length=250, null=True, blank=True)
+    country = models.CharField(max_length=250, null=True, blank=True)
+    city = models.CharField(max_length=250, null=True, blank=True)
     email = models.EmailField(max_length=300, unique=True, null=False)
     is_inspector = models.BooleanField(default=False)
-    phone_number = models.CharField(max_length=100, default="")
+    phone_number = models.CharField(max_length=100, default="", null=True, blank=True)
     is_staff = models.BooleanField(default=False)
     activation_code = models.PositiveIntegerField(null=True, blank=True)
     activated = models.BooleanField(default=False)
@@ -70,6 +70,14 @@ class Boat(models.Model):
     passport_image = models.FileField(null=False, blank=False)
     other_files = models.FileField(null=True, blank=False)
     status = models.CharField(max_length=100, choices=BOAT_STATUS, default="wait")
+
+    def change_status(self, value):
+        if self.status is not value:
+            self.status = value
+            self.save()
+
+            notification = Notification(owner=self.owner, boat=self, status=self.status)
+            notification.save()
 
     def __str__(self):
         return f"{self.name} - {self.model_type}"

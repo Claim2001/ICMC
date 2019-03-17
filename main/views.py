@@ -10,8 +10,6 @@ from django.contrib import messages
 from .models import Boat, Notification, Fine, Owner, RemoveRequest
 from .forms import UserForm, BoatForm
 
-# TODO: add admin check everywhere
-
 
 def send_sms(number, message):
     link = f"https://cdn.osg.uz/sms/?phone={number}&id=2342&message={message}"
@@ -95,7 +93,7 @@ def user_boat_requests(request):
     if not request.user.activated:
         return redirect("main:activate_account")
 
-    notifications = list(Notification.objects.filter(owner=request.user)).copy()
+    notifications = list(Notification.objects.filter(owner=request.user).order_by("-pk")).copy()
     unwatched_notifications = Notification.objects.filter(owner=request.user, watched=False)
 
     context = {
@@ -244,17 +242,10 @@ def add_request_to_looking(request, pk):
     if not request.user.is_inspector:
         return redirect("main:index")
 
-    # TODO: refactor this code: every time we change status of a boat we gotta send a notification
-    # TODO: so we can just write a function what will change status and send notifications to the user
     boat = get_object_or_404(Boat, pk=pk)
+    boat.change_status("looking")
 
-    if boat.status is not "looking":
-        boat.status = "looking"
-        boat.save()
-
-        notification = Notification(owner=boat.owner, boat=boat, status=boat.status)
-        notification.save()
-
+    messages.add_message(request, messages.SUCCESS, "Добавлено в 'рассматриваемые'")
     return redirect("main:inspector")
 
 
@@ -284,8 +275,8 @@ class Login(View):
             login(request, authenticated_user)
             return redirect("main:index")
 
-        messages.add_message(request, messages.ERROR, "Login or password is wrong")
-        return redirect("main:login")
+        messages.add_message(request, messages.ERROR, "Неверный email или пароль")
+        return render(request, "main/login.html", {"email": email})
 
 
 class SignUp(View):

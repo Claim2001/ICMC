@@ -2,6 +2,11 @@
 
 {% block content %}
 
+    {% for message in messages %}
+        <div class="alert alert-success" role="alert" id="backendErrorMessage">
+            {{ message }}
+        </div>
+    {% endfor %}
 
 {% for request in requests %}
 
