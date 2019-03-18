@@ -335,7 +335,9 @@ class ActivateAccount(View):
         return redirect("main:login")
 
 
-class TechCheck(View):
+class TechCheckView(View):
+    title = ""
+
     def get(self, request, pk):
         if not request.user.is_authenticated:
             return redirect("main:login")
@@ -348,10 +350,22 @@ class TechCheck(View):
 
         context = {
             "boat": boat,
-            "notifications_count": unwatched_notifications_count
+            "notifications_count": unwatched_notifications_count,
+            "title": self.title
         }
 
-        return render(request, "main/first_tech_check.html", context)
+        return render(request, "main/tech_check_template.html", context)
+
+
+class FirstTechCheck(TechCheckView):
+    title = "Первичный техосмотр"
 
     def post(self, request):
-        return render(request, "main/first_tech_check.html", {})
+        return redirect("main:boats")
+
+
+class YearTechCheck(TechCheckView):
+    title = "Ежегодный техосмотр"
+
+    def post(self, request):
+        return redirect("main:boats")

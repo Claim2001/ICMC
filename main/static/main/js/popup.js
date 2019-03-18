@@ -3,7 +3,8 @@ let removePopupWindow = document.querySelector(".remove-window"),
     closeButtons = Array.from(document.querySelectorAll(".closeButton")),
     removeOpenButtons = Array.from(document.querySelectorAll(".removeOpenButton")),
     techCheckOpenButtons = Array.from(document.querySelectorAll(".techCheckOpenButton")),
-    techCheckLinks = Array.from(document.querySelectorAll(".techCheckLink")),
+    techCheckLink = document.querySelector("#techCheck"),
+    yearTechCheckLink = document.querySelector("#yearTechCheck"),
     removeConfirmLink = document.querySelector("#removeConfirmLink");
 
 
@@ -21,9 +22,8 @@ removeOpenButtons.map(function (button) {
 techCheckOpenButtons.map(function (button) {
     button.addEventListener('click', function () {
         let boatID = button.dataset.id;
-        techCheckLinks.map(function (link) {
-            link.href = boatID;
-        });
+        techCheckLink.href = "/request/" + boatID + "/techCheck";
+        yearTechCheckLink.href = "/request/" + boatID + "/yearTechCheck";
 
         techCheckPopupWindow.style.display = "flex"
     });
