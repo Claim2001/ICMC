@@ -467,6 +467,13 @@ h1.formTitle {
     justify-content: flex-start;
 }
 
+.exit-icon {
+    display: inline-block;
+    width: 20px;
+    margin-right: 3px;
+}
+
+
 /* ************************************* */
 /* just for a moment */
 h1 {

@@ -1,11 +1,10 @@
-{% extends 'main/header_template.html' %}
+{% extends 'main/header_user_template.html' %}
 
 <div>
 
-    {% block header %}
+    {% block title %}
 
-    <h1><a href="{% url 'main:index' %}">Личный кабинет</a></h1>
-    <a href="{% url 'main:logout' %}" class="logout">Выход</a>
+        <a href="{% url 'main:index' %}">Личный кабинет</a>
 
     {% endblock %}
 

@@ -1,0 +1,13 @@
+{% extends 'main/header_template.html' %}
+{% load staticfiles %}
+
+{% block header %}
+
+    <h1>{% block title %}{% endblock %}</h1>
+
+    <a href="{% url 'main:logout' %}" class="logout">
+        <img src="{% static 'main/img/exit.svg' %}" alt="" class="exit-icon">
+        Выход
+    </a>
+
+{% endblock %}
