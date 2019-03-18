@@ -3,14 +3,182 @@
 
 {% block content %}
 
-    <h1 class="formTitle">Ежегодный техосмотр</h1>
+    <form action="" method="POST" autocomplete="off" name="boatForm" enctype="multipart/form-data">
 
-    <div class="steps">
-        <p>
-            <span class="step currentStep">Шаг 1</span>
-            <img src="{% static 'main/img/arrow-right.svg' %}" class="arrow" alt="">
-            <span class="step">Шаг 2</span>
-        </p>
-    </div>
+        <div class="titleContainer">
+            <h1 class="formTitle">Первичный техосмотр</h1>
+
+            <div class="steps">
+                <p>
+                    <span class="step currentStep">Шаг 1</span>
+                    <img src="{% static 'main/img/arrow-right.svg' %}" class="arrow" alt="">
+                    <span class="step">Шаг 2</span>
+                </p>
+            </div>
+        </div>
+
+
+        <div class="alert alert-danger" id="clientErrorMessage" role="alert">
+            Некоторые поля заполнены неверно
+        </div>
+
+        {% csrf_token %}
+
+        <div class="page selectedPage">
+            <div class="row">
+
+                <div class="col-lg-4 form-column">
+
+                    <div class="form-element">
+                        <p>Тип и модель</p>
+                        <input type="text" name="model_type" maxlength="300" required id="id_model_type">
+                    </div>
+
+                    <div class="form-element">
+                        <p>Наименование</p>
+                        <input type="text" name="name" maxlength="250" required id="id_name">
+                    </div>
+
+                    <div class="form-element">
+                        <p>Идентификационный (IMO)</p>
+                        <input type="text" name="imo" maxlength="250" required id="id_imo">
+                    </div>
+
+                    <div class="form-element">
+                        <p>Место постройки</p>
+                        <input type="text" name="build_place" maxlength="300" required id="id_build_place">
+                    </div>
+
+                    <div class="form-element">
+                        <p>Год постройки</p>
+                        <input type="number" name="build_year" min="0" required id="id_build_year">
+                    </div>
+
+
+                </div>
+
+
+                <div class="col-lg-4 form-column">
+
+                    <div class="form-element">
+                        <p>Длина (м)</p>
+                        <input type="number" name="length" min="0" required id="id_length">
+                    </div>
+
+                    <div class="form-element">
+                        <p>Ширина (м)</p>
+                        <input type="number" name="width" min="0" required id="id_width">
+                    </div>
+
+                    <div class="form-element">
+                        <p>Высота борта (м)</p>
+                        <input type="number" name="height_board" min="0" required id="id_height_board">
+                    </div>
+
+                    <div class="form-element">
+                        <p>Высота надв. Борта (м)</p>
+                        <input type="number" name="height_second_board" min="0" required id="id_height_second_board">
+                    </div>
+
+                    <div class="form-element">
+                        <p>Материал корпуса</p>
+                        <select name="material" required id="id_material">
+                            <option value="wood">wood</option>
+                            <option value="other">other</option>
+                        </select>
+                    </div>
+
+                </div>
+
+
+                <div class="col-lg-4 form-column">
+
+                    <div class="form-element">
+                        <p>Пассажировместимость (чел.)</p>
+                        <input type="number" name="passenger_awn" min="0" required id="id_passenger_awn">
+                    </div>
+
+                    <div class="form-element">
+                        <p>Вместимость (тонн)</p>
+                        <input type="number" name="capacity" min="0" required id="id_capacity">
+                    </div>
+
+                    <div class="form-element">
+                        <p>Грузоподъемность (кг)</p>
+                        <input type="number" name="capacity_load" min="0" required id="id_capacity_load">
+                    </div>
+
+
+                    <div class="form-element">
+                        <p>Район и условия плавания</p>
+                        <input type="text" name="swimming_place" maxlength="300" required id="id_swimming_place">
+                    </div>
+
+
+                    <div class="form-element">
+                        <p>Тип главного двигателя</p>
+                        <input type="text" name="engine_type" maxlength="300" required id="id_engine_type">
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="form-buttons">
+                <button class="btn" type="button" id="nextFormPage">Далее</button>
+            </div>
+
+        </div>
+
+        <div class="page">
+            <div class="row">
+
+                <div class="col-lg-4 form-column">
+
+                    <div class="form-element">
+                        <p>Количество парусов</p>
+                        <input type="number" name="sails_amount" min="0" required id="id_sails_amount">
+                    </div>
+
+                    <div class="form-element">
+                        <p>Площадь парусов (м2)</p>
+                        <input type="number" name="sail_area" min="0" required id="id_sail_area">
+                    </div>
+
+                    <div class="form-element">
+                        <p>Марка двигателя</p>
+                        <input type="text" name="engine_model" maxlength="300" required id="id_engine_model">
+                    </div>
+
+                </div>
+
+                <div class="col-lg-4 form-column">
+                    <div class="form-element">
+                        <p>Заводские номера двигателей</p>
+                        <input type="text" name="engine_number" maxlength="300" required id="id_engine_number">
+                    </div>
+
+                    <div class="form-element">
+                        <p>Мощность двигателя/ей (кВт/л.с.)</p>
+                        <input type="number" name="engine_power" min="0" required id="id_engine_power">
+                    </div>
+                </div>
+
+
+                <div class="col-lg-4 form-column">
+                </div>
+
+            </div>
+
+
+            <div class="form-buttons">
+                <button class="btn" type="button" id="prevFormPage">Назад</button>
+                <button class="btn" type="submit" id="submitButton">Подать заявку</button>
+            </div>
+        </div>
+
+    </form>
+
+    <script src="{% static 'main/js/boat_form.js' %}"></script>
 
 {% endblock %}

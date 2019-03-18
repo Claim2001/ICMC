@@ -455,6 +455,18 @@ h1.popupTitle {
     color: #138cff;
 }
 
+h1.formTitle {
+    font-size: 25px;
+    color: #ff7d1b;
+    margin-right: 20px;
+}
+
+.titleContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
 /* ************************************* */
 /* just for a moment */
 h1 {

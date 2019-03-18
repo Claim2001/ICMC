@@ -31,8 +31,6 @@ class RegisterBoat(View):
             form = BoatForm()
             unwatched_notifications_count = len(Notification.objects.filter(owner=request.user, watched=False))
 
-            notification_count = Notification.objects.filter(owner=request.user, watched=False)
-
             context = {
                 "user": request.user,
                 "form": form,
