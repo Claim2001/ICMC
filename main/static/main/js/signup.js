@@ -70,3 +70,4 @@ function validatePhoneNumber(string) {
     let re = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
     return string.match(re);
 }
+

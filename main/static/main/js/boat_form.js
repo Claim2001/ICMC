@@ -7,7 +7,7 @@ let pages = Array.from(document.querySelectorAll(".page")),
 
 
 nextFormPageButton.addEventListener("click", function () {
-    if (checkInputsFilled()) {
+    if (checkFieldsFilled() && checkFileFormats()) {
         toggleErrorMessage(false);
         movePage(true);
     } else {
@@ -22,7 +22,7 @@ prevFormPageButton.addEventListener("click", function () {
 submitButton.addEventListener("click", function (evt) {
     evt.preventDefault();
 
-    if (checkInputsFilled()) {
+    if (checkFieldsFilled() && checkFileFormats()) {
         toggleErrorMessage(false);
         document.boatForm.submit();
     } else {
@@ -48,30 +48,46 @@ function toggleErrorMessage(visible) {
     errorMessage.style.display = visible ? "block" : "none";
 }
 
-function checkInputsFilled() {
+function checkFieldsFilled() {
     let currentPage = document.querySelector(".selectedPage"),
         inputs = Array.from(currentPage.getElementsByTagName("input"));
 
-    let inputsFilled = true;
+    let areFilled = true;
 
     inputs.map(function (input) {
         if (input.type === "file") {
             let fileBox = input.parentElement.getElementsByClassName("fileBox")[0];
-            fileBox.className = input.value === "" ? "fileBox incorrect" : "fileBox filled";
+            fileBox.className = input.value === "" || !isAllowedFileFormat(input.value) ? "fileBox incorrect" : "fileBox filled";
         } else {
             input.className = input.value === "" ? "incorrect" : "";
         }
 
-	if (input.value === "")
-	    inputsFilled = false
+        if (input.value === "") {
+            areFilled = false;
+        }
     });
 
-    return inputsFilled;
+    return areFilled;
+}
+
+function checkFileFormats() {
+    let currentPage = document.querySelector(".selectedPage"),
+        fileInputsInCurrentPage = Array.from(currentPage.getElementsByClassName("formFileInput")),
+        formatsAreCorrect = true;
+
+    fileInputsInCurrentPage.map(function (fileInput) {
+        if (formatsAreCorrect === true) {
+            formatsAreCorrect = isAllowedFileFormat(fileInput.value);
+        }
+    });
+
+    return formatsAreCorrect;
 }
 
 
 let fileBoxes = Array.from(document.querySelectorAll(".fileBox")),
-    fileFields = Array.from(document.querySelectorAll("input"));
+    fileFields = Array.from(document.querySelectorAll("input[type='file']"));
+
 
 fileBoxes.map(function (box) {
     box.addEventListener("click", function () {
@@ -84,7 +100,21 @@ fileFields.map(function (field) {
     field.addEventListener("change", function () {
         let fileBox = field.parentElement.getElementsByClassName("fileBox")[0];
 
+        if (!isAllowedFileFormat(field.value)) {
+            fileBox.className = "fileBox incorrect";
+            toggleErrorMessage(true);
+
+            return
+        }
+
         // if user selected a file then change the class name
         fileBox.className = field.value === "" ? "fileBox" : "fileBox filled";
     })
 });
+
+function isAllowedFileFormat(filename) {
+    let allowed_extensions = ["jpeg", "png", "jpg", "pdf", "docx", "doc"],
+        extension = filename.split('.').pop();
+
+    return allowed_extensions.includes(extension);
+}
