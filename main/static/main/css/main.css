@@ -486,6 +486,17 @@ h1.formTitle {
     margin-right: 3px;
 }
 
+@media (max-width: 768px) {
+    aside.user-navigation {
+        display: none;
+    }
+
+    .content.user-content {
+        margin-left: 0;
+        padding-left: 0;
+    }
+}
+
 
 /* ************************************* */
 /* just for a moment */
