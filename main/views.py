@@ -16,6 +16,8 @@ def send_sms(number, message):
     requests.get(link)
 
 
+# User related views
+
 class RegisterBoat(View):
     def get(self, request):
         if request.user.is_authenticated:
@@ -56,29 +58,6 @@ class RegisterBoat(View):
                 return redirect("main:index")
 
         return redirect("main:login")
-
-
-def logout_user(request):
-    logout(request)
-    return redirect("main:login")
-
-
-def boat_request(request, pk):
-    if not request.user.is_authenticated:
-        return redirect("main:login")
-
-    boat = get_object_or_404(Boat, pk=pk)
-
-    if request.user.is_inspector:
-        notification = Notification(owner=boat.owner, boat=boat, status=boat.status)
-        notification.save()
-
-        return render(request, "main/inspector_request.html", {"boat": boat})
-
-    if not request.user.activated:
-        return redirect("main:activate_account")
-
-    return render(request, "main/request.html", {"request": boat})
 
 
 def user_boat_requests(request):
@@ -127,6 +106,27 @@ def user_boats(request):
     return render(request, "main/user_boats.html", context)
 
 
+def user_fines(request):
+    if not request.user.is_authenticated:
+        return redirect("main:login")
+
+    if request.user.is_superuser:
+        return redirect("main:index")
+
+    if not request.user.activated:
+        return redirect("main:activate_account")
+
+    unwatched_notifications_count = len(Notification.objects.filter(owner=request.user, watched=False))
+    fines = Fine.objects.filter(owner=request.user)
+
+    context = {
+        "fines": fines,
+        "notifications_count": unwatched_notifications_count,
+    }
+
+    return render(request, "main/user_fines.html", context)
+
+
 def make_remove_boat_request(request, pk):
     if not request.user.is_authenticated:
         return redirect("main:login")
@@ -151,25 +151,27 @@ def make_remove_boat_request(request, pk):
     return redirect("main:boats")
 
 
-def user_fines(request):
+def logout_user(request):
+    logout(request)
+    return redirect("main:login")
+
+
+def boat_request(request, pk):
     if not request.user.is_authenticated:
         return redirect("main:login")
 
-    if request.user.is_superuser:
-        return redirect("main:index")
+    boat = get_object_or_404(Boat, pk=pk)
+
+    if request.user.is_inspector:
+        notification = Notification(owner=boat.owner, boat=boat, status=boat.status)
+        notification.save()
+
+        return render(request, "main/inspector_request.html", {"boat": boat})
 
     if not request.user.activated:
         return redirect("main:activate_account")
 
-    unwatched_notifications_count = len(Notification.objects.filter(owner=request.user, watched=False))
-    fines = Fine.objects.filter(owner=request.user)
-
-    context = {
-        "fines": fines,
-        "notifications_count": unwatched_notifications_count,
-    }
-
-    return render(request, "main/user_fines.html", context)
+    return render(request, "main/request.html", {"request": boat})
 
 
 def inspector_page(request):

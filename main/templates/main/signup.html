@@ -41,28 +41,30 @@
                     </div>
 
                     <div class="form-element">
-                        <p><label for="id_name_of_organization">Name of organization:</label></p>
+                        <p><label for="id_name_of_organization">Название организации:</label></p>
                         <input type="text" name="name_of_organization" maxlength="250" required id="id_name_of_organization" value="{{ form.name_of_organization.value|default_if_none:"" }}">
                     </div>
 
                     <div class="form-element">
-                        <p><label for="id_mail_index">Mail index:</label></p>
+                        <p><label for="id_mail_index">Почтовый индекс:</label></p>
                         <input type="text" name="mail_index" maxlength="100" required id="id_mail_index" value="{{ form.mail_index.value|default_if_none:"" }}">
                     </div>
 
                     <div class="form-element">
-                        <p><label for="id_address">Address:</label></p>
+                        <p><label for="id_address">Адрес:</label></p>
                         <input type="text" name="address" maxlength="300" required id="id_address" value="{{ form.address.value|default_if_none:"" }}">
                     </div>
 
                     <div class="form-element">
                         <p><label for="id_gender">Пол:</label></p>
-                        <select name="gender" required id="id_gender">
-                            <option value="Мужской" {% if form.gender.value|default_if_none:"Мужской" == "Мужской" %}selected{% endif %}>Мужской</option>
+                        <div class="dropdown">
+                            <select name="gender" required id="id_gender">
+                                <option value="Мужской" {% if form.gender.value|default_if_none:"Мужской" == "Мужской" %}selected{% endif %}>Мужской</option>
 
-                            <option value="Женский" {% if form.gender.value|default_if_none:"Мужской" == "Женский" %}selected{% endif %}>Женский</option>
+                                <option value="Женский" {% if form.gender.value|default_if_none:"Мужской" == "Женский" %}selected{% endif %}>Женский</option>
 
-                        </select>
+                            </select>
+                        </div>
                     </div>
 
                 </div>
@@ -71,7 +73,7 @@
 
 
                     <div class="form-element">
-                        <p><label for="id_date_of_passport">Date of passport:</label></p>
+                        <p><label for="id_date_of_passport">Дата выдачи и серия паспотра:</label></p>
                         <input type="text" name="date_of_passport" maxlength="200" required id="id_date_of_passport" value="{{ form.date_of_passport.value|default_if_none:"" }}">
                     </div>
 
@@ -81,17 +83,17 @@
                     </div>
 
                     <div class="form-element">
-                        <p><label for="id_country">Country:</label></p>
+                        <p><label for="id_country">Страна:</label></p>
                         <input type="text" name="country" maxlength="250" required id="id_country" value="{{ form.country.value|default_if_none:"" }}">
                     </div>
 
                     <div class="form-element">
-                        <p><label for="id_city">City:</label></p>
+                        <p><label for="id_city">Город:</label></p>
                         <input type="text" name="city" maxlength="250" required id="id_city" value="{{ form.city.value|default_if_none:"" }}">
                     </div>
 
                     <div class="form-element">
-                        <p><label for="id_phone_number">Phone number:</label></p>
+                        <p><label for="id_phone_number">Номер телефона:</label></p>
                         <input type="text" name="phone_number" maxlength="100" required id="id_phone_number" value="{{ form.phone_number.value|default_if_none:"" }}">
                     </div>
 
@@ -106,12 +108,12 @@
 
 
                     <div class="form-element">
-                        <p><label for="id_password">Password:</label></p>
+                        <p><label for="id_password">Пароль:</label></p>
                         <input type="password" name="password" required id="id_password" value="{{ form.password.value|default_if_none:"" }}">
                     </div>
 
                     <div class="form-element">
-                        <p><label for="passwordCheck">Check password:</label></p>
+                        <p><label for="passwordCheck">Повторите пароль:</label></p>
                         <input type="password" id="passwordCheck" value="{{ form.password.value|default_if_none:"" }}">
                     </div>
 
