@@ -279,39 +279,60 @@ class Login(View):
         return render(request, "main/login.html", {"email": email})
 
 
+def register_user(request, template_name):
+    form = UserForm(request.POST)
+
+    if form.is_valid():
+        user = form.save(commit=False)
+        user.username = form.cleaned_data['email']
+        user.set_password(form.cleaned_data['password'])
+        user.activation_code = randint(1000, 9999)
+        user.save()
+
+        login(request, user)
+
+        send_sms(request.user.phone_number, message=str(request.user.activation_code))
+
+        return redirect("main:activate_account")
+
+    user_with_same_email = Owner.objects.filter(email=request.POST['email'])
+    if user_with_same_email:
+        messages.add_message(request, messages.INFO, "User with this email exists")
+        return render(request, template_name, {"form": form})
+
+    user_with_same_number = Owner.objects.filter(phone_number=request.POST['phone_number'])
+    if user_with_same_number:
+        messages.add_message(request, messages.INFO, "User with this phone number exists")
+        return render(request, template_name, {"form": form})
+
+    messages.add_message(request, messages.INFO, "Some error")
+    return render(request, template_name, {"form": form})
+
+
 class SignUp(View):
     def get(self, request):
         form = UserForm()
         return render(request, "main/signup.html", {"form": form})
 
     def post(self, request):
-        form = UserForm(request.POST)
+        return register_user(request, template_name="main/signup.html")
 
-        if form.is_valid():
-            user = form.save(commit=False)
-            user.username = form.cleaned_data['email']
-            user.set_password(form.cleaned_data['password'])
-            user.activation_code = randint(1000, 9999)
-            user.save()
 
-            login(request, user)
+class UserEdit(View):
+    def get(self, request):
+        if not request.user.is_authenticated:
+            return redirect("main:login")
 
-            send_sms(request.user.phone_number, message=str(request.user.activation_code))
+        form = UserForm(instance=request.user)
 
-            return redirect("main:activate_account")
+        context = {
+            "form": form
+        }
 
-        user_with_same_email = Owner.objects.filter(email=request.POST['email'])
-        if user_with_same_email:
-            messages.add_message(request, messages.INFO, "User with this email exists")
-            return render(request, "main/signup.html", {"form": form})
+        return render(request, "main/edit_user.html", context)
 
-        user_with_same_number = Owner.objects.filter(phone_number=request.POST['phone_number'])
-        if user_with_same_number:
-            messages.add_message(request, messages.INFO, "User with this phone number exists")
-            return render(request, "main/signup.html", {"form": form})
-
-        messages.add_message(request, messages.INFO, "Some error")
-        return render(request, "main/signup.html", {"form": form})
+    def post(self, request):
+        return register_user(request, template_name="main/edit_user.html")
 
 
 class ActivateAccount(View):
