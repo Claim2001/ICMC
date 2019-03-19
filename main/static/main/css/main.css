@@ -108,11 +108,24 @@ ul.user-navigation-list li.selected a {
     margin-bottom: 10px;
 }
 
-.form-element input, .form-element .fileBox {
+.form-element input, .form-element .fileBox, .form-element select {
     width: 100%;
     background-color: #ffffff;
     border: 1px solid lightgray;
     padding: 5px 10px;
+    border-radius: 7px;
+}
+
+.form-element select {
+    padding-left: 0;
+    padding-right: 0;
+    outline: none;
+    border: none;
+}
+
+.form-element .dropdown {
+    border: 1px solid lightgray;
+    padding: 0 10px;
     border-radius: 7px;
 }
 
@@ -174,11 +187,11 @@ form button.btn, form a.btn {
 * {
   margin: 0;
   padding: 0;
-  font-family: "Open Sans";
+  font-family: "Open Sans", sans-serif;
 }
 
 html {
-  font-family: "Open Sans";
+  font-family: "Open Sans", sans-serif;
 }
 
 .fileBox {
