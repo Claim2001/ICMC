@@ -30,8 +30,17 @@ techCheckOpenButtons.map(function (button) {
 });
 
 closeButtons.map(function (button) {
-    button.addEventListener("click", function () {
-        removePopupWindow.style.display = "none";
-        techCheckPopupWindow.style.display = "none";
-    });
+    button.addEventListener("click", closePopups);
 });
+
+document.addEventListener('keydown', function (evt) {
+    if (evt.keyCode === 27) {
+        closePopups();
+    }
+});
+
+
+function closePopups() {
+    removePopupWindow.style.display = "none";
+    techCheckPopupWindow.style.display = "none";
+}
