@@ -230,7 +230,6 @@ input.formFileInput {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    height: 100vh;
     background-image: url("../img/loginBG.jpg");
     background-size: cover;
 }
