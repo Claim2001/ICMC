@@ -323,6 +323,9 @@ class UserEdit(View):
         if not request.user.is_authenticated:
             return redirect("main:login")
 
+        if request.user.activated:
+            return redirect("main:index")
+
         form = UserForm(instance=request.user)
 
         context = {
@@ -366,7 +369,7 @@ class ActivateAccount(View):
         return redirect("main:index")
 
     def post(self, request):
-        if not request.user.is_authenticated:
+        if request.user.is_authenticated:
             user_code = int(request.POST['activation_code'])
 
             if request.user.activation_code == user_code:
