@@ -340,7 +340,7 @@ class UserEdit(View):
         if form.is_valid():
             user = form.save(commit=False)
             user.set_password(form.cleaned_data['password'])
-            
+
             send_sms(request.user.phone_number, message=str(request.user.activation_code))
 
             return redirect("main:index")
