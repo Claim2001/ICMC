@@ -25,7 +25,7 @@ SECRET_KEY = 'cpie)82c&3hm5^!&m7qsu8&y_u6w%bcwy-*%h!c9asc+pw8p#b'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["80.80.218.227",]
 
 
 # Application definition
@@ -126,6 +126,7 @@ USE_TZ = True
 AUTH_USER_MODEL = 'main.Owner'
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
