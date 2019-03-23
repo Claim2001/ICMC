@@ -16,8 +16,6 @@ def send_sms(number, message):
     requests.get(link)
 
 
-# User related views
-
 class RegisterBoat(View):
     def get(self, request):
         if request.user.is_authenticated:
@@ -343,10 +341,14 @@ class UserEdit(View):
         if form.is_valid():
             user = form.save(commit=False)
             user.set_password(form.cleaned_data['password'])
+            user.activation_code = randint(1000, 9999)
+            user.save()
+
+            login(request, user)
 
             send_sms(request.user.phone_number, message=str(request.user.activation_code))
 
-            return redirect("main:index")
+            return redirect("main:activate_account")
 
         user_with_same_email = Owner.objects.filter(email=request.POST['email'])
         if user_with_same_email is not request.user:

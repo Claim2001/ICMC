@@ -25,7 +25,10 @@ SECRET_KEY = 'cpie)82c&3hm5^!&m7qsu8&y_u6w%bcwy-*%h!c9asc+pw8p#b'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["80.80.218.227",]
+ALLOWED_HOSTS = ["80.80.218.227"]
+
+if DEBUG is True:
+    ALLOWED_HOSTS.append("localhost")
 
 
 # Application definition
