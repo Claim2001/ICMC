@@ -324,10 +324,13 @@ input:focus {
 }
 
 .control-block .control-button {
-    margin-left: 40px;
     display: flex;
     flex-direction: column;
     justify-content: center;
+}
+
+.control-block .btn {
+    margin-left: 40px;
 }
 
 .steps {
