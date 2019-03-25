@@ -40,7 +40,6 @@ BOAT_STATUS = [
 ]
 
 
-# TODO: add date
 class Boat(models.Model):
     owner = models.ForeignKey(Owner, on_delete=models.CASCADE)
     model_type = models.CharField("Тип и модель", max_length=300)  # need choices here
@@ -98,7 +97,20 @@ class RemoveRequest(models.Model):
         return self.boat.name
 
 
-# TODO: think how this model gotta look
+TECH_CHECK_TYPE = (
+    ("первичный", "first"),
+    ("ежегодный", "year"),
+)
+
+
+class TechCheckRequest(models.Model):
+    boat = models.ForeignKey(Boat, on_delete=models.CASCADE)
+    check_type = models.CharField(max_length=100, choices=TECH_CHECK_TYPE)
+
+    def __str__(self):
+        return self.boat.name
+
+
 class Notification(models.Model):
     owner = models.ForeignKey(Owner, on_delete=models.CASCADE)
     boat = models.ForeignKey(Boat, on_delete=models.CASCADE)

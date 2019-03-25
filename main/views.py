@@ -15,6 +15,7 @@ def send_sms(number, message):
     link = f"https://cdn.osg.uz/sms/?phone={number}&id=2342&message={message}"
     requests.get(link)
 
+# User views
 
 class RegisterBoat(View):
     def get(self, request):
@@ -172,6 +173,44 @@ def boat_request(request, pk):
     return render(request, "main/request.html", {"request": boat})
 
 
+class TechCheckView(View):
+    title = ""
+
+    def get(self, request, pk):
+        if not request.user.is_authenticated:
+            return redirect("main:login")
+
+        if request.user.is_inspector:
+            return redirect("main:inspector")
+
+        boat = get_object_or_404(Boat, pk=pk)
+        unwatched_notifications_count = len(Notification.objects.filter(watched=False))
+
+        context = {
+            "boat": boat,
+            "notifications_count": unwatched_notifications_count,
+            "title": self.title
+        }
+
+        return render(request, "main/tech_check_template.html", context)
+
+
+class FirstTechCheck(TechCheckView):
+    title = "Первичный техосмотр"
+
+    def post(self, request):
+        return redirect("main:boats")
+
+
+class YearTechCheck(TechCheckView):
+    title = "Ежегодный техосмотр"
+
+    def post(self, request):
+        return redirect("main:boats")
+
+
+# Inspector views
+
 def inspector_page(request):
     if not request.user.is_authenticated:
         return redirect("main:login")
@@ -276,6 +315,8 @@ class Login(View):
         messages.add_message(request, messages.ERROR, "Неверный email или пароль")
         return render(request, "main/login.html", {"email": email})
 
+
+# Login, registration and etc.
 
 class SignUp(View):
     template_name = "main/signup.html"
@@ -385,39 +426,3 @@ class ActivateAccount(View):
             return render(request, "main/activation.html", {})
 
         return redirect("main:login")
-
-
-class TechCheckView(View):
-    title = ""
-
-    def get(self, request, pk):
-        if not request.user.is_authenticated:
-            return redirect("main:login")
-
-        if request.user.is_inspector:
-            return redirect("main:inspector")
-
-        boat = get_object_or_404(Boat, pk=pk)
-        unwatched_notifications_count = len(Notification.objects.filter(watched=False))
-
-        context = {
-            "boat": boat,
-            "notifications_count": unwatched_notifications_count,
-            "title": self.title
-        }
-
-        return render(request, "main/tech_check_template.html", context)
-
-
-class FirstTechCheck(TechCheckView):
-    title = "Первичный техосмотр"
-
-    def post(self, request):
-        return redirect("main:boats")
-
-
-class YearTechCheck(TechCheckView):
-    title = "Ежегодный техосмотр"
-
-    def post(self, request):
-        return redirect("main:boats")
