@@ -1,8 +1,9 @@
+import json
 import requests
 from random import randint
 
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.views.generic import View
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
@@ -14,6 +15,7 @@ from .forms import UserForm, BoatForm
 def send_sms(number, message):
     link = f"https://cdn.osg.uz/sms/?phone={number}&id=2342&message={message}"
     requests.get(link)
+
 
 # User views
 
@@ -268,16 +270,37 @@ def add_request_to_looking(request, pk):
     return redirect("main:inspector")
 
 
-def register_request(request, pk):
-    if not request.user.is_authenticated:
-        return redirect("main:login")
-    
-    if not request.user.is_inspector:
-        return redirect("main:index")
+class RegistrationRequest(View):
+    def get(self, request, pk):
+        if not request.user.is_authenticated:
+            return redirect("main:login")
 
-    boat = get_object_or_404(Boat, pk=pk)
+        if not request.user.is_inspector:
+            return redirect("main:index")
 
-    return render(request, "main/register_request.html", {"request": boat})
+        boat = get_object_or_404(Boat, pk=pk)
+        form = BoatForm(instance=boat)
+
+        return render(request, "main/registration_request.html", {"form": form})
+
+    def post(self, request, pk):
+        if not request.user.is_authenticated:
+            return redirect("main:login")
+
+        if not request.user.is_inspector:
+            return redirect("main:index")
+
+        incorrect_fields = json.dumps(request.POST.getlist("incorrect_fields"))
+
+        boat = get_object_or_404(Boat, pk=pk)
+        boat.incorrect_fields = incorrect_fields
+        boat.save()
+
+        if boat.incorrect_fields:
+            boat.change_status("rejected")
+            return redirect("main:inspecting_requests")
+
+        return render(request, "main/registration_request.html", {})
 
 
 # Login, signup and etc.

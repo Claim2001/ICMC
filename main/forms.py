@@ -37,5 +37,6 @@ class BoatForm(ModelForm):
         exclude = (
             "owner",
             "status",
+            "incorrect_fields"
         )
         fields = '__all__'

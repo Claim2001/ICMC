@@ -1,3 +1,5 @@
+import json
+
 from django.db import models
 from django.contrib.auth.models import AbstractUser, PermissionsMixin
 from django.contrib.auth.base_user import AbstractBaseUser
@@ -35,7 +37,7 @@ BOAT_STATUS = [
     ("wait", "wait"),
     ("look", "look"),
     ("rejected", "rejected"),
-    ("payment", "waiting for payment"),
+    ("waiting for payment", "payment"),
     ("accepted", "accepted"),
 ]
 
@@ -69,6 +71,7 @@ class Boat(models.Model):
     passport_image = models.FileField(null=False, blank=False)
     other_files = models.FileField(null=True, blank=False)
     status = models.CharField(max_length=100, choices=BOAT_STATUS, default="wait")
+    incorrect_fields = models.TextField(default="[]")
 
     def change_status(self, value):
         if self.status is not value:
@@ -77,6 +80,12 @@ class Boat(models.Model):
 
             notification = Notification(owner=self.owner, boat=self, status=self.status)
             notification.save()
+
+    def get_incorrect_field_labels(self):
+        decoded_incorrect_fields = json.loads(self.incorrect_fields)
+        print(decoded_incorrect_fields)
+
+        return [Boat._meta.get_field(field).verbose_name for field in decoded_incorrect_fields]
 
     def __str__(self):
         return f"{self.name} - {self.model_type}"

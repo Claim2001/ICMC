@@ -14,10 +14,22 @@
             <img src="{% static 'main/img/ship.svg' %}" alt="">
         {% endif %}
 
+        {% if notification.status == "rejected" %}
+            <img src="{% static 'main/img/exam.svg' %}" alt="">
+        {% endif %}
+
         <div class="control-title">
 {#            <p>{{ notification.status }}</p>#}
             {% if notification.status == "looking" %}
                 Ваше заявление находится на стадии рассмотрения
+            {% endif %}
+
+            {% if notification.status == "rejected" %}
+                Неправильно заполненные поля:
+
+                {% for field in notification.boat.get_incorrect_field_labels %}
+                    <p>- {{ field }}</p>
+                {% endfor %}
             {% endif %}
         </div>
 

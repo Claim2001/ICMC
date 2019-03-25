@@ -497,6 +497,15 @@ h1.formTitle {
     }
 }
 
+h1.form-title {
+    margin-bottom: 30px;
+}
+
+.inspector-check-form input[type="checkbox"] {
+    display: inline-block;
+    width: auto;
+    margin-right: 10px;
+}
 
 /* ************************************* */
 /* just for a moment */

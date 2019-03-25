@@ -1,0 +1,239 @@
+{% extends 'main/inspector_base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+
+
+    <form action="" method="post" class="inspector-check-form">
+
+        <p>Заявление №{{ form.instance.pk }}</p>
+
+        <h1 class="form-title">{{ form.instance.owner.first_name }} {{ form.instance.owner.last_name }} -
+            <small>{{ form.instance.name }}</small>
+        </h1>
+
+        {% csrf_token %}
+
+        <input type="hidden" name="pk" value="{{ form.instance.pk }}">
+
+        {% for field in form %}
+
+            <div class="form-element">
+                <label><input type="checkbox" name="incorrect_fields" value="{{ field.name }}">{{ field.label }}</label>
+                <input type="text" value="{{ field.value }}" disabled>
+            </div>
+
+        {% endfor %}
+
+        <div class="form-buttons">
+            <button class="btn" type="submit">Принять к оплате</button>
+        </div>
+
+
+{#        <div class="row">#}
+{##}
+{#            <div class="col-lg-4 form-column">#}
+{##}
+{#                <div class="form-element">#}
+{#                    <p>Тип и модель</p>#}
+{#                    <input type="text" name="model_type" maxlength="300" required id="id_model_type" disabled#}
+{#                           value="{{ form.model_type.value }}">#}
+{#                </div>#}
+{##}
+{#                <div class="form-element">#}
+{#                    <p>Наименование</p>#}
+{#                    <input type="text" name="name" maxlength="250" required id="id_name" disabled#}
+{#                           value="{{ form.name.value }}">#}
+{#                </div>#}
+{##}
+{#                <div class="form-element">#}
+{#                    <p>Идентификационный (IMO)</p>#}
+{#                    <input type="text" name="imo" maxlength="250" required id="id_imo" disabled#}
+{#                           value="{{ form.imo.value }}">#}
+{#                </div>#}
+{##}
+{#                <div class="form-element">#}
+{#                    <p>Место постройки</p>#}
+{#                    <input type="text" name="build_place" maxlength="300" required id="id_build_place" disabled#}
+{#                           value="{{ form.build_place.value }}">#}
+{#                </div>#}
+{##}
+{#                <div class="form-element">#}
+{#                    <p>Год постройки</p>#}
+{#                    <input type="number" name="build_year" min="0" required id="id_build_year" disabled#}
+{#                           value="{{ form.build_year.value }}">#}
+{#                </div>#}
+{##}
+{#                <div class="form-element">#}
+{#                    <p>Материал корпуса</p>#}
+{#                    <div class="dropdown">#}
+{#                        <select name="material" required id="id_material" disabled>#}
+{#                            <option value="wood">wood</option>#}
+{#                            <option value="other">other</option>#}
+{#                        </select>#}
+{#                    </div>#}
+{#                </div>#}
+{##}
+{#            </div>#}
+{##}
+{##}
+{#            <div class="col-lg-4 form-column">#}
+{##}
+{#                <div class="form-element">#}
+{#                    <p>Длина (м)</p>#}
+{#                    <input type="number" name="length" min="0" required id="id_length" disabled#}
+{#                           value="{{ form.length.value }}">#}
+{#                </div>#}
+{##}
+{#                <div class="form-element">#}
+{#                    <p>Ширина (м)</p>#}
+{#                    <input type="number" name="width" min="0" required id="id_width" disabled#}
+{#                           value="{{ form.width.value }}">#}
+{#                </div>#}
+{##}
+{#                <div class="form-element">#}
+{#                    <p>Высота борта (м)</p>#}
+{#                    <input type="number" name="height_board" min="0" required id="id_height_board" disabled#}
+{#                           value="{{ form.height_board.value }}">#}
+{#                </div>#}
+{##}
+{#                <div class="form-element">#}
+{#                    <p>Высота надв. Борта (м)</p>#}
+{#                    <input type="number" name="height_second_board" min="0" required id="id_height_second_board"#}
+{#                           disabled value="{{ form.height_second_board.value }}">#}
+{#                </div>#}
+{##}
+{#                <div class="form-element">#}
+{#                    <p>Вместимость (тонн)</p>#}
+{#                    <input type="number" name="capacity" min="0" required id="id_capacity" disabled#}
+{#                           value="{{ form.capacity.value }}">#}
+{#                </div>#}
+{##}
+{#                <div class="form-element">#}
+{#                    <p>Грузоподъемность (кг)</p>#}
+{#                    <input type="number" name="capacity_load" min="0" required id="id_capacity_load" disabled#}
+{#                           value="{{ form.capacity_load.value }}">#}
+{#                </div>#}
+{##}
+{#            </div>#}
+{##}
+{##}
+{#            <div class="col-lg-4 form-column">#}
+{##}
+{#                <div class="form-element">#}
+{#                    <p>Пассажировместимость (чел.)</p>#}
+{#                    <input type="number" name="passenger_awn" min="0" required id="id_passenger_awn" disabled#}
+{#                           value="{{ form.passenger_awn.value }}">#}
+{#                </div>#}
+{##}
+{##}
+{#                <div class="form-element">#}
+{#                    <p>Район и условия плавания</p>#}
+{#                    <input type="text" name="swimming_place" maxlength="300" required id="id_swimming_place" disabled#}
+{#                           value="{{ form.swimming_place.value }}">#}
+{#                </div>#}
+{##}
+{##}
+{#                <div class="form-element">#}
+{#                    <p>Тип главного двигателя</p>#}
+{#                    <input type="text" name="engine_type" maxlength="300" required id="id_engine_type" disabled#}
+{#                           value="{{ form.engine_type.value }}">#}
+{#                </div>#}
+{##}
+{##}
+{#                <div class="form-element">#}
+{#                    <p>Марка двигателя</p>#}
+{#                    <input type="text" name="engine_model" maxlength="300" required id="id_engine_model" disabled#}
+{#                           value="{{ form.engine_model.value }}">#}
+{#                </div>#}
+{##}
+{#                <div class="form-element">#}
+{#                    <p>Заводские номера двигателей</p>#}
+{#                    <input type="text" name="engine_number" maxlength="300" required id="id_engine_number" disabled#}
+{#                           value="{{ form.engine_number.value }}">#}
+{#                </div>#}
+{##}
+{#                <div class="form-element">#}
+{#                    <p>Мощность двигателя/ей (кВт/л.с.)</p>#}
+{#                    <input type="number" name="engine_power" min="0" required id="id_engine_power" disabled#}
+{#                           value="{{ form.engine_power.value }}">#}
+{#                </div>#}
+{##}
+{##}
+{#            </div>#}
+{##}
+{#        </div>#}
+{##}
+{#        <div class="row">#}
+{##}
+{#            <div class="col-lg-4 form-column">#}
+{##}
+{#                <div class="form-element">#}
+{#                    <p>Количество парусов</p>#}
+{#                    <input type="number" name="sails_amount" min="0" required id="id_sails_amount" disabled#}
+{#                           value="{{ form.sails_amount.value }}">#}
+{#                </div>#}
+{##}
+{#                <div class="form-element">#}
+{#                    <p>Площадь парусов (м2)</p>#}
+{#                    <input type="number" name="sail_area" min="0" required id="id_sail_area" disabled#}
+{#                           value="{{ form.sail_area.value }}">#}
+{#                </div>#}
+{##}
+{#                <div class="form-element">#}
+{#                    <p>Прежние регистр. No и название судна</p>#}
+{#                    <input type="text" name="prev_numbers_or_name" maxlength="300"#}
+{#                           id="id_prev_numbers_or_name" disabled value="{{ form.prev_numbers_or_name.value }}">#}
+{#                </div>#}
+{##}
+{#                <div class="form-element">#}
+{#                    <p>Место прежней регистрации судна</p>#}
+{#                    <input type="text" name="prev_registration_place" maxlength="300" required#}
+{#                           id="id_prev_registration_place" disabled value="{{ form.prev_registration_place.value }}">#}
+{#                </div>#}
+{##}
+{#                <div class="form-element">#}
+{#                    <p>Место постоянной стоянки судна</p>#}
+{#                    <input type="text" name="parking_place" maxlength="300" required id="id_parking_place" disabled#}
+{#                           value="{{ form.parking_place.value }}">#}
+{#                </div>#}
+{##}
+{#            </div>#}
+{##}
+{#            <div class="col-lg-4 form-column">#}
+{##}
+{#                <div class="form-element">#}
+{#                    <p>Скан паспорта</p>#}
+{#                    <div class="fileBox">#}
+{#                        <p>+</p>#}
+{#                    </div>#}
+{##}
+{#                    <input type="file" name="passport_image" class="formFileInput" required>#}
+{#                </div>#}
+{##}
+{#            </div>#}
+{##}
+{##}
+{#            <div class="col-lg-4 form-column">#}
+{##}
+{#                <div class="form-element">#}
+{#                    <p>Другие документы</p>#}
+{#                    <div class="fileBox">#}
+{#                        <p>+</p>#}
+{#                    </div>#}
+{#                    <input type="file" name="other_files" class="formFileInput">#}
+{#                </div>#}
+{##}
+{#            </div>#}
+{##}
+{#        </div>#}
+{##}
+{##}
+{#        <div class="form-buttons">#}
+{#            <button class="btn" type="button" id="prevFormPage">Назад</button>#}
+{#            <button class="btn" type="submit" id="submitButton">Сохранить</button>#}
+{#        </div>#}
+
+    </form>
+
+{% endblock %}
