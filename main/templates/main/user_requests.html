@@ -9,14 +9,15 @@
 
 
     <div class="control-block{% if notification.watched == False %} unwatched {% endif %}">
-        {# TODO: check the height in PS #}
-        {% if notification.status == "looking" %}
-            <img src="{% static 'main/img/ship.svg' %}" alt="">
-        {% endif %}
+        <div class="notification-icon">
+            {% if notification.status == "looking" %}
+                <img src="{% static 'main/img/ship.svg' %}" alt="">
+            {% endif %}
 
-        {% if notification.status == "rejected" %}
-            <img src="{% static 'main/img/exam.svg' %}" alt="">
-        {% endif %}
+            {% if notification.status == "rejected" %}
+                <img src="{% static 'main/img/exam.svg' %}" alt="">
+            {% endif %}
+        </div>
 
         <div class="control-title">
 {#            <p>{{ notification.status }}</p>#}

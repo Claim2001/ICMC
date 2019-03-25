@@ -507,6 +507,12 @@ h1.form-title {
     margin-right: 10px;
 }
 
+.notification-icon {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
 /* ************************************* */
 /* just for a moment */
 h1 {
