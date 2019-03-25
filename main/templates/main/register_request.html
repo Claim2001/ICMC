@@ -1,0 +1,9 @@
+{% extends 'main/inspector_base.html' %}
+
+{% block content %}
+
+<p>Заявление №{{ request.pk }}</p>
+
+<h1>{{ request.owner.first_name }} {{ request.owner.last_name }} - <small>{{ request.name }}</small></h1>
+
+{% endblock %}

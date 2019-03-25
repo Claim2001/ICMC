@@ -155,24 +155,6 @@ def logout_user(request):
     return redirect("main:login")
 
 
-def boat_request(request, pk):
-    if not request.user.is_authenticated:
-        return redirect("main:login")
-
-    boat = get_object_or_404(Boat, pk=pk)
-
-    if request.user.is_inspector:
-        notification = Notification(owner=boat.owner, boat=boat, status=boat.status)
-        notification.save()
-
-        return render(request, "main/inspector_request.html", {"boat": boat})
-
-    if not request.user.activated:
-        return redirect("main:activate_account")
-
-    return render(request, "main/request.html", {"request": boat})
-
-
 class TechCheckView(View):
     title = ""
 
@@ -286,17 +268,19 @@ def add_request_to_looking(request, pk):
     return redirect("main:inspector")
 
 
-def reactivate(request):
+def register_request(request, pk):
     if not request.user.is_authenticated:
         return redirect("main:login")
+    
+    if not request.user.is_inspector:
+        return redirect("main:index")
 
-    request.user.activation_code = randint(1000, 9999)
-    request.user.save()
+    boat = get_object_or_404(Boat, pk=pk)
 
-    send_sms(request.user.phone_number, message=str(request.user.activation_code))
+    return render(request, "main/register_request.html", {"request": boat})
 
-    return redirect("main:activate_account")
 
+# Login, signup and etc.
 
 class Login(View):
     def get(self, request):
@@ -315,8 +299,6 @@ class Login(View):
         messages.add_message(request, messages.ERROR, "Неверный email или пароль")
         return render(request, "main/login.html", {"email": email})
 
-
-# Login, registration and etc.
 
 class SignUp(View):
     template_name = "main/signup.html"
@@ -408,7 +390,11 @@ class UserEdit(View):
 class ActivateAccount(View):
     def get(self, request):
         if request.user.is_authenticated and not request.user.activated:
+            if request.user.is_inspector:
+                return redirect("main:inspector")
+
             return render(request, "main/activation.html", {})
+
         return redirect("main:index")
 
     def post(self, request):
@@ -426,3 +412,15 @@ class ActivateAccount(View):
             return render(request, "main/activation.html", {})
 
         return redirect("main:login")
+
+
+def reactivate(request):
+    if not request.user.is_authenticated:
+        return redirect("main:login")
+
+    request.user.activation_code = randint(1000, 9999)
+    request.user.save()
+
+    send_sms(request.user.phone_number, message=str(request.user.activation_code))
+
+    return redirect("main:activate_account")
