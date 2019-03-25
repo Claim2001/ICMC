@@ -323,8 +323,11 @@ input:focus {
     justify-content: center;
 }
 
-.control-block .btn {
+.control-block .control-button {
     margin-left: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .steps {
@@ -511,6 +514,10 @@ h1.form-title {
     display: flex;
     flex-direction: column;
     justify-content: center;
+}
+
+.incorrect-fields-list {
+    margin-top: 7px;
 }
 
 /* ************************************* */

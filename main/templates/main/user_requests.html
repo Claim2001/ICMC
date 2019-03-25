@@ -28,9 +28,20 @@
             {% if notification.status == "rejected" %}
                 Неправильно заполненные поля:
 
-                {% for field in notification.boat.get_incorrect_field_labels %}
-                    <p>- {{ field }}</p>
-                {% endfor %}
+                <div class="incorrect-fields-list">
+                    {% for field in notification.boat.get_incorrect_field_labels %}
+                        <p>- {{ field }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+
+        <div class="control-button">
+            {% if notification.status == "rejected" %}
+                <a href="#{{ notification.boat.pk }}" class="btn {% if notification.watched == False %}btn-warn{% endif %}">
+                    Изменить
+                </a>
             {% endif %}
         </div>
 
