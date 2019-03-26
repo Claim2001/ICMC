@@ -68,8 +68,8 @@ class Boat(models.Model):
     prev_numbers_or_name = models.CharField("Прежние регистр. No и название судна", max_length=300)
     prev_registration_place = models.CharField("Место прежней регистрации судна", max_length=300)
     parking_place = models.CharField("Место постоянной стоянки судна", max_length=300)
-    passport_image = models.FileField(null=False, blank=False)
-    other_files = models.FileField(null=True, blank=False)
+    passport_image = models.FileField("Скан паспорта", null=False, blank=False)
+    other_files = models.FileField("Другие файлы", null=True, blank=False)
     status = models.CharField(max_length=100, choices=BOAT_STATUS, default="wait")
     incorrect_fields = models.TextField(default="[]")
 
@@ -78,8 +78,9 @@ class Boat(models.Model):
             self.status = value
             self.save()
 
-            notification = Notification(owner=self.owner, boat=self, status=self.status)
-            notification.save()
+            if self.status != "wait":
+                notification = Notification(owner=self.owner, boat=self, status=self.status)
+                notification.save()
 
     def get_incorrect_field_labels(self):
         decoded_incorrect_fields = json.loads(self.incorrect_fields)
@@ -92,9 +93,9 @@ class Boat(models.Model):
 
 
 REMOVE_BOAT_REASONS = (
-    ("change", "Изменение владельца или места жительства"),
-    ("broke", "Износ или поломка судна"),
-    ("ticket", "Утеря или порча судового билета"),
+    ("Изменение владельца или места жительства", "change"),
+    ("Износ или поломка судна", "broke"),
+    ("Утеря или порча судового билета", "ticket"),
 )
 
 
