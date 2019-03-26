@@ -2,7 +2,8 @@ import json
 import requests
 from random import randint
 
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.views.generic import View
@@ -19,138 +20,103 @@ def send_sms(number, message):
 
 
 # User views
+class UserActivatedMixin(UserPassesTestMixin):
+    def handle_no_permission(self):
+        return redirect('main:activate_account')
 
-class RegisterBoat(View):
+    def test_func(self):
+        return self.request.user.activated
+
+
+class UserNotInspectorMixin(UserPassesTestMixin):
+    def handle_no_permission(self):
+        return redirect('main:inspector')
+
+    def test_func(self):
+        return not self.request.user.is_inspector
+
+
+class UserView(LoginRequiredMixin, UserNotInspectorMixin, UserActivatedMixin, View):
+    login_url = "main:login"
+
+    def get_context_with_extra_data(self, context):
+        unwatched_notifications_count = len(Notification.objects.filter(watched=False, owner=self.request.user))
+        context["notifications_count"] = unwatched_notifications_count
+
+        return context
+
+
+class RegisterBoat(UserView):
     def get(self, request):
-        if request.user.is_authenticated:
-            if request.user.is_inspector:
-                return redirect("main:inspector")
+        form = BoatForm()
 
-            if request.user.is_superuser:
-                return HttpResponseRedirect("/admin")
+        context = {
+            "user": request.user,
+            "form": form,
+        }
 
-            if request.user.activated is not True:
-                return redirect("main:activate_account")
+        context = self.get_context_with_extra_data(context)
 
-            form = BoatForm()
-            unwatched_notifications_count = len(Notification.objects.filter(owner=request.user, watched=False))
-
-            context = {
-                "user": request.user,
-                "form": form,
-                "notifications_count": unwatched_notifications_count,
-            }
-
-            return render(request, "main/boat_form.html", context)
-
-        return redirect("main:login")
+        return render(request, "main/boat_form.html", context)
 
     def post(self, request):
-        if request.user.is_authenticated:
-            form = BoatForm(request.POST, request.FILES)
-            if form.is_valid():
-                boat = form.save(commit=False)
-                boat.owner = request.user
-                boat.save()
+        form = BoatForm(request.POST, request.FILES)
+        if form.is_valid():
+            boat = form.save(commit=False)
+            boat.owner = request.user
+            boat.save()
 
-                messages.add_message(request, messages.SUCCESS, "Ваше заявление принято и находится в очереди")
-                return redirect("main:index")
+            messages.add_message(request, messages.SUCCESS, "Ваше заявление принято и находится в очереди")
+            return redirect("main:index")
 
-            else:
-                return redirect("main:index")
-
-        return redirect("main:login")
+        else:
+            return redirect("main:index")
 
 
-def user_boat_requests(request):
-    if not request.user.is_authenticated:
-        return redirect("main:login")
+class UserBoatRequests(UserView):
+    def get(self, request):
+        notifications = list(Notification.objects.filter(owner=request.user).order_by("-pk")).copy()
+        unwatched_notifications = Notification.objects.filter(owner=request.user, watched=False)
 
-    if request.user.is_superuser:
-        return redirect("main:index")
+        context = self.get_context_with_extra_data({"notifications": notifications})
 
-    if not request.user.activated:
-        return redirect("main:activate_account")
+        for notification in unwatched_notifications:
+            notification.watched = True
+            notification.save()
 
-    notifications = list(Notification.objects.filter(owner=request.user).order_by("-pk")).copy()
-    unwatched_notifications = Notification.objects.filter(owner=request.user, watched=False)
-
-    context = {
-        "notifications": notifications,
-        "notifications_count": len(unwatched_notifications),
-    }
-
-    for notification in unwatched_notifications:
-        notification.watched = True
-        notification.save()
-
-    return render(request, "main/user_requests.html", context)
+        return render(request, "main/user_requests.html", context)
 
 
-def user_boats(request):
-    if not request.user.is_authenticated:
-        return redirect("main:login")
+class UserBoats(UserView):
+    def get(self, request):
+        boats = Boat.objects.filter(owner=request.user)
+        context = self.get_context_with_extra_data({"boats": boats})
 
-    if request.user.is_superuser:
-        return redirect("main:index")
-
-    if not request.user.activated:
-        return redirect("main:activate_account")
-
-    unwatched_notifications_count = len(Notification.objects.filter(owner=request.user, watched=False))
-    boats = Boat.objects.filter(owner=request.user)
-
-    context = {
-        "boats": boats,
-        "notifications_count": unwatched_notifications_count
-    }
-
-    return render(request, "main/user_boats.html", context)
+        return render(request, "main/user_boats.html", context)
 
 
-def user_fines(request):
-    if not request.user.is_authenticated:
-        return redirect("main:login")
+class UserFines(UserView):
+    def get(self, request):
+        fines = Fine.objects.filter(owner=request.user)
+        context = self.get_context_with_extra_data({"fines": fines})
 
-    if request.user.is_superuser:
-        return redirect("main:index")
-
-    if not request.user.activated:
-        return redirect("main:activate_account")
-
-    unwatched_notifications_count = len(Notification.objects.filter(owner=request.user, watched=False))
-    fines = Fine.objects.filter(owner=request.user)
-
-    context = {
-        "fines": fines,
-        "notifications_count": unwatched_notifications_count,
-    }
-
-    return render(request, "main/user_fines.html", context)
+        return render(request, "main/user_fines.html", context)
 
 
-def make_remove_boat_request(request, pk):
-    if not request.user.is_authenticated:
-        return redirect("main:login")
+class BoatRemoveRequest(UserView):
+    def get(request, pk):
+        boat = get_object_or_404(Boat, owner=request.user, pk=pk)
 
-    if request.user.is_superuser:
-        return redirect("main:index")
+        if not RemoveRequest.objects.filter(boat=boat):
+            remove_request = RemoveRequest(boat=boat, reason="broke")
+            remove_request.save()
 
-    if not request.user.activated:
-        return redirect("main:activate_account")
+            messages.add_message(request, messages.SUCCESS, "Ваше заявление на снятие судна с учета отправлено!")
 
-    boat = get_object_or_404(Boat, owner=request.user, pk=pk)
+        else:
+            messages.add_message(request, messages.WARNING, "Ваше заявление на снятие судна с учета уже отправлено!")
 
-    if not RemoveRequest.objects.filter(boat=boat):
-        remove_request = RemoveRequest(boat=boat, reason="broke")
-        remove_request.save()
-
-        messages.add_message(request, messages.SUCCESS, "Ваше заявление на снятие судна с учета отправлено!")
-
-    else:
-        messages.add_message(request, messages.WARNING, "Ваше заявление на снятие судна с учета уже отправлено!")
-
-    return redirect("main:boats")
+        return redirect("main:boats")
 
 
 def logout_user(request):
@@ -158,7 +124,7 @@ def logout_user(request):
     return redirect("main:login")
 
 
-class TechCheckView(View):
+class TechCheckView(UserView):
     title = ""
 
     def get(self, request, pk):
@@ -169,13 +135,13 @@ class TechCheckView(View):
             return redirect("main:inspector")
 
         boat = get_object_or_404(Boat, pk=pk)
-        unwatched_notifications_count = len(Notification.objects.filter(owner=request.user, watched=False))
 
         context = {
             "boat": boat,
-            "notifications_count": unwatched_notifications_count,
             "title": self.title
         }
+
+        context = self.get_context_with_extra_data(context)
 
         return render(request, "main/tech_check_template.html", context)
 
@@ -194,9 +160,7 @@ class YearTechCheck(TechCheckView):
         return redirect("main:boats")
 
 
-class EditRequest(LoginRequiredMixin, View):
-    login_url = "main:login"
-
+class EditRequest(UserView):
     def get(self, request, pk):
         boat = get_object_or_404(Boat, owner=request.user, pk=pk)
 
@@ -206,13 +170,7 @@ class EditRequest(LoginRequiredMixin, View):
             return redirect("main:boat_requests")
 
         form = BoatForm(instance=boat)
-
-        notification_count = Notification.objects.filter(owner=request.user, watched=False)
-
-        context = {
-            "notifications_count": notification_count,
-            "form": form,
-        }
+        context = self.get_context_with_extra_data({"form": form})
 
         return render(request, "main/boat_form.html", context)
 
