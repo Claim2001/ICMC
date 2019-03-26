@@ -201,11 +201,9 @@ class EditRequest(LoginRequiredMixin, View):
     def get(self, request, pk):
         boat = get_object_or_404(Boat, owner=request.user, pk=pk)
 
-        print(boat.status)
-
         if boat.status == "looking":
             messages.add_message(request, messages.WARNING, "Вы не можете изменять заявления, которые находятся на "
-                                                          "рассмотрении")
+                                                            "рассмотрении")
             return redirect("main:boat_requests")
 
         form = BoatForm(instance=boat)
@@ -214,7 +212,7 @@ class EditRequest(LoginRequiredMixin, View):
 
         context = {
             "notifications_count": notification_count,
-            "form": form
+            "form": form,
         }
 
         return render(request, "main/boat_form.html", context)

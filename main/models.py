@@ -84,9 +84,10 @@ class Boat(models.Model):
 
     def get_incorrect_field_labels(self):
         decoded_incorrect_fields = json.loads(self.incorrect_fields)
-        print(decoded_incorrect_fields)
-
         return [Boat._meta.get_field(field).verbose_name for field in decoded_incorrect_fields]
+
+    def get_incorrect_field_names(self):
+        return json.loads(self.incorrect_fields)
 
     def __str__(self):
         return f"{self.name} - {self.model_type}"

@@ -32,27 +32,27 @@
 
                     <div class="form-element">
                         <p>Тип и модель</p>
-                        <input type="text" name="model_type" maxlength="300" required id="id_model_type" value="{{ form.model_type.value|default_if_none:'' }}">
+                        <input type="text" name="model_type" maxlength="300" required id="id_model_type" value="{{ form.model_type.value|default_if_none:'' }}" class="{% if 'model_type' in form.instance.get_incorrect_field_names %}incorrect{% endif %}">
                     </div>
 
                     <div class="form-element">
                         <p>Наименование</p>
-                        <input type="text" name="name" maxlength="250" required id="id_name" value="{{ form.name.value|default_if_none:'' }}">
+                        <input type="text" name="name" maxlength="250" required id="id_name" value="{{ form.name.value|default_if_none:'' }}" class="{% if 'name' in form.instance.get_incorrect_field_names %}incorrect{% endif %}">
                     </div>
 
                     <div class="form-element">
                         <p>Идентификационный (IMO)</p>
-                        <input type="text" name="imo" maxlength="250" required id="id_imo" value="{{ form.imo.value|default_if_none:'' }}">
+                        <input type="text" name="imo" maxlength="250" required id="id_imo" value="{{ form.imo.value|default_if_none:'' }}" class="{% if 'imo' in form.instance.get_incorrect_field_names %}incorrect{% endif %}">
                     </div>
 
                     <div class="form-element">
                         <p>Место постройки</p>
-                        <input type="text" name="build_place" maxlength="300" required id="id_build_place" value="{{ form.build_place.value|default_if_none:'' }}">
+                        <input type="text" name="build_place" maxlength="300" required id="id_build_place" value="{{ form.build_place.value|default_if_none:'' }}" class="{% if 'build_place' in form.instance.get_incorrect_field_names %}incorrect{% endif %}">
                     </div>
 
                     <div class="form-element">
                         <p>Год постройки</p>
-                        <input type="number" name="build_year" min="0" required id="id_build_year" value="{{ form.build_year.value|default_if_none:'' }}">
+                        <input type="number" name="build_year" min="0" required id="id_build_year" value="{{ form.build_year.value|default_if_none:'' }}" class="{% if 'build_year' in form.instance.get_incorrect_field_names %}incorrect{% endif %}">
                     </div>
 
                     <div class="form-element">
@@ -72,32 +72,32 @@
 
                     <div class="form-element">
                         <p>Длина (м)</p>
-                        <input type="number" name="length" min="0" required id="id_length" value="{{ form.length.value|default_if_none:'' }}">
+                        <input type="number" name="length" min="0" required id="id_length" value="{{ form.length.value|default_if_none:'' }}" class="{% if 'length' in form.instance.get_incorrect_field_names %}incorrect{% endif %}">
                     </div>
 
                     <div class="form-element">
                         <p>Ширина (м)</p>
-                        <input type="number" name="width" min="0" required id="id_width" value="{{ form.width.value|default_if_none:'' }}">
+                        <input type="number" name="width" min="0" required id="id_width" value="{{ form.width.value|default_if_none:'' }}" class="{% if 'width' in form.instance.get_incorrect_field_names %}incorrect{% endif %}">
                     </div>
 
                     <div class="form-element">
                         <p>Высота борта (м)</p>
-                        <input type="number" name="height_board" min="0" required id="id_height_board" value="{{ form.height_board.value|default_if_none:'' }}">
+                        <input type="number" name="height_board" min="0" required id="id_height_board" value="{{ form.height_board.value|default_if_none:'' }}" class="{% if 'height_board' in form.instance.get_incorrect_field_names %}incorrect{% endif %}">
                     </div>
 
                     <div class="form-element">
                         <p>Высота надв. Борта (м)</p>
-                        <input type="number" name="height_second_board" min="0" required id="id_height_second_board" value="{{ form.height_second_board.value|default_if_none:'' }}">
+                        <input type="number" name="height_second_board" min="0" required id="id_height_second_board" value="{{ form.height_second_board.value|default_if_none:'' }}" class="{% if 'height_second_board' in form.instance.get_incorrect_field_names %}incorrect{% endif %}">
                     </div>
 
                     <div class="form-element">
                         <p>Вместимость (тонн)</p>
-                        <input type="number" name="capacity" min="0" required id="id_capacity" value="{{ form.capacity.value|default_if_none:'' }}">
+                        <input type="number" name="capacity" min="0" required id="id_capacity" value="{{ form.capacity.value|default_if_none:'' }}" class="{% if 'capacity' in form.instance.get_incorrect_field_names %}incorrect{% endif %}">
                     </div>
 
                     <div class="form-element">
                         <p>Грузоподъемность (кг)</p>
-                        <input type="number" name="capacity_load" min="0" required id="id_capacity_load" value="{{ form.capacity_load.value|default_if_none:'' }}">
+                        <input type="number" name="capacity_load" min="0" required id="id_capacity_load" value="{{ form.capacity_load.value|default_if_none:'' }}" class="{% if 'capacity_load' in form.instance.get_incorrect_field_names %}incorrect{% endif %}">
                     </div>
 
                 </div>
@@ -107,35 +107,35 @@
 
                     <div class="form-element">
                         <p>Пассажировместимость (чел.)</p>
-                        <input type="number" name="passenger_awn" min="0" required id="id_passenger_awn" value="{{ form.passenger_awn.value|default_if_none:'' }}">
+                        <input type="number" name="passenger_awn" min="0" required id="id_passenger_awn" value="{{ form.passenger_awn.value|default_if_none:'' }}" class="{% if 'passenger_awn' in form.instance.get_incorrect_field_names %}incorrect{% endif %}">
                     </div>
 
 
                     <div class="form-element">
                         <p>Район и условия плавания</p>
-                        <input type="text" name="swimming_place" maxlength="300" required id="id_swimming_place" value="{{ form.swimming_place.value|default_if_none:'' }}">
+                        <input type="text" name="swimming_place" maxlength="300" required id="id_swimming_place" value="{{ form.swimming_place.value|default_if_none:'' }}" class="{% if 'swimming_place' in form.instance.get_incorrect_field_names %}incorrect{% endif %}">
                     </div>
 
 
                     <div class="form-element">
                         <p>Тип главного двигателя</p>
-                        <input type="text" name="engine_type" maxlength="300" required id="id_engine_type" value="{{ form.engine_type.value|default_if_none:'' }}">
+                        <input type="text" name="engine_type" maxlength="300" required id="id_engine_type" value="{{ form.engine_type.value|default_if_none:'' }}" class="{% if 'engine_type' in form.instance.get_incorrect_field_names %}incorrect{% endif %}">
                     </div>
 
 
                     <div class="form-element">
                         <p>Марка двигателя</p>
-                        <input type="text" name="engine_model" maxlength="300" required id="id_engine_model" value="{{ form.engine_model.value|default_if_none:'' }}">
+                        <input type="text" name="engine_model" maxlength="300" required id="id_engine_model" value="{{ form.engine_model.value|default_if_none:'' }}" class="{% if 'engine_model' in form.instance.get_incorrect_field_names %}incorrect{% endif %}">
                     </div>
 
                     <div class="form-element">
                         <p>Заводские номера двигателей</p>
-                        <input type="text" name="engine_number" maxlength="300" required id="id_engine_number" value="{{ form.engine_number.value|default_if_none:'' }}">
+                        <input type="text" name="engine_number" maxlength="300" required id="id_engine_number" value="{{ form.engine_number.value|default_if_none:'' }}" class="{% if 'engine_number' in form.instance.get_incorrect_field_names %}incorrect{% endif %}">
                     </div>
 
                     <div class="form-element">
                         <p>Мощность двигателя/ей (кВт/л.с.)</p>
-                        <input type="number" name="engine_power" min="0" required id="id_engine_power" value="{{ form.engine_power.value|default_if_none:'' }}">
+                        <input type="number" name="engine_power" min="0" required id="id_engine_power" value="{{ form.engine_power.value|default_if_none:'' }}" class="{% if 'engine_power' in form.instance.get_incorrect_field_names %}incorrect{% endif %}">
                     </div>
 
 
@@ -156,29 +156,29 @@
 
                     <div class="form-element">
                         <p>Количество парусов</p>
-                        <input type="number" name="sails_amount" min="0" required id="id_sails_amount" value="{{ form.sails_amount.value|default_if_none:'' }}">
+                        <input type="number" name="sails_amount" min="0" required id="id_sails_amount" value="{{ form.sails_amount.value|default_if_none:'' }}" class="{% if 'sails_amount' in form.instance.get_incorrect_field_names %}incorrect{% endif %}">
                     </div>
 
                     <div class="form-element">
                         <p>Площадь парусов (м2)</p>
-                        <input type="number" name="sail_area" min="0" required id="id_sail_area" value="{{ form.sail_area.value|default_if_none:'' }}">
+                        <input type="number" name="sail_area" min="0" required id="id_sail_area" value="{{ form.sail_area.value|default_if_none:'' }}" class="{% if 'sail_area' in form.instance.get_incorrect_field_names %}incorrect{% endif %}">
                     </div>
 
                     <div class="form-element">
                         <p>Прежние регистр. No и название судна</p>
-                        <input type="text" name="prev_numbers_or_name" maxlength="300" required
+                        <input type="text" name="prev_numbers_or_name" maxlength="300" require class="{% if 'prev_numbers_or_name' in form.instance.get_incorrect_field_names %}incorrect{% endif %}"d
                                id="id_prev_numbers_or_name" value="{{ form.prev_numbers_or_name.value|default_if_none:'' }}">
                     </div>
 
                     <div class="form-element">
                         <p>Место прежней регистрации судна</p>
-                        <input type="text" name="prev_registration_place" maxlength="300" required
+                        <input type="text" name="prev_registration_place" maxlength="300" require class="{% if 'prev_registration_place' in form.instance.get_incorrect_field_names %}incorrect{% endif %}"d
                                id="id_prev_registration_place" value="{{ form.prev_registration_place.value|default_if_none:'' }}">
                     </div>
 
                     <div class="form-element">
                         <p>Место постоянной стоянки судна</p>
-                        <input type="text" name="parking_place" maxlength="300" required id="id_parking_place" value="{{ form.parking_place.value|default_if_none:'' }}">
+                        <input type="text" name="parking_place" maxlength="300" required id="id_parking_place" value="{{ form.parking_place.value|default_if_none:'' }}" class="{% if 'parking_place' in form.instance.get_incorrect_field_names %}incorrect{% endif %}">
                     </div>
 
                 </div>
@@ -187,7 +187,7 @@
 
                     <div class="form-element">
                         <p>Скан паспорта</p>
-                        <div class="fileBox">
+                        <div class="fileBox {% if 'passport_image' in form.instance.get_incorrect_field_names %}incorrect{% endif %}">
                             <p>+</p>
                         </div>
 
@@ -201,7 +201,7 @@
 
                     <div class="form-element">
                         <p>Другие документы</p>
-                        <div class="fileBox">
+                        <div class="fileBox {% if 'other_files' in form.instance.get_incorrect_field_names%}incorrect{% endif %}">
                             <p>+</p>
                         </div>
                         <input type="file" name="other_files" class="formFileInput">
