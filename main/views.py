@@ -168,7 +168,7 @@ class TechCheckView(View):
             return redirect("main:inspector")
 
         boat = get_object_or_404(Boat, pk=pk)
-        unwatched_notifications_count = len(Notification.objects.filter(watched=False))
+        unwatched_notifications_count = len(Notification.objects.filter(owner=request.user, watched=False))
 
         context = {
             "boat": boat,
