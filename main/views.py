@@ -2,10 +2,9 @@ import json
 import requests
 from random import randint
 
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect
 from django.views.generic import View
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
@@ -219,7 +218,7 @@ class EditRequest(LoginRequiredMixin, View):
 
     def post(self, request, pk):
         boat = get_object_or_404(Boat, owner=request.user, pk=pk)
-        form = BoatForm(request.POST, instance=boat)
+        form = BoatForm(request.POST, request.FILES, instance=boat)
 
         if form.is_valid():
             edited_boat = form.save(commit=False)
@@ -330,15 +329,16 @@ class RegistrationRequest(View):
         if not request.user.is_inspector:
             return redirect("main:index")
 
-        incorrect_fields = json.dumps(request.POST.getlist("incorrect_fields"))
+        incorrect_fields = request.POST.getlist("incorrect_fields")
+        incorrect_fields_json = json.dumps(incorrect_fields)
 
         boat = get_object_or_404(Boat, pk=pk)
-        boat.incorrect_fields = incorrect_fields
+        boat.incorrect_fields = incorrect_fields_json
         boat.save()
 
         status = "payment"
 
-        if boat.incorrect_fields:
+        if incorrect_fields:
             status = "rejected"
 
         boat.change_status(status)

@@ -18,16 +18,26 @@
 
         {% for field in form %}
 
-            <div class="form-element">
-                <label><input type="checkbox" name="incorrect_fields" value="{{ field.name }}">{{ field.label }}</label>
-                <input type="text" value="{{ field.value }}" disabled>
-            </div>
+
+
+                <div class="form-element">
+                    <label><input type="checkbox" name="incorrect_fields" value="{{ field.name }}">{{ field.label }}</label>
+                    {% if field.name == "passport_image" %}
+                        <a href="{{ form.instance.passport_image.url}}">{{ field.value }}</a>
+                    {% elif field.name == "other_files" %}
+                        <a href="{{ form.instance.other_files.url}}">{{ field.value }}</a>
+                    {% else %}
+                    <input type="text" value="{{ field.value }}" disabled>
+                    {% endif %}
+                </div>
 
         {% endfor %}
 
         <div class="form-buttons">
-            <button class="btn" type="submit">Принять к оплате</button>
+            <button id="submitButton" class="btn" type="submit">Принять к оплате</button>
         </div>
+
+
 
 
 {#        <div class="row">#}
@@ -236,4 +246,5 @@
 
     </form>
 
+    <script src="{% static 'main/js/registrationRequest.js' %}"></script>
 {% endblock %}
