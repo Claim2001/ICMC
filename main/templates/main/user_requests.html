@@ -3,52 +3,57 @@
 
 {% block content %}
 
-{% for notification in notifications %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
 
-{#    <p><a href="request/{{ notification.id }}">{{ notification.status }}</a></p>#}
+    {% for notification in notifications %}
+
+        {#    <p><a href="request/{{ notification.id }}">{{ notification.status }}</a></p>#}
 
 
-    <div class="control-block{% if notification.watched == False %} unwatched {% endif %}">
-        <div class="notification-icon">
-            {% if notification.status == "looking" %}
-                <img src="{% static 'main/img/ship.svg' %}" alt="">
-            {% endif %}
+        <div class="control-block{% if notification.watched == False %} unwatched {% endif %}">
+            <div class="notification-icon">
+                {% if notification.status == "looking" %}
+                    <img src="{% static 'main/img/ship.svg' %}" alt="">
+                {% endif %}
 
-            {% if notification.status == "rejected" %}
-                <img src="{% static 'main/img/exam.svg' %}" alt="">
-            {% endif %}
+                {% if notification.status == "rejected" %}
+                    <img src="{% static 'main/img/exam.svg' %}" alt="">
+                {% endif %}
+            </div>
+
+            <div class="control-title">
+                {#            <p>{{ notification.status }}</p>#}
+                {% if notification.status == "looking" %}
+                    Ваше заявление находится на стадии рассмотрения
+                {% endif %}
+
+                {% if notification.status == "rejected" %}
+                    Неправильно заполненные поля:
+
+                    <div class="incorrect-fields-list">
+                        {% for field in notification.boat.get_incorrect_field_labels %}
+                            <p>- {{ field }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+
+            <div class="control-button">
+                {% if notification.status == "rejected" %}
+                    <a href="{% url 'main:edit_request' pk=notification.boat.pk %}"
+                       class="btn {% if notification.watched == False %}btn-warn{% endif %}">
+                        Изменить
+                    </a>
+                {% endif %}
+            </div>
+
         </div>
 
-        <div class="control-title">
-{#            <p>{{ notification.status }}</p>#}
-            {% if notification.status == "looking" %}
-                Ваше заявление находится на стадии рассмотрения
-            {% endif %}
-
-            {% if notification.status == "rejected" %}
-                Неправильно заполненные поля:
-
-                <div class="incorrect-fields-list">
-                    {% for field in notification.boat.get_incorrect_field_labels %}
-                        <p>- {{ field }}</p>
-                    {% endfor %}
-                </div>
-            {% endif %}
-        </div>
-
-
-        <div class="control-button">
-            {% if notification.status == "rejected" %}
-                <a href="#{{ notification.boat.pk }}" class="btn {% if notification.watched == False %}btn-warn{% endif %}">
-                    Изменить
-                </a>
-            {% endif %}
-        </div>
-
-{#        <a href="#{{ notification.pk }}" class="btn">Технический осмотр</a>#}
-{#        <a href="#{{ notification.pk }}" class="btn btn-warn">Снять с учета</a>#}
-    </div>
-
-{% endfor %}
+    {% endfor %}
 
 {% endblock %}

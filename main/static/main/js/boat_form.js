@@ -113,6 +113,8 @@ fileFields.map(function (field) {
 });
 
 function isAllowedFileFormat(filename) {
+    filename = filename.toLowerCase();
+
     let allowed_extensions = ["jpeg", "png", "jpg", "pdf", "docx", "doc"],
         extension = filename.split('.').pop();
 

@@ -22,8 +22,8 @@ removeOpenButtons.map(function (button) {
 techCheckOpenButtons.map(function (button) {
     button.addEventListener('click', function () {
         let boatID = button.dataset.id;
-        techCheckLink.href = "/request/" + boatID + "/techCheck";
-        yearTechCheckLink.href = "/request/" + boatID + "/yearTechCheck";
+        techCheckLink.href = "/requests/" + boatID + "/techCheck";
+        yearTechCheckLink.href = "/requests/" + boatID + "/yearTechCheck";
 
         techCheckPopupWindow.style.display = "flex"
     });

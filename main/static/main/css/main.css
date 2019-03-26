@@ -208,9 +208,9 @@ html {
 }
 
 .fileBox.filled {
-    border: 1px solid green;
-    background-color: lightgreen;
-    color: green;
+    border: 1px solid lightgreen;
+    background-color: rgba(0, 250, 0, 0.3);
+    color: rgba(0, 136, 0, 0.9);
 }
 
 .fileBox.incorrect {
@@ -373,7 +373,6 @@ input.incorrect {
 .count {
     color: #fff;
     background-color: #FF7D1B;
-    padding-top: 3px;
     font-size: 10px;
     width: 16px;
     height: 16px;

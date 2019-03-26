@@ -2,8 +2,9 @@ import json
 import requests
 from random import randint
 
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect
 from django.views.generic import View
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
@@ -40,7 +41,7 @@ class RegisterBoat(View):
                 "notifications_count": unwatched_notifications_count,
             }
 
-            return render(request, "main/register_boat.html", context)
+            return render(request, "main/boat_form.html", context)
 
         return redirect("main:login")
 
@@ -193,6 +194,44 @@ class YearTechCheck(TechCheckView):
         return redirect("main:boats")
 
 
+class EditRequest(LoginRequiredMixin, View):
+    login_url = "main:login"
+
+    def get(self, request, pk):
+        boat = get_object_or_404(Boat, owner=request.user, pk=pk)
+
+        if boat.status == "looking":
+            messages.add_message(request, messages.WARNING, "Вы не можете изменять заявления, которые находятся на "
+                                                            "рассмотрении")
+            return redirect("main:boat_requests")
+
+        form = BoatForm(instance=boat)
+
+        notification_count = Notification.objects.filter(owner=request.user, watched=False)
+
+        context = {
+            "notifications_count": notification_count,
+            "form": form,
+        }
+
+        return render(request, "main/boat_form.html", context)
+
+    def post(self, request, pk):
+        boat = get_object_or_404(Boat, owner=request.user, pk=pk)
+        form = BoatForm(request.POST, request.FILES, instance=boat)
+
+        if form.is_valid():
+            edited_boat = form.save(commit=False)
+            edited_boat.change_status("wait")
+            edited_boat.save()
+
+            messages.add_message(request, messages.SUCCESS, "Ваше заявление принято и повторно отправлено!")
+        else:
+            messages.add_message(request, messages.ERROR, "Что-то пошло не так")
+
+        return redirect("main:boat_requests")
+
+
 # Inspector views
 
 def inspector_page(request):
@@ -290,17 +329,21 @@ class RegistrationRequest(View):
         if not request.user.is_inspector:
             return redirect("main:index")
 
-        incorrect_fields = json.dumps(request.POST.getlist("incorrect_fields"))
+        incorrect_fields = request.POST.getlist("incorrect_fields")
+        incorrect_fields_json = json.dumps(incorrect_fields)
 
         boat = get_object_or_404(Boat, pk=pk)
-        boat.incorrect_fields = incorrect_fields
+        boat.incorrect_fields = incorrect_fields_json
         boat.save()
 
-        if boat.incorrect_fields:
-            boat.change_status("rejected")
-            return redirect("main:inspecting_requests")
+        status = "payment"
 
-        return render(request, "main/registration_request.html", {})
+        if incorrect_fields:
+            status = "rejected"
+
+        boat.change_status(status)
+
+        return redirect("main:inspecting_requests")
 
 
 # Login, signup and etc.
