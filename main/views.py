@@ -3,9 +3,7 @@ import requests
 from random import randint
 
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponseRedirect
 from django.views.generic import View
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
@@ -44,6 +42,8 @@ class UserView(LoginRequiredMixin, UserNotInspectorMixin, UserActivatedMixin, Vi
         context["notifications_count"] = unwatched_notifications_count
 
         return context
+
+
 
 
 class RegisterBoat(UserView):
@@ -191,102 +191,69 @@ class EditRequest(UserView):
 
 
 # Inspector views
-
-def inspector_page(request):
-    if not request.user.is_authenticated:
-        return redirect("main:login")
-
-    if request.user.is_superuser:
+class UserInspectorMixin(UserPassesTestMixin):
+    def handle_no_permission(self):
         return redirect("main:index")
 
-    if not request.user.is_inspector:
-        return redirect("main:index")
-
-    waiting_requests = Boat.objects.filter(status="wait").order_by("-pk")
-    print(waiting_requests)
-
-    context = {
-        "requests": waiting_requests
-    }
-
-    return render(request, "main/inspector.html", context)
+    def test_func(self):
+        return self.request.user.is_inspector
 
 
-def inspecting_requests(request):
-    if not request.user.is_authenticated:
-        return redirect("main:login")
-
-    if request.user.is_superuser:
-        return redirect("main:index")
-
-    if not request.user.is_inspector:
-        return redirect("main:index")
-
-    inspecting_boat_requests = Boat.objects.filter(status="looking").order_by("-pk")
-
-    context = {
-        "requests": inspecting_boat_requests,
-    }
-
-    return render(request, "main/inspector_inspecting_requests.html", context)
+class InspectorView(LoginRequiredMixin, UserInspectorMixin, View):
+    login_url = "main:login"
 
 
-def remove_requests(request):
-    if not request.user.is_authenticated:
-        return redirect("main:login")
+class Inspector(InspectorView):
+    def get(self, request):
+        waiting_requests = Boat.objects.filter(status="wait").order_by("-pk")
+        print(waiting_requests)
 
-    if request.user.is_superuser:
-        return redirect("main:index")
+        context = {
+            "requests": waiting_requests
+        }
 
-    if not request.user.is_inspector:
-        return redirect("")
-
-    remove_boat_request = RemoveRequest.objects.all()
-
-    context = {
-        "requests": remove_boat_request
-    }
-
-    return render(request, "main/inspector_remove_requests.html", context)
+        return render(request, "main/inspector.html", context)
 
 
-def add_request_to_looking(request, pk):
-    if not request.user.is_authenticated:
-        return redirect("main:login")
+class InspectingRequests(InspectorView):
+    def get(self, request):
+        inspecting_boat_requests = Boat.objects.filter(status="looking").order_by("-pk")
 
-    if request.user.is_superuser:
-        return redirect("main:index")
+        context = {
+            "requests": inspecting_boat_requests,
+        }
 
-    if not request.user.is_inspector:
-        return redirect("main:index")
-
-    boat = get_object_or_404(Boat, pk=pk)
-    boat.change_status("looking")
-
-    messages.add_message(request, messages.SUCCESS, "Добавлено в 'рассматриваемые'")
-    return redirect("main:inspector")
+        return render(request, "main/inspector_inspecting_requests.html", context)
 
 
-class RegistrationRequest(View):
+class RequestRemove(InspectorView):
+    def get(self, request):
+        remove_boat_request = RemoveRequest.objects.all()
+
+        context = {
+            "requests": remove_boat_request
+        }
+
+        return render(request, "main/inspector_remove_requests.html", context)
+
+
+class AddRequestToLooking(InspectorView):
     def get(self, request, pk):
-        if not request.user.is_authenticated:
-            return redirect("main:login")
+        boat = get_object_or_404(Boat, pk=pk)
+        boat.change_status("looking")
 
-        if not request.user.is_inspector:
-            return redirect("main:index")
+        messages.add_message(request, messages.SUCCESS, "Добавлено в 'рассматриваемые'")
+        return redirect("main:inspector")
 
+
+class RegistrationRequest(InspectorView):
+    def get(self, request, pk):
         boat = get_object_or_404(Boat, pk=pk)
         form = BoatForm(instance=boat)
 
         return render(request, "main/registration_request.html", {"form": form})
 
     def post(self, request, pk):
-        if not request.user.is_authenticated:
-            return redirect("main:login")
-
-        if not request.user.is_inspector:
-            return redirect("main:index")
-
         incorrect_fields = request.POST.getlist("incorrect_fields")
         incorrect_fields_json = json.dumps(incorrect_fields)
 
@@ -361,13 +328,10 @@ class SignUp(View):
         return render(request, self.template_name, {"form": form})
 
 
-class UserEdit(View):
+class UserEdit(LoginRequiredMixin, View):
     template_name = "main/edit_user.html"
 
     def get(self, request):
-        if not request.user.is_authenticated:
-            return redirect("main:login")
-
         if request.user.activated:
             return redirect("main:index")
 
@@ -380,8 +344,8 @@ class UserEdit(View):
         return render(request, self.template_name, context)
 
     def post(self, request):
-        if not request.user.is_authenticated:
-            return redirect("main:login")
+        if request.user.activated:
+            return redirect("main:index")
 
         form = UserForm(request.POST, instance=request.user)
 
