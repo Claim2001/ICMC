@@ -46,7 +46,7 @@ class UserView(UserLoggedMixin, UserNotInspectorMixin, UserActivatedMixin, View)
     login_url = "/login"
 
     def get_context_with_extra_data(self, context):
-        unwatched_notifications_count = len(Notification.objects.filter(watched=False, owner=self.request.user))
+        unwatched_notifications_count = Notification.objects.filter(watched=False, owner=self.request.user).count()
         context["notifications_count"] = unwatched_notifications_count
 
         return context
