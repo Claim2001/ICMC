@@ -23,6 +23,10 @@
                 {% if notification.status == "rejected" %}
                     <img src="{% static 'main/img/exam.svg' %}" alt="">
                 {% endif %}
+
+                {% if notification.status == "payment" %}
+                    <img src="{% static 'main/img/job.svg' %}" alt="">
+                {% endif %}
             </div>
 
             <div class="control-title">
@@ -40,6 +44,10 @@
                         {% endfor %}
                     </div>
                 {% endif %}
+
+                {% if notification.status == "payment" %}
+                    Ваше заявление принято! Пожалуйста оплатите пошлину.
+                {% endif %}
             </div>
 
 
@@ -50,6 +58,14 @@
                         Изменить
                     </a>
                 {% endif %}
+
+                {% if notification.status == "payment" %}
+                    <a href="#"
+                       class="btn btn-warn">
+                        Оплатить
+                    </a>
+                {% endif %}
+
             </div>
 
         </div>
