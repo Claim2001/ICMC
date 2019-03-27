@@ -110,7 +110,7 @@ class UserFines(UserView):
 
 
 class BoatRemoveRequest(UserView):
-    def get(request, pk):
+    def get(self, request, pk):
         boat = get_object_or_404(Boat, owner=request.user, pk=pk)
 
         if not RemoveRequest.objects.filter(boat=boat):
