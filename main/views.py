@@ -34,16 +34,22 @@ class UserNotInspectorMixin(UserPassesTestMixin):
         return not self.request.user.is_inspector
 
 
-class UserView(LoginRequiredMixin, UserNotInspectorMixin, UserActivatedMixin, View):
-    login_url = "main:login"
+class UserLoggedMixin(UserPassesTestMixin):  # LoginRequiredMixin doesn't work with UserPassesMixins
+    def handle_no_permission(self):
+        return redirect("main:login")
+
+    def test_func(self):
+        return self.request.user.is_authenticated
+
+
+class UserView(UserLoggedMixin, UserNotInspectorMixin, UserActivatedMixin, View):
+    login_url = "/login"
 
     def get_context_with_extra_data(self, context):
         unwatched_notifications_count = len(Notification.objects.filter(watched=False, owner=self.request.user))
         context["notifications_count"] = unwatched_notifications_count
 
         return context
-
-
 
 
 class RegisterBoat(UserView):
@@ -199,7 +205,7 @@ class UserInspectorMixin(UserPassesTestMixin):
         return self.request.user.is_inspector
 
 
-class InspectorView(LoginRequiredMixin, UserInspectorMixin, View):
+class InspectorView(UserLoggedMixin, UserInspectorMixin, View):
     login_url = "main:login"
 
 
