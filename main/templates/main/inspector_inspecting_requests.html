@@ -3,15 +3,38 @@
 {% block content %}
 
 
-    {% for request in requests %}
+{#    {% for request in requests %}#}
+{##}
+{#        <div class="control-block">#}
+{#            <div class="control-title">#}
+{#                <p>{{ request.owner.first_name }} {{ request.owner.last_name }} - {{ request.name }}</p>#}
+{#            </div>#}
+{#            <a href="{% url 'main:register_request' pk=request.pk %}" class="btn">Просмотреть</a>#}
+{#        </div>#}
+{##}
+{#    {% endfor %}#}
 
-        <div class="control-block">
-            <div class="control-title">
-                <p>{{ request.owner.first_name }} {{ request.owner.last_name }} - {{ request.name }}</p>
-            </div>
-            <a href="{% url 'main:register_request' pk=request.pk %}" class="btn">Просмотреть</a>
-        </div>
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Ф.И.О.</th>
+            <th scope="col">Тип и модель</th>
+            <th scope="col">IMO</th>
+            <th scope="col">Номера двигателей</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for request in requests %}
+            <tr>
+                <th scope="row">{{ forloop.counter }}</th>
+                <td>{{ request.owner.first_name }} {{ request.owner.last_name }}</td>
+                <td>{{ request.model_type }}</td>
+                <td>{{ request.imo }}</td>
+                <td>{{ request.engine_number }}</td>
+            </tr>
+        {% endfor %}
+    </table>
 
-    {% endfor %}
 
 {% endblock %}

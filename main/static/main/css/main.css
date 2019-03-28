@@ -522,6 +522,19 @@ h1.form-title {
     margin-top: 7px;
 }
 
+table.table {
+    font-size: 14px;
+}
+
+table.table thead {
+    background-color: #287ac3;
+    color: #ffffff;
+}
+
+table.table th {
+    font-weight: 100;
+}
+
 /* ************************************* */
 /* just for a moment */
 h1 {
