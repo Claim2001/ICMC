@@ -209,7 +209,7 @@ class InspectorMixin(UserMixin):
         if not request.user.is_inspector:
             return self.handle_basic_user()
 
-        return super(AccessMixin, self).dispatch(request, *args, *kwargs)
+        return super(AccessMixin, self).dispatch(request, *args, **kwargs)
 
 
 class InspectorView(InspectorMixin, View):
@@ -219,7 +219,6 @@ class InspectorView(InspectorMixin, View):
 class Inspector(InspectorView):
     def get(self, request):
         waiting_requests = Boat.objects.filter(status="wait").order_by("-pk")
-        print(waiting_requests)
 
         context = {
             "requests": waiting_requests
@@ -252,6 +251,8 @@ class RequestRemove(InspectorView):
 
 class AddRequestToLooking(InspectorView):
     def get(self, request, pk):
+        print(pk)
+
         boat = get_object_or_404(Boat, pk=pk)
         boat.change_status("looking")
 
