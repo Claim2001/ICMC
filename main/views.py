@@ -213,16 +213,17 @@ class InspectorMixin(UserMixin):
 
 
 class InspectorView(InspectorMixin, View):
-    pass
+    def get_context_with_extra_data(self, context):
+        context['waiting_requests'] = Boat.objects.filter(status="wait").count()
+        # TODO: add tech check requests
+        # TODO: add remove requests
+        return context
 
 
 class Inspector(InspectorView):
     def get(self, request):
         waiting_requests = Boat.objects.filter(status="wait").order_by("-pk")
-
-        context = {
-            "requests": waiting_requests
-        }
+        context = self.get_context_with_extra_data({"requests": waiting_requests})
 
         return render(request, "main/inspector.html", context)
 
@@ -230,10 +231,7 @@ class Inspector(InspectorView):
 class InspectingRequests(InspectorView):
     def get(self, request):
         inspecting_boat_requests = Boat.objects.filter(status="looking").order_by("-pk")
-
-        context = {
-            "requests": inspecting_boat_requests,
-        }
+        context = self.get_context_with_extra_data({"requests": inspecting_boat_requests})
 
         return render(request, "main/inspector_inspecting_requests.html", context)
 
@@ -241,18 +239,13 @@ class InspectingRequests(InspectorView):
 class RequestRemove(InspectorView):
     def get(self, request):
         remove_boat_request = RemoveRequest.objects.all()
-
-        context = {
-            "requests": remove_boat_request
-        }
+        context = self.get_context_with_extra_data({"requests": remove_boat_request})
 
         return render(request, "main/inspector_remove_requests.html", context)
 
 
 class AddRequestToLooking(InspectorView):
     def get(self, request, pk):
-        print(pk)
-
         boat = get_object_or_404(Boat, pk=pk)
         boat.change_status("looking")
 
@@ -264,8 +257,9 @@ class RegistrationRequest(InspectorView):
     def get(self, request, pk):
         boat = get_object_or_404(Boat, pk=pk)
         form = BoatForm(instance=boat)
+        context = self.get_context_with_extra_data({"form": form})
 
-        return render(request, "main/registration_request.html", {"form": form})
+        return render(request, "main/registration_request.html", context)
 
     def post(self, request, pk):
         incorrect_fields = request.POST.getlist("incorrect_fields")

@@ -524,6 +524,7 @@ h1.form-title {
 
 table.table {
     font-size: 14px;
+    background-color: rgba(0, 0, 0, 0.04);
 }
 
 table.table thead {
@@ -535,7 +536,15 @@ table.table th {
     font-weight: 100;
 }
 
-table.table tr td a, table.table tr td a:hover {
+table.table thead th {
+    padding: 12px;
+}
+
+table.table tbody th {
+    padding: 0;
+}
+
+table.table tr td a, table.table tr td a:hover, table.table tr th a, table.table tr th a:hover {
     display:block;
     height:100%;
     width:100%;
