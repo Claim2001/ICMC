@@ -2,7 +2,7 @@ import json
 import requests
 from random import randint
 
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin, AccessMixin
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import View
 from django.contrib.auth import authenticate, login, logout
@@ -18,31 +18,30 @@ def send_sms(number, message):
 
 
 # User views
-class UserActivatedMixin(UserPassesTestMixin):
-    def handle_no_permission(self):
-        return redirect('main:activate_account')
-
-    def test_func(self):
-        return self.request.user.activated
-
-
-class UserNotInspectorMixin(UserPassesTestMixin):
-    def handle_no_permission(self):
-        return redirect('main:inspector')
-
-    def test_func(self):
-        return not self.request.user.is_inspector
-
-
-class UserLoggedMixin(UserPassesTestMixin):  # LoginRequiredMixin doesn't work with UserPassesMixins
-    def handle_no_permission(self):
+class UserMixin(AccessMixin):
+    def handle_not_authenticated(self):
         return redirect("main:login")
 
-    def test_func(self):
-        return self.request.user.is_authenticated
+    def handle_user_inspector(self):
+        return redirect("main:inspector")
+
+    def handle_not_activated(self):
+        return redirect("main:activate_account")
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return self.handle_not_authenticated()
+
+        if request.user.is_inspector:
+            return self.handle_user_inspector()
+
+        if not request.user.activated:
+            return self.handle_not_activated()
+
+        return super(UserMixin, self).dispatch(request, *args, **kwargs)
 
 
-class UserView(UserLoggedMixin, UserNotInspectorMixin, UserActivatedMixin, View):
+class UserView(UserMixin, View):
     login_url = "/login"
 
     def get_context_with_extra_data(self, context):
@@ -55,6 +54,8 @@ class UserView(UserLoggedMixin, UserNotInspectorMixin, UserActivatedMixin, View)
 class RegisterBoat(UserView):
     def get(self, request):
         form = BoatForm()
+
+        print(request.user.activated)
 
         context = {
             "user": request.user,
@@ -197,16 +198,22 @@ class EditRequest(UserView):
 
 
 # Inspector views
-class UserInspectorMixin(UserPassesTestMixin):
-    def handle_no_permission(self):
+class InspectorMixin(UserMixin):
+    def handle_basic_user(self):
         return redirect("main:index")
 
-    def test_func(self):
-        return self.request.user.is_inspector
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return self.handle_not_authenticated()
+
+        if not request.user.is_inspector:
+            return self.handle_basic_user()
+
+        return super(AccessMixin, self).dispatch(request, *args, *kwargs)
 
 
-class InspectorView(UserLoggedMixin, UserInspectorMixin, View):
-    login_url = "main:login"
+class InspectorView(InspectorMixin, View):
+    pass
 
 
 class Inspector(InspectorView):
