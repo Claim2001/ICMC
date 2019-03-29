@@ -7,7 +7,8 @@ let removePopupWindow = document.querySelector(".remove-window"),
     yearTechCheckLink = document.querySelector("#yearTechCheck"),
     removeForm = document.querySelector("#removeForm"),
     fileBox = document.querySelector(".fileBox"),
-    fileInput = document.querySelector("input[type='file']");
+    fileInput = document.querySelector("input[type='file']"),
+    submitButton = document.querySelector("button[type='submit']");
 
 
 removeOpenButtons.map(function (button) {
@@ -43,6 +44,14 @@ function closePopups() {
     removePopupWindow.style.display = "none";
     techCheckPopupWindow.style.display = "none";
 }
+
+submitButton.addEventListener("click", function (evt) {
+    evt.preventDefault();
+
+    if (isAllowedFileFormat(fileInput.value)) {
+        removeForm.submit();
+    }
+});
 
 
 fileBox.addEventListener("click", function () {

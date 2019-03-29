@@ -515,6 +515,10 @@ a.popupBlock:hover {
     margin-top: 30px;
 }
 
+.popup .fileBox.incorrect {
+    border: 1px solid red;
+}
+
 h1.formTitle {
     font-size: 25px;
     color: #ff7d1b;
