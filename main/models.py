@@ -103,6 +103,7 @@ REMOVE_BOAT_REASONS = (
 class RemoveRequest(models.Model):
     boat = models.ForeignKey(Boat, on_delete=models.CASCADE)
     reason = models.CharField(max_length=300, choices=REMOVE_BOAT_REASONS)
+    ticket = models.FileField(null=True, blank=True)
 
     def __str__(self):
         return self.boat.name

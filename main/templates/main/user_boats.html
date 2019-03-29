@@ -29,7 +29,39 @@
                 </button>
             </div>
 
-            <a href="#" class="btn btn-warn" id="removeConfirmLink">Remove</a>
+            <h1 class="popupTitle">Снятие судна с учета</h1>
+
+            <form action="" method="post" id="removeForm" enctype="multipart/form-data">
+
+                {% csrf_token %}
+
+                <div class="popupBlocks">
+                    <div class="popupBlock reasonBlock">
+                        <label>
+                            <input type="radio" name="reason" checked value="change">
+                            <span><span class="checkboxIcon"></span> Изменение владельца или места жительства</span>
+                        </label>
+
+                        <label>
+                            <input type="radio" name="reason" value="ticket">
+                            <span><span class="checkboxIcon"></span>Утеря или порча судового билета</span>
+                        </label>
+
+                        <label>
+                            <input type="radio" name="reason" value="broke">
+                            <span><span class="checkboxIcon"></span>Износ судна и другие причины</span>
+                        </label>
+                    </div>
+
+                    <div class="popupBlock fileBox">
+                        +
+                        <span class="file-input-hint">Скан судового билета</span>
+                        <input type="file" class="ticketFileInput" name="ticket">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-warn">Отправить</button>
+            </form>
         </div>
     </div>
 
@@ -44,9 +76,9 @@
 
             <h1 class="popupTitle">Выберите тип техосмотра</h1>
 
-            <div class="popupLinks">
-                <a href="#" class="popupLink techCheckLink" id="techCheck">Первичный техосмотр</a>
-                <a href="#" class="popupLink techCheckLink" id="yearTechCheck">Ежегодный техосмотр</a>
+            <div class="popupBlocks">
+                <a href="#" class="popupBlock techCheckLink" id="techCheck">Первичный техосмотр</a>
+                <a href="#" class="popupBlock techCheckLink" id="yearTechCheck">Ежегодный техосмотр</a>
             </div>
         </div>
     </div>

@@ -5,15 +5,15 @@ let removePopupWindow = document.querySelector(".remove-window"),
     techCheckOpenButtons = Array.from(document.querySelectorAll(".techCheckOpenButton")),
     techCheckLink = document.querySelector("#techCheck"),
     yearTechCheckLink = document.querySelector("#yearTechCheck"),
-    removeConfirmLink = document.querySelector("#removeConfirmLink");
+    removeForm = document.querySelector("#removeForm"),
+    fileBox = document.querySelector(".fileBox"),
+    fileInput = document.querySelector("input[type='file']");
 
 
 removeOpenButtons.map(function (button) {
    button.addEventListener('click', function () {
        let boatID = button.dataset.id;
-       removeConfirmLink.href = "/requests/" + boatID + "/remove";
-
-       console.log(removeConfirmLink);
+       removeForm.action = "/requests/" + boatID + "/remove/";
 
        removePopupWindow.style.display = "flex";
    });
@@ -39,8 +39,25 @@ document.addEventListener('keydown', function (evt) {
     }
 });
 
-
 function closePopups() {
     removePopupWindow.style.display = "none";
     techCheckPopupWindow.style.display = "none";
+}
+
+
+fileBox.addEventListener("click", function () {
+   fileInput.click();
+});
+
+fileInput.addEventListener("change", function () {
+    fileBox.className = isAllowedFileFormat(fileInput.value) ? "popupBlock fileBox filled" : "popupBlock fileBox incorrect";
+});
+
+function isAllowedFileFormat(filename) {
+    filename = filename.toLowerCase();
+
+    let allowed_extensions = ["jpeg", "png", "jpg", "pdf", "docx", "doc"],
+        extension = filename.split('.').pop();
+
+    return allowed_extensions.includes(extension);
 }

@@ -414,7 +414,7 @@ input.incorrect {
 }
 
 .popup-window .popup {
-    width: 600px;
+    width: 650px;
     /*height: 300px;*/
     left: 50%;
     top: 50%;
@@ -449,14 +449,24 @@ h1.popupTitle {
     margin-bottom: 30px;
 }
 
-.popupLinks {
+.popupBlocks {
     display: flex;
     flex-direction: row;
     justify-content: normal;
-    height: 100px;
+    min-height: 100px;
 }
 
-.popupLink {
+.reasonBlock {
+    text-align: left;
+}
+
+.reasonBlock label {
+    margin-bottom: 15px;
+    margin-left: 18px;
+}
+
+.popupBlock {
+    padding: 25px;
     background-color: #f3f3f3;
     font-size: 15px;
     flex: 1;
@@ -468,9 +478,41 @@ h1.popupTitle {
     color: rgba(0, 0, 0, 0.7);
 }
 
-.popupLink:hover {
+input[type="radio"] {
+  display: none;
+}
+
+input[type="radio"] + span:before {
+    font-family: "FontAwesome", serif;
+    display: inline-block;
+    content: "\f096";
+    color: #138cff;
+    margin-right: 8px;
+    width: 10px;
+}
+input[type="radio"]:checked + span:before {
+    content: "\f046";
+}
+
+.popup .fileBox {
+    border: none;
+    height: auto;
+    font-size: 50px;
+    color: #138cff;
+}
+
+.popup .fileBox .file-input-hint {
+    font-size: 15px;
+    color: rgba(0, 0, 0, 0.4);
+}
+
+a.popupBlock:hover {
     text-decoration: none;
     color: #138cff;
+}
+
+.popup .btn {
+    margin-top: 30px;
 }
 
 h1.formTitle {
@@ -483,6 +525,10 @@ h1.formTitle {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
+}
+
+#removeForm input[type="file"] {
+    display: none;
 }
 
 .exit-icon {

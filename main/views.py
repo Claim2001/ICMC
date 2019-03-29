@@ -2,7 +2,8 @@ import json
 import requests
 from random import randint
 
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin, AccessMixin
+from django.http import HttpResponseNotFound
+from django.contrib.auth.mixins import LoginRequiredMixin, AccessMixin
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import View
 from django.contrib.auth import authenticate, login, logout
@@ -112,10 +113,16 @@ class UserFines(UserView):
 
 class BoatRemoveRequest(UserView):
     def get(self, request, pk):
+        return HttpResponseNotFound()
+
+    def post(self, request, pk):
         boat = get_object_or_404(Boat, owner=request.user, pk=pk)
 
         if not RemoveRequest.objects.filter(boat=boat):
-            remove_request = RemoveRequest(boat=boat, reason="broke")
+            reason = request.POST["reason"]
+            ticket = request.FILES.get("ticket")
+
+            remove_request = RemoveRequest(boat=boat, reason=reason, ticket=ticket)
             remove_request.save()
 
             messages.add_message(request, messages.SUCCESS, "Ваше заявление на снятие судна с учета отправлено!")
