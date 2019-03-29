@@ -11,7 +11,7 @@ let removePopupWindow = document.querySelector(".remove-window"),
 removeOpenButtons.map(function (button) {
    button.addEventListener('click', function () {
        let boatID = button.dataset.id;
-       removeConfirmLink.href = "/request/" + boatID + "/remove";
+       removeConfirmLink.href = "/requests/" + boatID + "/remove";
 
        console.log(removeConfirmLink);
 
