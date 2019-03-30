@@ -264,6 +264,7 @@ class RegistrationRequest(InspectorView):
     def get(self, request, pk):
         boat = get_object_or_404(Boat, pk=pk)
         form = BoatForm(instance=boat)
+
         context = self.get_context_with_extra_data({"form": form})
 
         return render(request, "main/registration_request.html", context)

@@ -557,9 +557,21 @@ h1.form-title {
 }
 
 .inspector-check-form input[type="checkbox"] {
-    display: inline-block;
+    display: none;
     width: auto;
     margin-right: 10px;
+}
+
+.inspector-check-form input[type="checkbox"] + span:before {
+    display: inline-block;
+    font-family: "FontAwesome", serif;
+    content: "\f1db";
+    margin-right: 10px;
+    color: #138cff;
+}
+
+.inspector-check-form input[type="checkbox"]:checked + span:before {
+    content: "\f192";
 }
 
 .notification-icon {
