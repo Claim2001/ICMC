@@ -30,7 +30,6 @@ submitButton.addEventListener("click", function (evt) {
     }
 });
 
-
 function movePage(isNext) {
     let selectedPage = document.querySelector(".selectedPage"),
         currentStep = document.querySelector(".currentStep"),

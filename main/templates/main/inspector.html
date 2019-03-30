@@ -8,15 +8,28 @@
         </div>
     {% endfor %}
 
-{% for request in requests %}
-
-    <div class="control-block">
-        <div class="control-title">
-            <p>{{ request.owner.first_name }} {{ request.owner.last_name }} - {{ request.name }}</p>
-        </div>
-        <a href="{% url 'main:add_looking_request' pk=request.pk %}" class="btn">Добавить</a>
-    </div>
-
-{% endfor %}
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Ф.И.О.</th>
+            <th scope="col">Тип и модель</th>
+            <th scope="col">IMO</th>
+            <th scope="col">Номера двигателей</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for request in requests %}
+            <tr>
+                <th scope="row"><a href="{% url 'main:register_request' pk=request.pk %}">{{ forloop.counter }}</a></th>
+                <td>
+                    <a href="{% url 'main:register_request' pk=request.pk %}">{{ request.owner.first_name }} {{ request.owner.last_name }}</a>
+                </td>
+                <td><a href="{% url 'main:register_request' pk=request.pk %}">{{ request.model_type }}</a></td>
+                <td><a href="{% url 'main:register_request' pk=request.pk %}">{{ request.imo }}</a></td>
+                <td><a href="{% url 'main:register_request' pk=request.pk %}">{{ request.engine_number }}</a></td>
+            </tr>
+        {% endfor %}
+    </table>
 
 {% endblock %}
