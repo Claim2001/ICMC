@@ -253,18 +253,15 @@ class RequestRemove(InspectorView):
 
 class AddRequestsToLooking(InspectorView):
     def post(self, request):
-        # boat = get_object_or_404(Boat, pk=pk)
-        # boat.change_status("looking")
-
-        # get array of selected requests
         waiting_requests_ids = request.POST.getlist("request")
 
-        # iterate through them and change status to looking
         for request_id in waiting_requests_ids:
             boat = Boat.objects.get(id=request_id)
             boat.change_status("looking")
 
-        messages.add_message(request, messages.SUCCESS, "Добавлено в 'рассматриваемые'")
+        if waiting_requests_ids:
+            messages.add_message(request, messages.SUCCESS, "Добавлено в 'рассматриваемые'")
+
         return redirect("main:inspector")
 
 
