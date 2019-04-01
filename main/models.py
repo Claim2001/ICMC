@@ -110,8 +110,8 @@ class RemoveRequest(models.Model):
 
 
 TECH_CHECK_TYPE = (
-    ("первичный", "first"),
-    ("ежегодный", "year"),
+    ("first", "первичный"),
+    ("year", "ежегодный"),
 )
 
 

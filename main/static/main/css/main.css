@@ -279,7 +279,8 @@ input.formFileInput {
 }
 
 .loginForm {
-    margin: 72px 0;
+    margin-top: 30px;
+    margin-bottom: 70px;
 }
 
 .loginInput {
@@ -630,6 +631,18 @@ th.first {
 
 .table-container {
     min-height: 700px;
+}
+
+button.table-submit {
+    position: fixed;
+    bottom: 100px;
+    right: 200px;
+}
+
+.logo-image {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
 }
 
 /* ************************************* */

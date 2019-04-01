@@ -9,7 +9,7 @@ from django.views.generic import View
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 
-from .models import Boat, Notification, Fine, Owner, RemoveRequest
+from .models import Boat, Notification, Fine, Owner, RemoveRequest, TechCheckRequest
 from .forms import UserForm, BoatForm
 
 
@@ -139,39 +139,28 @@ def logout_user(request):
 
 
 class TechCheckView(UserView):
-    title = ""
+    type = ""
 
     def get(self, request, pk):
-        if not request.user.is_authenticated:
-            return redirect("main:login")
-
-        if request.user.is_inspector:
-            return redirect("main:inspector")
-
         boat = get_object_or_404(Boat, pk=pk)
 
-        context = {
-            "boat": boat,
-            "title": self.title
-        }
+        if TechCheckRequest.objects.filter(boat=boat, check_type=self.type):
+            messages.add_message(request, messages.WARNING, "Заявление на техосмотр уже находится в очереди")
+            return redirect("main:boats")
 
-        context = self.get_context_with_extra_data(context)
+        tech_check_request = TechCheckRequest(boat=boat, check_type=self.type)
+        tech_check_request.save()
 
-        return render(request, "main/tech_check_template.html", context)
+        messages.add_message(request, messages.SUCCESS, "Заявление на техосмотр принято и находится в очереди")
+        return redirect("main:boats")
 
 
 class FirstTechCheck(TechCheckView):
-    title = "Первичный техосмотр"
-
-    def post(self, request):
-        return redirect("main:boats")
+    type = "first"
 
 
 class YearTechCheck(TechCheckView):
-    title = "Ежегодный техосмотр"
-
-    def post(self, request):
-        return redirect("main:boats")
+    type = "year"
 
 
 class EditRequest(UserView):
