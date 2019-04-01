@@ -297,7 +297,7 @@ class Login(View):
             login(request, authenticated_user)
             return redirect("main:index")
 
-        messages.add_message(request, messages.ERROR, "Неверный email или пароль")
+        messages.add_message(request, messages.ERROR, "Неверный e-адрес или пароль")
         return render(request, "main/login.html", {"email": email})
 
 
@@ -326,15 +326,15 @@ class SignUp(View):
 
         user_with_same_email = Owner.objects.filter(email=request.POST['email'])
         if user_with_same_email:
-            messages.add_message(request, messages.ERROR, "User with this email exists")
+            messages.add_message(request, messages.ERROR, "Пользователь с таким эл. адресом уже зарегестрирован")
             return render(request, self.template_name, {"form": form})
 
         user_with_same_number = Owner.objects.filter(phone_number=request.POST['phone_number'])
         if user_with_same_number:
-            messages.add_message(request, messages.ERROR, "User with this phone number exists")
+            messages.add_message(request, messages.ERROR, "Пользователь с таким номером телефона уже зарегестрирован")
             return render(request, self.template_name, {"form": form})
 
-        messages.add_message(request, messages.ERROR, "Some error")
+        messages.add_message(request, messages.ERROR, "Произошла какая-то ошибка")
         return render(request, self.template_name, {"form": form})
 
 
@@ -373,12 +373,12 @@ class UserEdit(LoginRequiredMixin, View):
 
         user_with_same_email = Owner.objects.filter(email=request.POST['email'])
         if user_with_same_email is not request.user:
-            messages.add_message(request, messages.ERROR, "User with this email exists")
+            messages.add_message(request, messages.ERROR, "Пользователь с таким эл. адресом уже зарегестрирован")
             return render(request, self.template_name, {"form": form})
 
         user_with_same_number = Owner.objects.filter(phone_number=request.POST['phone_number'])
         if user_with_same_number is not request.user:
-            messages.add_message(request, messages.ERROR, "User with this phone number exists")
+            messages.add_message(request, messages.ERROR, "Пользователь с таким номером телефона уже зарегестрирован")
             return render(request, self.template_name, {"form": form})
 
         messages.add_message(request, messages.ERROR, "Some error")
@@ -406,7 +406,7 @@ class ActivateAccount(View):
 
                 return redirect("main:index")
 
-            messages.add_message(request, messages.ERROR, "Wrong code")
+            messages.add_message(request, messages.ERROR, "Неверный код")
             return render(request, "main/activation.html", {})
 
         return redirect("main:login")
