@@ -279,7 +279,8 @@ input.formFileInput {
 }
 
 .loginForm {
-    margin: 72px 0;
+    margin-top: 30px;
+    margin-bottom: 70px;
 }
 
 .loginInput {
@@ -414,7 +415,7 @@ input.incorrect {
 }
 
 .popup-window .popup {
-    width: 600px;
+    width: 650px;
     /*height: 300px;*/
     left: 50%;
     top: 50%;
@@ -449,14 +450,24 @@ h1.popupTitle {
     margin-bottom: 30px;
 }
 
-.popupLinks {
+.popupBlocks {
     display: flex;
     flex-direction: row;
     justify-content: normal;
-    height: 100px;
+    min-height: 100px;
 }
 
-.popupLink {
+.reasonBlock {
+    text-align: left;
+}
+
+.reasonBlock label {
+    margin-bottom: 15px;
+    margin-left: 18px;
+}
+
+.popupBlock {
+    padding: 25px;
     background-color: #f3f3f3;
     font-size: 15px;
     flex: 1;
@@ -468,9 +479,45 @@ h1.popupTitle {
     color: rgba(0, 0, 0, 0.7);
 }
 
-.popupLink:hover {
+input[type="radio"] {
+  display: none;
+}
+
+input[type="radio"] + span:before {
+    font-family: "FontAwesome", serif;
+    display: inline-block;
+    content: "\f096";
+    color: #138cff;
+    margin-right: 8px;
+    width: 10px;
+}
+input[type="radio"]:checked + span:before {
+    content: "\f046";
+}
+
+.popup .fileBox {
+    border: none;
+    height: auto;
+    font-size: 50px;
+    color: #138cff;
+}
+
+.popup .fileBox .file-input-hint {
+    font-size: 15px;
+    color: rgba(0, 0, 0, 0.4);
+}
+
+a.popupBlock:hover {
     text-decoration: none;
     color: #138cff;
+}
+
+.popup .btn {
+    margin-top: 30px;
+}
+
+.popup .fileBox.incorrect {
+    border: 1px solid red;
 }
 
 h1.formTitle {
@@ -483,6 +530,10 @@ h1.formTitle {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
+}
+
+#removeForm input[type="file"] {
+    display: none;
 }
 
 .exit-icon {
@@ -507,9 +558,21 @@ h1.form-title {
 }
 
 .inspector-check-form input[type="checkbox"] {
-    display: inline-block;
+    display: none;
     width: auto;
     margin-right: 10px;
+}
+
+.inspector-check-form input[type="checkbox"] + span:before {
+    display: inline-block;
+    font-family: "FontAwesome", serif;
+    content: "\f1db";
+    margin-right: 10px;
+    color: #138cff;
+}
+
+.inspector-check-form input[type="checkbox"]:checked + span:before {
+    content: "\f192";
 }
 
 .notification-icon {
@@ -540,7 +603,7 @@ table.table thead th {
     padding: 12px;
 }
 
-table.table tbody th {
+table.link-table tbody th {
     padding: 0;
 }
 
@@ -553,8 +616,33 @@ table.table tr td a, table.table tr td a:hover, table.table tr th a, table.table
     padding: 12px;
 }
 
-table.table tr td {
+table.link-table tr td {
     padding: 0;
+}
+
+#selectCell {
+    padding: 0 12px;
+    text-align: center;
+}
+
+th.first {
+    text-align: center;
+}
+
+.table-container {
+    min-height: 700px;
+}
+
+/*button.table-submit {*/
+    /*position: fixed;*/
+    /*bottom: 100px;*/
+    /*right: 200px;*/
+/*}*/
+
+.logo-image {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
 }
 
 /* ************************************* */

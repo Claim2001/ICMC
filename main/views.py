@@ -2,13 +2,14 @@ import json
 import requests
 from random import randint
 
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin, AccessMixin
+from django.http import HttpResponseNotFound
+from django.contrib.auth.mixins import LoginRequiredMixin, AccessMixin
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import View
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 
-from .models import Boat, Notification, Fine, Owner, RemoveRequest
+from .models import Boat, Notification, Fine, Owner, RemoveRequest, TechCheckRequest
 from .forms import UserForm, BoatForm
 
 
@@ -112,10 +113,16 @@ class UserFines(UserView):
 
 class BoatRemoveRequest(UserView):
     def get(self, request, pk):
+        return HttpResponseNotFound()
+
+    def post(self, request, pk):
         boat = get_object_or_404(Boat, owner=request.user, pk=pk)
 
         if not RemoveRequest.objects.filter(boat=boat):
-            remove_request = RemoveRequest(boat=boat, reason="broke")
+            reason = request.POST["reason"]
+            ticket = request.FILES.get("ticket")
+
+            remove_request = RemoveRequest(boat=boat, reason=reason, ticket=ticket)
             remove_request.save()
 
             messages.add_message(request, messages.SUCCESS, "Ваше заявление на снятие судна с учета отправлено!")
@@ -132,39 +139,28 @@ def logout_user(request):
 
 
 class TechCheckView(UserView):
-    title = ""
+    type = ""
 
     def get(self, request, pk):
-        if not request.user.is_authenticated:
-            return redirect("main:login")
-
-        if request.user.is_inspector:
-            return redirect("main:inspector")
-
         boat = get_object_or_404(Boat, pk=pk)
 
-        context = {
-            "boat": boat,
-            "title": self.title
-        }
+        if TechCheckRequest.objects.filter(boat=boat, check_type=self.type):
+            messages.add_message(request, messages.WARNING, "Заявление на техосмотр уже находится в очереди")
+            return redirect("main:boats")
 
-        context = self.get_context_with_extra_data(context)
+        tech_check_request = TechCheckRequest(boat=boat, check_type=self.type)
+        tech_check_request.save()
 
-        return render(request, "main/tech_check_template.html", context)
+        messages.add_message(request, messages.SUCCESS, "Заявление на техосмотр принято и находится в очереди")
+        return redirect("main:boats")
 
 
 class FirstTechCheck(TechCheckView):
-    title = "Первичный техосмотр"
-
-    def post(self, request):
-        return redirect("main:boats")
+    type = "first"
 
 
 class YearTechCheck(TechCheckView):
-    title = "Ежегодный техосмотр"
-
-    def post(self, request):
-        return redirect("main:boats")
+    type = "year"
 
 
 class EditRequest(UserView):
@@ -244,12 +240,17 @@ class RequestRemove(InspectorView):
         return render(request, "main/inspector_remove_requests.html", context)
 
 
-class AddRequestToLooking(InspectorView):
-    def get(self, request, pk):
-        boat = get_object_or_404(Boat, pk=pk)
-        boat.change_status("looking")
+class AddRequestsToLooking(InspectorView):
+    def post(self, request):
+        waiting_requests_ids = request.POST.getlist("request")
 
-        messages.add_message(request, messages.SUCCESS, "Добавлено в 'рассматриваемые'")
+        for request_id in waiting_requests_ids:
+            boat = Boat.objects.get(id=request_id)
+            boat.change_status("looking")
+
+        if waiting_requests_ids:
+            messages.add_message(request, messages.SUCCESS, "Добавлено в 'рассматриваемые'")
+
         return redirect("main:inspector")
 
 
@@ -257,6 +258,7 @@ class RegistrationRequest(InspectorView):
     def get(self, request, pk):
         boat = get_object_or_404(Boat, pk=pk)
         form = BoatForm(instance=boat)
+
         context = self.get_context_with_extra_data({"form": form})
 
         return render(request, "main/registration_request.html", context)
@@ -295,7 +297,7 @@ class Login(View):
             login(request, authenticated_user)
             return redirect("main:index")
 
-        messages.add_message(request, messages.ERROR, "Неверный email или пароль")
+        messages.add_message(request, messages.ERROR, "Неверный e-адрес или пароль")
         return render(request, "main/login.html", {"email": email})
 
 
@@ -324,15 +326,15 @@ class SignUp(View):
 
         user_with_same_email = Owner.objects.filter(email=request.POST['email'])
         if user_with_same_email:
-            messages.add_message(request, messages.ERROR, "User with this email exists")
+            messages.add_message(request, messages.ERROR, "Пользователь с таким эл. адресом уже зарегестрирован")
             return render(request, self.template_name, {"form": form})
 
         user_with_same_number = Owner.objects.filter(phone_number=request.POST['phone_number'])
         if user_with_same_number:
-            messages.add_message(request, messages.ERROR, "User with this phone number exists")
+            messages.add_message(request, messages.ERROR, "Пользователь с таким номером телефона уже зарегестрирован")
             return render(request, self.template_name, {"form": form})
 
-        messages.add_message(request, messages.ERROR, "Some error")
+        messages.add_message(request, messages.ERROR, "Произошла какая-то ошибка")
         return render(request, self.template_name, {"form": form})
 
 
@@ -371,12 +373,12 @@ class UserEdit(LoginRequiredMixin, View):
 
         user_with_same_email = Owner.objects.filter(email=request.POST['email'])
         if user_with_same_email is not request.user:
-            messages.add_message(request, messages.ERROR, "User with this email exists")
+            messages.add_message(request, messages.ERROR, "Пользователь с таким эл. адресом уже зарегестрирован")
             return render(request, self.template_name, {"form": form})
 
         user_with_same_number = Owner.objects.filter(phone_number=request.POST['phone_number'])
         if user_with_same_number is not request.user:
-            messages.add_message(request, messages.ERROR, "User with this phone number exists")
+            messages.add_message(request, messages.ERROR, "Пользователь с таким номером телефона уже зарегестрирован")
             return render(request, self.template_name, {"form": form})
 
         messages.add_message(request, messages.ERROR, "Some error")
@@ -404,7 +406,7 @@ class ActivateAccount(View):
 
                 return redirect("main:index")
 
-            messages.add_message(request, messages.ERROR, "Wrong code")
+            messages.add_message(request, messages.ERROR, "Неверный код")
             return render(request, "main/activation.html", {})
 
         return redirect("main:login")

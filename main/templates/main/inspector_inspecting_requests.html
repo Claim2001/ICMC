@@ -2,11 +2,10 @@
 
 {% block content %}
 
-
-    <table class="table table-bordered table-hover">
+    <table class="table table-bordered table-hover link-table">
         <thead>
         <tr>
-            <th scope="col">#</th>
+            <th class="first" scope="col">#</th>
             <th scope="col">Ф.И.О.</th>
             <th scope="col">Тип и модель</th>
             <th scope="col">IMO</th>
@@ -16,7 +15,7 @@
         <tbody>
         {% for request in requests %}
             <tr>
-                <th scope="row"><a href="{% url 'main:register_request' pk=request.pk %}">{{ forloop.counter }}</a></th>
+                <th class="first" scope="row"><a href="{% url 'main:register_request' pk=request.pk %}">{{ forloop.counter }}</a></th>
                 <td>
                     <a href="{% url 'main:register_request' pk=request.pk %}">{{ request.owner.first_name }} {{ request.owner.last_name }}</a>
                 </td>
@@ -26,6 +25,5 @@
             </tr>
         {% endfor %}
     </table>
-
 
 {% endblock %}

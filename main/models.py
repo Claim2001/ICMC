@@ -94,23 +94,24 @@ class Boat(models.Model):
 
 
 REMOVE_BOAT_REASONS = (
-    ("Изменение владельца или места жительства", "change"),
-    ("Износ или поломка судна", "broke"),
-    ("Утеря или порча судового билета", "ticket"),
+    ("change", "Изменение владельца или места жительства"),
+    ("broke", "Износ или поломка судна"),
+    ("ticket", "Утеря или порча судового билета"),
 )
 
 
 class RemoveRequest(models.Model):
     boat = models.ForeignKey(Boat, on_delete=models.CASCADE)
     reason = models.CharField(max_length=300, choices=REMOVE_BOAT_REASONS)
+    ticket = models.FileField(null=True, blank=True)
 
     def __str__(self):
         return self.boat.name
 
 
 TECH_CHECK_TYPE = (
-    ("первичный", "first"),
-    ("ежегодный", "year"),
+    ("first", "первичный"),
+    ("year", "ежегодный"),
 )
 
 
