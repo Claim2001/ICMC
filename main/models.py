@@ -37,7 +37,8 @@ BOAT_STATUS = [
     ("wait", "wait"),
     ("look", "look"),
     ("rejected", "rejected"),
-    ("waiting for payment", "payment"),
+    ("payment", "waiting for payment"),
+    ("check", "waiting for check"),
     ("accepted", "accepted"),
 ]
 

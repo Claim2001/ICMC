@@ -1,6 +1,7 @@
 let submitButton = document.querySelector("#submitButton"),
     checkboxes = Array.from(document.querySelectorAll("input[type='checkbox'"));
 
+console.log("This is loaded!");
 
 checkboxes.map(function (checkbox) {
     checkbox.addEventListener('change', function (evt) {
