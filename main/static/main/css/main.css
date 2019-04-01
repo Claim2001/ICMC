@@ -633,11 +633,11 @@ th.first {
     min-height: 700px;
 }
 
-button.table-submit {
-    position: fixed;
-    bottom: 100px;
-    right: 200px;
-}
+/*button.table-submit {*/
+    /*position: fixed;*/
+    /*bottom: 100px;*/
+    /*right: 200px;*/
+/*}*/
 
 .logo-image {
     display: flex;
