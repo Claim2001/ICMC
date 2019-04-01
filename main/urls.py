@@ -23,7 +23,7 @@ urlpatterns = [
     path('fines/', views.UserFines.as_view(), name="fines"),
     path('activate/', views.ActivateAccount.as_view(), name="activate_account"),
     path('reactivate/', views.reactivate, name="reactivate"),
-    path('inspector/request/<int:pk>/looking/', views.AddRequestToLooking.as_view(), name="add_looking_request"),
+    path('inspector/request/looking/', views.AddRequestsToLooking.as_view(), name="add_looking_request"),
     path('inspector/inspectingRequests/', views.InspectingRequests.as_view(), name="inspecting_requests"),
     path('inspector/removeRequests/', views.RequestRemove.as_view(), name="remove_requests"),
 ]

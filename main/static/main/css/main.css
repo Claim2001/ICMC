@@ -602,7 +602,7 @@ table.table thead th {
     padding: 12px;
 }
 
-table.table tbody th {
+table.link-table tbody th {
     padding: 0;
 }
 
@@ -615,8 +615,21 @@ table.table tr td a, table.table tr td a:hover, table.table tr th a, table.table
     padding: 12px;
 }
 
-table.table tr td {
+table.link-table tr td {
     padding: 0;
+}
+
+#selectCell {
+    padding: 0 12px;
+    text-align: center;
+}
+
+th.first {
+    text-align: center;
+}
+
+.table-container {
+    min-height: 700px;
 }
 
 /* ************************************* */

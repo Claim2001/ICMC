@@ -1,4 +1,5 @@
 {% extends "main/inspector_base.html" %}
+{% load staticfiles %}
 
 {% block content %}
 
@@ -8,28 +9,38 @@
         </div>
     {% endfor %}
 
-    <table class="table table-bordered table-hover">
-        <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Ф.И.О.</th>
-            <th scope="col">Тип и модель</th>
-            <th scope="col">IMO</th>
-            <th scope="col">Номера двигателей</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for request in requests %}
-            <tr>
-                <th scope="row"><a href="{% url 'main:register_request' pk=request.pk %}">{{ forloop.counter }}</a></th>
-                <td>
-                    <a href="{% url 'main:register_request' pk=request.pk %}">{{ request.owner.first_name }} {{ request.owner.last_name }}</a>
-                </td>
-                <td><a href="{% url 'main:register_request' pk=request.pk %}">{{ request.model_type }}</a></td>
-                <td><a href="{% url 'main:register_request' pk=request.pk %}">{{ request.imo }}</a></td>
-                <td><a href="{% url 'main:register_request' pk=request.pk %}">{{ request.engine_number }}</a></td>
-            </tr>
-        {% endfor %}
-    </table>
+    <form action="{% url 'main:add_looking_request' %}" method="post">
+        {% csrf_token %}
+
+        <div class="table-container">
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th class="first" scope="col" id="selectCell">Все<br><input type="checkbox" id="selectAll"></th>
+                    <th scope="col">Ф.И.О.</th>
+                    <th scope="col">Тип и модель</th>
+                    <th scope="col">IMO</th>
+                    <th scope="col">Номера двигателей</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for request in requests %}
+                    <tr>
+                        <th class="first" scope="row"><input type="checkbox" value="{{ request.id }}" class="requestCheckbox" name="request"></th>
+                        <td>{{ request.owner.first_name }} {{ request.owner.last_name }}</td>
+                        <td>{{ request.model_type }}</td>
+                        <td>{{ request.imo }}</td>
+                        <td>{{ request.engine_number }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <div class="form-buttons">
+            <button type="submit" class="btn">Добавить</button>
+        </div>
+    </form>
+
+    <script src="{% static "main/js/inspectorSelectTable.js" %}"></script>
 
 {% endblock %}
