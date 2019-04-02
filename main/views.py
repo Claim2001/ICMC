@@ -26,6 +26,9 @@ class UserMixin(AccessMixin):
     def handle_user_inspector(self):
         return redirect("main:inspector")
 
+    def handle_user_admin(self):
+        return redirect("/admin")
+
     def handle_not_activated(self):
         return redirect("main:activate_account")
 
@@ -35,6 +38,9 @@ class UserMixin(AccessMixin):
 
         if request.user.is_inspector:
             return self.handle_user_inspector()
+
+        if request.user.is_superuser:
+            return self.handle_user_admin()
 
         if not request.user.activated:
             return self.handle_not_activated()
@@ -56,11 +62,9 @@ class RegisterBoat(UserView):
     def get(self, request):
         form = BoatForm()
 
-        print(request.user.activated)
-
         context = {
             "user": request.user,
-            "form": form,
+            "form": form
         }
 
         context = self.get_context_with_extra_data(context)
@@ -204,6 +208,9 @@ class InspectorMixin(UserMixin):
 
         if not request.user.is_inspector:
             return self.handle_basic_user()
+
+        if request.user.is_superuser:
+            return self.handle_user_admin()
 
         return super(AccessMixin, self).dispatch(request, *args, **kwargs)
 
