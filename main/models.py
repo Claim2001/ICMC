@@ -94,6 +94,15 @@ class Boat(models.Model):
         return f"{self.name} - {self.model_type}"
 
 
+class PaymentRequest(models.Model):
+    check_scan = models.FileField(null=False, blank=False)
+    boat = models.ForeignKey(Boat, on_delete=models.CASCADE)
+    user = models.ForeignKey(Owner, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.boat
+
+
 REMOVE_BOAT_REASONS = (
     ("change", "Изменение владельца или места жительства"),
     ("broke", "Износ или поломка судна"),
