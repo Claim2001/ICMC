@@ -1,22 +1,50 @@
-{% extends "main/base.html" %}
+{% extends "main/header_template.html" %}
+{% load staticfiles %}
 
-{% block body %}
+{% block header %}
+    <h1><a href="{% url 'main:index' %}">Активация</a></h1>
+    <a href="{% url 'main:logout' %}" class="logout">
+        <img src="{% static 'main/img/exit.svg' %}" alt="" class="exit-icon">
+        Выход
+    </a>
+{% endblock %}
 
-    {% if messages %}
-        {% for message in message %}
-            <p>{{ message }}</p>
-        {% endfor %}
-    {% endif %}
+{% block main %}
 
-    <form action="" method="POST">
-        {% csrf_token %}
-        Введите код активации:
-        <input type="text" name="activation_code">
-        <button type="submit">Submit</button>
-        <br>
+    <div class="login">
 
-        <a href="{% url 'main:reactivate' %}">Отправить код повторно</a> |
-        <a href="{% url 'main:user_edit' %}">Назад</a>
-    </form>
+        <div class="login-window">
+
+            <h2 class="loginTitle">Введите код активации:</h2>
+
+            {% if messages %}
+                {% for message in message %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+
+            <form action="" method="POST">
+                {% csrf_token %}
+
+                <div class="login-form-element activation-code">
+                    <div class="loginInput">
+                        <input type="text" name="activation_code" autocomplete="off">
+                    </div>
+                </div>
+
+                <div class="activation-code-button-container">
+                    <button type="submit" class="btn activation-code-button">Войти в систему</button>
+                </div>
+
+                <div class="loginFormLink">
+                    <a href="{% url 'main:reactivate' %}">Отправить код повторно</a><br>
+                    <a href="{% url 'main:user_edit' %}">Изменить личные данные</a>
+                </div>
+            </form>
+
+        </div>
+
+    </div>
+
 
 {% endblock %}

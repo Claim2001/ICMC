@@ -645,6 +645,21 @@ th.first {
     justify-content: center;
 }
 
+.activation-code {
+    margin: 40px 0;
+}
+
+form button.btn.activation-code-button {
+    margin-top: 0;
+}
+
+.activation-code-button-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: 40px;
+}
+
 /* ************************************* */
 /* just for a moment */
 h1 {
