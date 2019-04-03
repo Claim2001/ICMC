@@ -197,6 +197,12 @@ class EditRequest(UserView):
         return redirect("main:boat_requests")
 
 
+class PayRequest(UserView):
+    def post(self, pk):
+        # create pay request may be
+        pass
+
+
 # Inspector views
 class InspectorMixin(UserMixin):
     def handle_basic_user(self):

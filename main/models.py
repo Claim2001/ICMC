@@ -38,7 +38,8 @@ BOAT_STATUS = [
     ("look", "look"),
     ("rejected", "rejected"),
     ("payment", "waiting for payment"),
-    ("check", "waiting for check"),
+    ("payment_check", "waiting for payment check"),
+    ("inspector_check", "waiting for data check"),
     ("accepted", "accepted"),
 ]
 
@@ -149,3 +150,12 @@ class Fine(models.Model):
 
     def __str__(self):
         return f"{self.owner.email} - {str(self.amount)}"
+
+
+class PayRequest(models.Model):
+    boat = models.ForeignKey(Boat, on_delete=models.CASCADE)
+    owner = models.ForeignKey(Owner, on_delete=models.CASCADE)
+    check_scan = models.FileField(null=False, blank=False)
+
+    def __str__(self):
+        return str(self.boat)
