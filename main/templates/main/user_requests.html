@@ -97,12 +97,13 @@
             <h1 class="popupTitle">Оплата через банк или инфокиоск</h1>
 
             <form action="" name="payForm" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
                 <div class="popupBlocks">
 
                     <div class="popupBlock fileBox">
                         +
                         <span class="file-input-hint">Скан чека</span>
-                        <input type="file" class="ticketFileInput" name="ticket">
+                        <input type="file" class="ticketFileInput" name="checkScan">
                     </div>
                 </div>
 

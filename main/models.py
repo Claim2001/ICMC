@@ -98,10 +98,10 @@ class Boat(models.Model):
 class PaymentRequest(models.Model):
     check_scan = models.FileField(null=False, blank=False)
     boat = models.ForeignKey(Boat, on_delete=models.CASCADE)
-    user = models.ForeignKey(Owner, on_delete=models.CASCADE)
+    owner = models.ForeignKey(Owner, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.boat
+        return str(self.boat)
 
 
 REMOVE_BOAT_REASONS = (
@@ -150,12 +150,3 @@ class Fine(models.Model):
 
     def __str__(self):
         return f"{self.owner.email} - {str(self.amount)}"
-
-
-class PayRequest(models.Model):
-    boat = models.ForeignKey(Boat, on_delete=models.CASCADE)
-    owner = models.ForeignKey(Owner, on_delete=models.CASCADE)
-    check_scan = models.FileField(null=False, blank=False)
-
-    def __str__(self):
-        return str(self.boat)

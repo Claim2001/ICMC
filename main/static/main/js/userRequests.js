@@ -28,7 +28,7 @@ payButtons.map(function (button) {
     button.addEventListener("click", function () {
         let id = button.dataset.id;
         onlinePayLink.href = "#" + id;
-        document.payForm.action = id.toString();  // TODO: real link
+        document.payForm.action = "/requests/" + id + "/pay/";
         payPopup.style.display = "block";
     });
 });

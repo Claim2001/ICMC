@@ -9,7 +9,7 @@ from django.views.generic import View
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 
-from .models import Boat, Notification, Fine, Owner, RemoveRequest, TechCheckRequest
+from .models import Boat, Notification, Fine, Owner, RemoveRequest, TechCheckRequest, PaymentRequest
 from .forms import UserForm, BoatForm
 
 
@@ -198,9 +198,17 @@ class EditRequest(UserView):
 
 
 class PayRequest(UserView):
-    def post(self, pk):
-        # create pay request may be
-        pass
+    def post(self, request, pk):
+        boat = get_object_or_404(Boat, pk=pk)
+
+        if PaymentRequest.objects.filter(boat=boat):
+            messages.add_message(request, messages.WARNING, "Запрос уже отправлен")
+
+        pay_request = PaymentRequest(boat=boat, owner=boat.owner, check_scan=request.FILES['checkScan'])
+        pay_request.save()
+
+        messages.add_message(request, messages.SUCCESS, "Запрос отправлен и ожидает проверки")
+        return redirect("main:boat_requests")
 
 
 # Inspector views
