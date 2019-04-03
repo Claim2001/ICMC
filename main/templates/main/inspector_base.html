@@ -23,6 +23,7 @@
                             </li>
                             <li class="{% if url_name == 'inspecting_requests' or url_name == 'register_request' %}selected{% endif %}"><a href="{% url 'main:inspecting_requests' %}">Рассматриваемые заявления</a></li>
                             <li class="{% if url_name == 'remove_requests' %}selected{% endif %}"><a href="{% url 'main:remove_requests' %}">Заявления на снятие с учета</a></li>
+                            <li class="{% if url_name == 'payment_requests' %}selected{% endif %}"><a href="{% url 'main:payment_requests' %}">Оплата</a></li>
                         {% endwith %}
                     </ul>
 
