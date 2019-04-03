@@ -660,6 +660,11 @@ form button.btn.activation-code-button {
     margin-bottom: 40px;
 }
 
+.paymentLink {
+    cursor: pointer;
+
+}
+
 /* ************************************* */
 /* just for a moment */
 h1 {

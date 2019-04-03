@@ -76,11 +76,16 @@ class Boat(models.Model):
     incorrect_fields = models.TextField(default="[]")
 
     def change_status(self, value):
+        not_send_notification_statuses = (
+                "wait",
+                "inspector_check",
+                )
+
         if self.status is not value:
             self.status = value
             self.save()
 
-            if self.status != "wait":
+            if not self.status in not_send_notification_statuses:
                 notification = Notification(owner=self.owner, boat=self, status=self.status)
                 notification.save()
 
@@ -99,6 +104,7 @@ class PaymentRequest(models.Model):
     check_scan = models.FileField(null=False, blank=False)
     boat = models.ForeignKey(Boat, on_delete=models.CASCADE)
     owner = models.ForeignKey(Owner, on_delete=models.CASCADE)
+    payed = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.boat)
@@ -141,7 +147,7 @@ class Notification(models.Model):
     watched = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.boat.owner.email
+        return f"{self.boat.owner.email} - {self.get_status_display()}"
 
 
 class Fine(models.Model):

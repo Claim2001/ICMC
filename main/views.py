@@ -203,8 +203,10 @@ class PayRequest(UserView):
 
         if PaymentRequest.objects.filter(boat=boat):
             messages.add_message(request, messages.WARNING, "Запрос уже отправлен")
+            return redirect("main:boat_requests")
 
         pay_request = PaymentRequest(boat=boat, owner=boat.owner, check_scan=request.FILES['checkScan'])
+        boat.change_status("inspector_check")
         pay_request.save()
 
         messages.add_message(request, messages.SUCCESS, "Запрос отправлен и ожидает проверки")
@@ -232,6 +234,7 @@ class InspectorMixin(UserMixin):
 class InspectorView(InspectorMixin, View):
     def get_context_with_extra_data(self, context):
         context['waiting_requests'] = Boat.objects.filter(status="wait").count()
+        context['payment_requests'] = PaymentRequest.objects.filter(payed=False).count()
         # TODO: add tech check requests
         # TODO: add remove requests
         return context
@@ -300,6 +303,14 @@ class RegistrationRequest(InspectorView):
         boat.change_status(status)
 
         return redirect("main:inspecting_requests")
+
+
+class PaymentRequests(InspectorView):
+    def get(self, request):
+        payments = PaymentRequest.objects.filter(payed=False)
+        context = self.get_context_with_extra_data({"payments": payments})
+
+        return render(request, "main/inspector_payments.html", context)
 
 
 # Login, signup and etc.

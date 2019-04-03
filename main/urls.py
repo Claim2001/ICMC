@@ -27,4 +27,5 @@ urlpatterns = [
     path('inspector/request/looking/', views.AddRequestsToLooking.as_view(), name="add_looking_request"),
     path('inspector/inspectingRequests/', views.InspectingRequests.as_view(), name="inspecting_requests"),
     path('inspector/removeRequests/', views.RequestRemove.as_view(), name="remove_requests"),
+    path('inspector/payments/', views.PaymentRequests.as_view(), name="payment_requests"),
 ]
