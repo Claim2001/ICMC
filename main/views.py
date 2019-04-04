@@ -337,6 +337,15 @@ class RejectPayment(InspectorView):
         return redirect("main:payment_requests")
 
 
+class PayedRequests(InspectorView):
+    def get(self, request):
+        boats = Boat.objects.filter(status="inspector_check")
+
+        context = self.get_context_with_extra_data({"requests": boats})
+
+        return render(request, "main/inspector_payed_requests.html", context)
+
+
 # Login, signup and etc.
 
 class Login(View):

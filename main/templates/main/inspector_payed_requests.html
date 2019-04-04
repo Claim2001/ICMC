@@ -1,0 +1,12 @@
+{% extends 'main/inspector_base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+
+    {% for request in requests %}
+
+        {{ request }}
+
+    {% endfor %}
+
+{% endblock %}
