@@ -30,3 +30,4 @@ python manage.py migrate
 And finally run the server
 ```
 python manage.py runserver
+```
