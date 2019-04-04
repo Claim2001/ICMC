@@ -662,7 +662,25 @@ form button.btn.activation-code-button {
 
 .paymentLink {
     cursor: pointer;
+}
 
+.popupWithCheck .buttonsContainer a.btn-warn {
+    margin-right: 30px;
+}
+
+.checkScan {
+    width: 100%;
+}
+
+.no-select {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+table.no-select tbody tr {
+    cursor: pointer;
 }
 
 /* ************************************* */

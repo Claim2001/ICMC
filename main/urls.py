@@ -28,4 +28,6 @@ urlpatterns = [
     path('inspector/inspectingRequests/', views.InspectingRequests.as_view(), name="inspecting_requests"),
     path('inspector/removeRequests/', views.RequestRemove.as_view(), name="remove_requests"),
     path('inspector/payments/', views.PaymentRequests.as_view(), name="payment_requests"),
+    path('inspector/payments/<int:pk>/accept/', views.AcceptPayment.as_view(), name="accept_payment"),
+    path('inspector/payments/<int:pk>/reject/', views.RejectPayment.as_view(), name="reject_payment"),
 ]

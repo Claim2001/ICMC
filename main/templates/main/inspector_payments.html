@@ -1,9 +1,15 @@
 {% extends 'main/inspector_base.html'  %}
+{% load staticfiles %}
 
 {% block content %}
 
+    {% for message in messages %}
+        <div class="alert alert-success" role="alert" id="backendErrorMessage">
+            {{ message }}
+        </div>
+    {% endfor %}
 
-    <table class="table table-bordered table-hover link-table">
+    <table class="table table-bordered table-hover no-select">
         <thead>
         <tr>
             <th class="first" scope="col">#</th>
@@ -15,16 +21,37 @@
         </thead>
         <tbody>
         {% for request in payments %}
-            <tr>
-                <th class="first" scope="row"><a href="javascript:" data-id="{{ request.pk }}" class="paymentLink">{{ forloop.counter }}</a></th>
-                <td>
-                    <a href="javascript:" data-id="{{ request.pk }}" class="paymentLink">{{ request.boat.owner.first_name }} {{ request.boat.owner.last_name }}</a>
-                </td>
-                <td><a href="javascript:" data-id="{{ request.pk }}" class="paymentLink">{{ request.boat.model_type }}</a></td>
-                <td><a href="javascript:" data-id="{{ request.pk }}" class="paymentLink">{{ request.boat.imo }}</a></td>
-                <td><a href="javascript:" data-id="{{ request.pk }}" class="paymentLink">{{ request.boat.engine_number }}</a></td>
+            <tr data-id="{{ request.pk }}" data-check="{{ request.check_scan.url }}" class="paymentRequest">
+                <th class="first" scope="row">{{ forloop.counter }}</th>
+                <td>{{ request.owner.first_name }} {{ request.owner.last_name }}</td>
+                <td>{{ request.boat.model_type }}</td>
+                <td>{{ request.boat.imo }}</td>
+                <td>{{ request.boat.engine_number }}</td>
             </tr>
         {% endfor %}
     </table>
+
+    <div class="popup-window popupWithCheck">
+        <div class="popup-window-background"></div>
+        <div class="popup">
+            <div class="closeButtonContainer">
+                <button class="closeButton">
+                    <img src="{% static 'main/img/cancel.svg' %}" alt="">
+                </button>
+            </div>
+            <h1 class="popupTitle">Подтверждение оплаты</h1>
+
+            <div class="popupBlocks">
+                <a href="#" class="popupBlock checkScanLink"><img src="" class="checkScan"></a>
+            </div>
+
+            <div class="buttonsContainer">
+                <a href="#" id="rejectLink" class="btn btn-warn">Отклонить</a>
+                <a href="#" id="acceptLink" class="btn">Принять</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'main/js/payments.js' %}"></script>
 
 {% endblock %}

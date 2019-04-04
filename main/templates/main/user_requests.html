@@ -24,6 +24,10 @@
                 {% if notification.status == "payment" %}
                     <img src="{% static 'main/img/job.svg' %}" alt="">
                 {% endif %}
+
+                {% if notification.status == "payment_rejected" %}
+                    <img src="{% static 'main/img/exam.svg' %}" alt="">
+                {% endif %}
             </div>
 
             <div class="control-title">
@@ -44,6 +48,10 @@
 
                 {% if notification.status == "payment" %}
                     Ваше заявление принято! Пожалуйста оплатите пошлину.
+                {% endif %}
+
+                {% if notification.status == "payment_rejected" %}
+                    Оплата была отклонена. Попробуйте еще раз и используйте скан на котором чек виден отчетливо.
                 {% endif %}
             </div>
 

@@ -39,6 +39,7 @@ BOAT_STATUS = [
     ("rejected", "rejected"),
     ("payment", "waiting for payment"),
     ("payment_check", "waiting for payment check"),
+    ("payment_rejected", "payment rejected"),
     ("inspector_check", "waiting for data check"),
     ("accepted", "accepted"),
 ]
@@ -77,17 +78,20 @@ class Boat(models.Model):
 
     def change_status(self, value):
         not_send_notification_statuses = (
-                "wait",
-                "inspector_check",
-                )
+            "wait",
+            "payment_check",
+        )
 
         if self.status is not value:
             self.status = value
             self.save()
 
-            if not self.status in not_send_notification_statuses:
+            if self.status not in not_send_notification_statuses:
                 notification = Notification(owner=self.owner, boat=self, status=self.status)
                 notification.save()
+
+                if notification.status == "payment_rejected":
+                    notification.boat.change_status("payment")
 
     def get_incorrect_field_labels(self):
         decoded_incorrect_fields = json.loads(self.incorrect_fields)
@@ -105,6 +109,7 @@ class PaymentRequest(models.Model):
     boat = models.ForeignKey(Boat, on_delete=models.CASCADE)
     owner = models.ForeignKey(Owner, on_delete=models.CASCADE)
     payed = models.BooleanField(default=False)
+    rejected = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.boat)

@@ -201,12 +201,12 @@ class PayRequest(UserView):
     def post(self, request, pk):
         boat = get_object_or_404(Boat, pk=pk)
 
-        if PaymentRequest.objects.filter(boat=boat):
+        if PaymentRequest.objects.filter(boat=boat, rejected=False):
             messages.add_message(request, messages.WARNING, "Запрос уже отправлен")
             return redirect("main:boat_requests")
 
         pay_request = PaymentRequest(boat=boat, owner=boat.owner, check_scan=request.FILES['checkScan'])
-        boat.change_status("inspector_check")
+        boat.change_status("payment_check")
         pay_request.save()
 
         messages.add_message(request, messages.SUCCESS, "Запрос отправлен и ожидает проверки")
@@ -234,7 +234,7 @@ class InspectorMixin(UserMixin):
 class InspectorView(InspectorMixin, View):
     def get_context_with_extra_data(self, context):
         context['waiting_requests'] = Boat.objects.filter(status="wait").count()
-        context['payment_requests'] = PaymentRequest.objects.filter(payed=False).count()
+        context['payment_requests'] = PaymentRequest.objects.filter(payed=False, rejected=False).count()
         # TODO: add tech check requests
         # TODO: add remove requests
         return context
@@ -307,10 +307,34 @@ class RegistrationRequest(InspectorView):
 
 class PaymentRequests(InspectorView):
     def get(self, request):
-        payments = PaymentRequest.objects.filter(payed=False)
+        payments = PaymentRequest.objects.filter(payed=False, rejected=False)
         context = self.get_context_with_extra_data({"payments": payments})
 
         return render(request, "main/inspector_payments.html", context)
+
+
+class AcceptPayment(InspectorView):
+    def get(self, request, pk):
+        payment = get_object_or_404(PaymentRequest, pk=pk)
+        payment.payed = True
+        payment.save()
+
+        payment.boat.change_status("inspector_check")
+
+        messages.add_message(request, messages.SUCCESS, "Оплата принята и пользователь уведомлен!")
+        return redirect("main:payment_requests")
+
+
+class RejectPayment(InspectorView):
+    def get(self, request, pk):
+        payment = get_object_or_404(PaymentRequest, pk=pk)
+        payment.rejected = True
+        payment.save()
+
+        payment.boat.change_status("payment_rejected")
+
+        messages.add_message(request, messages.SUCCESS, "Оплата отклонена и пользователь уведомлен!")
+        return redirect("main:payment_requests")
 
 
 # Login, signup and etc.
