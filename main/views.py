@@ -289,6 +289,10 @@ class AddRequestsToLooking(InspectorView):
 class RegistrationRequest(InspectorView):
     def get(self, request, pk):
         boat = get_object_or_404(Boat, pk=pk)
+        if boat.status != "look":
+            messages.add_message(request, messages.WARNING, "Заявление не находится на рассмотрении")
+            return redirect("main:inspector")
+
         form = BoatForm(instance=boat)
 
         context = self.get_context_with_extra_data({"form": form})
@@ -300,6 +304,10 @@ class RegistrationRequest(InspectorView):
         incorrect_fields_json = json.dumps(incorrect_fields)
 
         boat = get_object_or_404(Boat, pk=pk)
+        if boat.status != "look":
+            messages.add_message(request, messages.WARNING, "Заявление не находится на рассмотрении")
+            return redirect("main:inspector")
+
         boat.incorrect_fields = incorrect_fields_json
         boat.save()
 
