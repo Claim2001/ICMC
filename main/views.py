@@ -8,6 +8,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import View
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
+from django.db.models import Value as V
+from django.db.models.functions import Concat
 
 from .models import Boat, Notification, Fine, Owner, RemoveRequest, TechCheckRequest, PaymentRequest
 from .forms import UserForm, BoatForm
@@ -358,7 +360,24 @@ class RejectPayment(InspectorView):
 
 class PayedRequests(InspectorView):
     def get(self, request):
-        boats = Boat.objects.filter(status="inspector_check")
+
+        boats = Boat.objects.filter(
+            status="inspector_check",
+        )
+
+        if request.GET.get("full_name"):
+            owners = Owner.objects.annotate(full_name=Concat("first_name", V(" "), "last_name")).\
+                filter(full_name__icontains=request.GET.get("full_name"))
+
+            print(owners)
+
+            boats_copy = boats.all()
+            boats = []
+
+            for owner in owners:
+                print(owner)
+                boats += list(boats_copy.filter(owner_id=owner.id))
+                print(boats)
 
         context = self.get_context_with_extra_data({"requests": boats})
 

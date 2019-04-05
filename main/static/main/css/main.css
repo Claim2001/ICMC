@@ -689,6 +689,10 @@ table.no-select tbody tr {
     cursor: pointer;
 }
 
+.searchBar {
+    margin-bottom: 50px;
+}
+
 /* ************************************* */
 /* just for a moment */
 h1 {
