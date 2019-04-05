@@ -201,8 +201,16 @@ class PayRequest(UserView):
     def post(self, request, pk):
         boat = get_object_or_404(Boat, pk=pk)
 
-        if PaymentRequest.objects.filter(boat=boat, rejected=False):
-            messages.add_message(request, messages.WARNING, "Запрос уже отправлен")
+        if boat.status != "payment":
+            message = "Запрос уже отправлен"
+
+            if PaymentRequest.objects.filter(boat=boat, payed=True):
+                message = "Заявление уже оплачено"
+
+            if boat.status == "wait" or boat.status == "look":
+                message = "Заявление еще не прошло проверку"
+
+            messages.add_message(request, messages.WARNING, message)
             return redirect("main:boat_requests")
 
         pay_request = PaymentRequest(boat=boat, owner=boat.owner, check_scan=request.FILES['checkScan'])
@@ -347,6 +355,21 @@ class PayedRequests(InspectorView):
         context = self.get_context_with_extra_data({"requests": boats})
 
         return render(request, "main/inspector_payed_requests.html", context)
+
+
+class AcceptBoat(InspectorView):
+    def get(self, request, pk):
+        boat = get_object_or_404(Boat, pk=pk)
+
+        if boat.status != "inspector_check":
+            messages.add_message(request, messages.WARNING, "Судно еще не прошло оплату")
+            return redirect("main:inspector")
+
+        boat.status = "accepted"
+        boat.save()
+
+        messages.add_message(request, messages.SUCCESS, "Судно успешно зарегестрировано в системе!")
+        return redirect("main:payed_requests")
 
 
 # Login, signup and etc.
