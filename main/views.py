@@ -314,12 +314,15 @@ class PaymentRequests(InspectorView):
 
 
 class AcceptPayment(InspectorView):
-    def get(self, request, pk):
+    def post(self, request, pk):
         payment = get_object_or_404(PaymentRequest, pk=pk)
         payment.payed = True
         payment.save()
 
         payment.boat.change_status("inspector_check")
+        notification = Notification(owner=payment.owner, boat=payment.boat, status="inspector_check")
+        notification.extra_data = request.POST["address"]
+        notification.save()
 
         messages.add_message(request, messages.SUCCESS, "Оплата принята и пользователь уведомлен!")
         return redirect("main:payment_requests")

@@ -47,8 +47,34 @@
 
             <div class="buttonsContainer">
                 <a href="#" id="rejectLink" class="btn btn-warn">Отклонить</a>
-                <a href="#" id="acceptLink" class="btn">Принять</a>
+                <a href="#" id="addressPopupLink" class="btn">Принять</a>
             </div>
+        </div>
+    </div>
+
+    <div class="popup-window addressPopup">
+        <div class="popup-window-background"></div>
+        <div class="popup">
+            <div class="closeButtonContainer">
+                <button class="closeButton">
+                    <img src="{% static 'main/img/cancel.svg' %}" alt="">
+                </button>
+            </div>
+            <form action="" name="acceptPaymentForm" method="post">
+                {% csrf_token %}
+
+                <h1 class="popupTitle">Напишите адрес и дату для проведения осмотра судна</h1>
+
+                <div class="popupBlocks">
+                    <div class="popupBlock">
+                        <div class="form-element">
+                            <input type="text" name="address" required>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn">Отправить пользователю</button>
+            </form>
         </div>
     </div>
 

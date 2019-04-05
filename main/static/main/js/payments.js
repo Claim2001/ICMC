@@ -3,8 +3,9 @@ let popupWithCheck = document.querySelector(".popupWithCheck"),
     closeButtons = Array.from(document.querySelectorAll(".closeButton")),
     checkScanImage = document.querySelector("img.checkScan"),
     checkScanLink = document.querySelector("a.checkScanLink"),
-    acceptLink = document.querySelector("a#acceptLink"),
-    rejectLink = document.querySelector("a#rejectLink");
+    showAddressPopupLink = document.querySelector("#addressPopupLink"),
+    rejectLink = document.querySelector("a#rejectLink"),
+    addressPopup = document.querySelector(".addressPopup");
 
 
 closeButtons.map(function (button) {
@@ -19,16 +20,23 @@ document.addEventListener('keydown', function (evt) {
 
 function closePopups() {
     popupWithCheck.style.display = "none";
+    addressPopup.style.display = "none";
 }
+
+showAddressPopupLink.addEventListener("click", function (evt) {
+    evt.preventDefault();
+
+    closePopups();
+    addressPopup.style.display = "block";
+});
 
 paymentRequestRows.map(function (requestRow) {
     requestRow.addEventListener("click", function (evt) {
         evt.preventDefault();
 
         checkScanLink.href = requestRow.dataset.check;
-        acceptLink.href = "/inspector/payments/" + requestRow.dataset.id + "/accept/";
+        document.acceptPaymentForm.action = "/inspector/payments/" + requestRow.dataset.id + "/accept/";
         rejectLink.href = "/inspector/payments/" + requestRow.dataset.id + "/reject/";
-
 
         if (checkIfImage(requestRow.dataset.check)) {
             checkScanImage.src = requestRow.dataset.check;

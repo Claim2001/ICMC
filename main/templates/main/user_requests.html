@@ -28,6 +28,10 @@
                 {% if notification.status == "payment_rejected" %}
                     <img src="{% static 'main/img/exam.svg' %}" alt="">
                 {% endif %}
+
+                {% if notification.status == "inspector_check" %}
+                    <img src="{% static 'main/img/wallet.svg' %}" alt="">
+                {% endif %}
             </div>
 
             <div class="control-title">
@@ -52,6 +56,10 @@
 
                 {% if notification.status == "payment_rejected" %}
                     Оплата была отклонена. Попробуйте еще раз и используйте скан на котором чек виден отчетливо.
+                {% endif %}
+
+                {% if notification.status == "inspector_check" %}
+                    Оплата прошла успешно! Придите по адресу и дате: {{ notification.extra_data }}.
                 {% endif %}
             </div>
 

@@ -80,6 +80,7 @@ class Boat(models.Model):
         not_send_notification_statuses = (
             "wait",
             "payment_check",
+            "inspector_check",
         )
 
         if self.status is not value:
@@ -150,6 +151,7 @@ class Notification(models.Model):
     boat = models.ForeignKey(Boat, on_delete=models.CASCADE)
     status = models.CharField(max_length=250, choices=BOAT_STATUS)
     watched = models.BooleanField(default=False)
+    extra_data = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return f"{self.boat.owner.email} - {self.get_status_display()}"
