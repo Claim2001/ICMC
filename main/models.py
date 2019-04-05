@@ -25,7 +25,7 @@ class Owner(AbstractUser):
     activated = models.BooleanField("Активирован", default=False)
 
     def __str__(self):
-        return self.email
+        return f"{self.first_name} {self.last_name}"
 
 
 BOAT_MATERIAL_TYPES = [
