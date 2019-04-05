@@ -369,8 +369,6 @@ class PayedRequests(InspectorView):
             owners = Owner.objects.annotate(full_name=Concat("first_name", V(" "), "last_name")).\
                 filter(full_name__icontains=request.GET.get("full_name"))
 
-            print(owners)
-
             boats_copy = boats.all()
             boats = []
 
