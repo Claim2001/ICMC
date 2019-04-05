@@ -693,6 +693,30 @@ table.no-select tbody tr {
     margin-bottom: 50px;
 }
 
+.searchBar form {
+    display: flex;
+    flex-direction: row;
+}
+
+.searchBar label {
+    display: block;
+    margin-right: 30px;
+    flex: 1;
+}
+
+.searchBar label input {
+    width: 100%;
+    padding: 5px 10px;
+    border: 1px solid lightgray;
+}
+
+button.searchButton {
+    background-color: #138cff;
+    color: #ffffff;
+    border: none;
+    padding: 5px 10px;
+}
+
 /* ************************************* */
 /* just for a moment */
 h1 {

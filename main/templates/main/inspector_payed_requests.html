@@ -5,8 +5,13 @@
 
     <div class="searchBar">
         <form action="" method="get">
-            <label for="full_name"><input type="search" name="full_name"></label>
-            <button class="searchButton" type="submit">Search</button>
+            <label for="full_name">ФИО<br><input type="search" name="full_name" value="{{ full_name|default_if_none:'' }}"></label>
+            <label for="imo">Идентификационный IMO<br><input type="search" name="imo" value="{{ imo|default_if_none:'' }}"></label>
+            <label for="full_name">Номера двигателей<br><input type="search" name="engine_number" value="{{ engine_number|default_if_none:'' }}"></label>
+            <div>
+                <br>
+                <button class="searchButton" type="submit">Поиск</button>
+            </div>
         </form>
     </div>
 

@@ -360,9 +360,14 @@ class RejectPayment(InspectorView):
 
 class PayedRequests(InspectorView):
     def get(self, request):
+        full_name = request.GET.get("full_name", "")
+        imo = request.GET.get("imo", "")
+        engine_number = request.GET.get("engine_number", "")
 
         boats = Boat.objects.filter(
             status="inspector_check",
+            imo__icontains=imo,
+            engine_number__icontains=engine_number
         )
 
         if request.GET.get("full_name"):
@@ -373,11 +378,14 @@ class PayedRequests(InspectorView):
             boats = []
 
             for owner in owners:
-                print(owner)
                 boats += list(boats_copy.filter(owner_id=owner.id))
-                print(boats)
 
-        context = self.get_context_with_extra_data({"requests": boats})
+        context = self.get_context_with_extra_data({
+            "requests": boats,
+            "full_name": full_name,
+            "imo": imo,
+            "engine_number": engine_number
+        })
 
         return render(request, "main/inspector_payed_requests.html", context)
 
