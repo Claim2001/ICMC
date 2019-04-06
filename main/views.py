@@ -83,8 +83,8 @@ class RegisterBoat(UserView):
             messages.add_message(request, messages.SUCCESS, "Ваше заявление принято и находится в очереди")
             return redirect("main:index")
 
-        else:
-            return redirect("main:index")
+        messages.add_message(request, messages.WARNING, "Произошла какая-то ошибка")
+        return redirect("main:index")
 
 
 class UserBoatRequests(UserView):
@@ -260,7 +260,7 @@ class Inspector(InspectorView):
 
 class InspectingRequests(InspectorView):
     def get(self, request):
-        inspecting_boat_requests = Boat.objects.filter(status="looking").order_by("-pk")
+        inspecting_boat_requests = Boat.objects.filter(status="look").order_by("-pk")
         context = self.get_context_with_extra_data({"requests": inspecting_boat_requests})
 
         return render(request, "main/inspector_inspecting_requests.html", context)
@@ -280,7 +280,7 @@ class AddRequestsToLooking(InspectorView):
 
         for request_id in waiting_requests_ids:
             boat = Boat.objects.get(id=request_id)
-            boat.change_status("looking")
+            boat.change_status("look")
 
         if waiting_requests_ids:
             messages.add_message(request, messages.SUCCESS, "Добавлено в 'рассматриваемые'")
@@ -424,7 +424,6 @@ class FinalBoatCheck(InspectorView):
 
         messages.add_message(request, messages.ERROR, "Некоторые поля заполнены неверно")
         return redirect("main:final_boat_check", pk=pk)
-
 
 
 class AcceptBoat(InspectorView):

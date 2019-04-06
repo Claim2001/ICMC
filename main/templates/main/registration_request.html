@@ -24,9 +24,13 @@
                     {% if field.name == "passport_image" %}
                         <a href="{{ form.instance.passport_image.url}}">{{ field.value }}</a>
                     {% elif field.name == "other_files" %}
-                        <a href="{{ form.instance.other_files.url}}">{{ field.value }}</a>
+                        {% if field.value == "" %}
+                            -
+                        {% else %}
+                            <a href="{{ form.instance.other_files.url}}">{{ field.value }}</a>
+                        {% endif %}
                     {% else %}
-                        {{ field.value }}
+                        {{ field.value|default_if_none:"-" }}
                     {% endif %}
                 </div>
 

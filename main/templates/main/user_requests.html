@@ -32,6 +32,10 @@
                 {% if notification.status == "inspector_check" %}
                     <img src="{% static 'main/img/wallet.svg' %}" alt="">
                 {% endif %}
+
+                {% if notification.status == "accepted" %}
+                    <img src="{% static 'main/img/ship.svg' %}" alt="">
+                {% endif %}
             </div>
 
             <div class="control-title">
@@ -60,6 +64,10 @@
 
                 {% if notification.status == "inspector_check" %}
                     Оплата прошла успешно! Придите по адресу и дате: {{ notification.extra_data }} для проведения осмотра.
+                {% endif %}
+
+                {% if notification.status == "accepted" %}
+                    Судно {{ notification.boat }} успешно зарегестировано в системе!
                 {% endif %}
             </div>
 

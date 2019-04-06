@@ -56,12 +56,20 @@ function checkFieldsFilled() {
     inputs.map(function (input) {
         if (input.type === "file") {
             let fileBox = input.parentElement.getElementsByClassName("fileBox")[0];
-            fileBox.className = input.value === "" || !isAllowedFileFormat(input.value) ? "fileBox incorrect" : "fileBox filled";
+
+            if (input.required) {
+                fileBox.className = input.value === "" || !isAllowedFileFormat(input.value) ? "fileBox incorrect" : "fileBox filled";
+            } else {
+                if (input.value !== "") {
+                    fileBox.className = isAllowedFileFormat(input.value) ? "fileBox filled" : "fileBox incorrect";
+                }
+            }
+
         } else {
-            input.className = input.value === "" ? "incorrect" : "";
+            input.className = input.value === "" && input.required === true ? "incorrect" : "";
         }
 
-        if (input.value === "") {
+        if (input.value === "" && input.required === true) {
             areFilled = false;
         }
     });
@@ -75,7 +83,7 @@ function checkFileFormats() {
         formatsAreCorrect = true;
 
     fileInputsInCurrentPage.map(function (fileInput) {
-        if (formatsAreCorrect === true) {
+        if (formatsAreCorrect === true && fileInput.required === true) {
             formatsAreCorrect = isAllowedFileFormat(fileInput.value);
         }
     });

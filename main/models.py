@@ -68,11 +68,13 @@ class Boat(models.Model):
     # engine_type = models.CharField("Тип движителя", max_length=300) WTF? Again?
     sails_amount = models.PositiveIntegerField("Количество парусов")
     sail_area = models.PositiveIntegerField("Площадь парусов (м2)")
-    prev_numbers_or_name = models.CharField("Прежние регистр. No и название судна", max_length=300)
-    prev_registration_place = models.CharField("Место прежней регистрации судна", max_length=300)
+    prev_numbers_or_name = models.CharField("Прежние регистр. No и название судна", default="", null=True, blank=True,
+                                            max_length=300)
+    prev_registration_place = models.CharField("Место прежней регистрации судна", default="", null=True, blank=True,
+                                               max_length=300)
     parking_place = models.CharField("Место постоянной стоянки судна", max_length=300)
-    passport_image = models.FileField("Скан паспорта", null=False, blank=False)
-    other_files = models.FileField("Другие файлы", null=True, blank=False)
+    passport_image = models.FileField("Скан паспорта", null=True, blank=True)
+    other_files = models.FileField("Другие файлы", null=True, blank=True)
     status = models.CharField(max_length=100, choices=BOAT_STATUS, default="wait")
     incorrect_fields = models.TextField(default="[]")
 

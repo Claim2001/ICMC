@@ -166,13 +166,13 @@
 
                     <div class="form-element">
                         <p>Прежние регистр. No и название судна</p>
-                        <input type="text" name="prev_numbers_or_name" maxlength="300" require class="{% if 'prev_numbers_or_name' in form.instance.get_incorrect_field_names %}incorrect{% endif %}"d
+                        <input type="text" name="prev_numbers_or_name" maxlength="300" class="{% if 'prev_numbers_or_name' in form.instance.get_incorrect_field_names %}incorrect{% endif %}"d
                                id="id_prev_numbers_or_name" value="{{ form.prev_numbers_or_name.value|default_if_none:'' }}">
                     </div>
 
                     <div class="form-element">
                         <p>Место прежней регистрации судна</p>
-                        <input type="text" name="prev_registration_place" maxlength="300" require class="{% if 'prev_registration_place' in form.instance.get_incorrect_field_names %}incorrect{% endif %}"d
+                        <input type="text" name="prev_registration_place" maxlength="300" class="{% if 'prev_registration_place' in form.instance.get_incorrect_field_names %}incorrect{% endif %}"d
                                id="id_prev_registration_place" value="{{ form.prev_registration_place.value|default_if_none:'' }}">
                     </div>
 
