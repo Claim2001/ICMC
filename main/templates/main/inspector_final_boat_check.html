@@ -1,0 +1,44 @@
+{% extends 'main/inspector_base.html' %}
+
+{% block content %}
+
+<h1 class="final-form-title">Финальная регистрация</h1>
+
+{% for message in messages %}
+    <div class="alert alert-danger" role="alert">
+        {{ message }}
+    </div>
+{% endfor %}
+
+<div class="final-form-element">
+	<label class="final-form-label" for="full_name">Владелец: </label>
+	<div>
+		<a target="_blank" rel="noopener noreferrer" href="#">{{ form.instance.owner.first_name }} {{ form.instance.owner.last_name }}</a>
+	</div>
+</div>
+
+<form action="" method="post">
+	{% csrf_token %}
+
+	{% for field in form %}
+		<div class="final-form-element">
+			<label class="final-form-label" for="full_name">{{ field.label }}: </label>
+			<div>
+				{% if field.name == "passport_image" or field.name == "other_files" %}
+
+				<a target="_blank" rel="noopener noreferrer" href="{{ field.value.url }}">{{ field.value }}</a>
+
+				{% else %}
+				{{ field }}
+
+				{% endif %}
+			</div>
+		</div>
+	{% endfor %}
+
+	<div class="form-buttons">
+		<button class="btn" type="submit">Сохранить и добавить</button>
+	</div>
+</form>
+
+{% endblock %}

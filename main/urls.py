@@ -32,4 +32,5 @@ urlpatterns = [
     path('inspector/payments/<int:pk>/reject/', views.RejectPayment.as_view(), name="reject_payment"),
     path('inspector/requests/payed/', views.PayedRequests.as_view(), name="payed_requests"),
     path('inspector/requests/<int:pk>/accept/', views.AcceptBoat.as_view(), name="accept_boat"),
+    path('inspector/requests/<int:pk>/finalcheck/', views.FinalBoatCheck.as_view(), name="final_boat_check"),
 ]

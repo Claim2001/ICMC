@@ -717,6 +717,30 @@ button.searchButton {
     padding: 5px 10px;
 }
 
+.final-form-element {
+    display: flex;
+    margin-bottom: 20px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding-bottom: 20px;
+}
+
+label.final-form-label {
+    width: 300px;
+    font-weight: bold;
+}
+
+.final-form-element input, select {
+    width: 400px;
+    padding: 5px 10px;
+    border-radius: 7px;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    background-color: #ffffff;
+}
+
+h1.final-form-title {
+    margin-bottom: 50px;
+}
+
 /* ************************************* */
 /* just for a moment */
 h1 {

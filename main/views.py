@@ -390,6 +390,43 @@ class PayedRequests(InspectorView):
         return render(request, "main/inspector_payed_requests.html", context)
 
 
+class FinalBoatCheck(InspectorView):
+    def get(self, request, pk):
+        boat = get_object_or_404(Boat, pk=pk)
+
+        if boat.status != "inspector_check":
+            messages.add_message(request, messages.WARNING, "Судно еще не прошло оплату")
+            return redirect("main:payed_requests")
+
+        form = BoatForm(instance=boat)
+
+        context = self.get_context_with_extra_data({"form": form})
+        return render(request, "main/inspector_final_boat_check.html", context)
+
+    def post(self, request, pk):
+        boat = get_object_or_404(Boat, pk=pk)
+
+        print(request.POST)
+
+        if boat.status != "inspector_check":
+            messages.add_message(request, messages.WARNING, "Судно еще не прошло оплату")
+            return redirect("main:payed_requests")
+
+        form = BoatForm(request.POST, instance=boat)
+        
+        if form.is_valid():
+            boat = form.save(commit=False)
+            boat.change_status("accepted")
+            boat.save()
+
+            messages.add_message(request, messages.SUCCESS, "Судно успешно зарегестрировано в системе")
+            return redirect("main:payed_requests")
+
+        messages.add_message(request, messages.ERROR, "Некоторые поля заполнены неверно")
+        return redirect("main:final_boat_check", pk=pk)
+
+
+
 class AcceptBoat(InspectorView):
     def get(self, request, pk):
         boat = get_object_or_404(Boat, pk=pk)
