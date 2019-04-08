@@ -9,11 +9,11 @@
                 <p>Протокол нарушения №{{ fine.id }}</p>
             </div>
 
-            <a href="#{{ fine.pk }}" class="btn">Просмотреть</a>
+            <button data-id="{{ fine.pk }}" data-owner="{{ fine.owner }}" data-amount="{{ fine.amount }}" data-reason="{{ fine.reason }}" class="btn showFineButton">Просмотреть</button>
         </div>
     {% endfor %}
 
-    <div class="popup-window">
+    <div class="popup-window" id="finePopup">
         <div class="popup-window-background"></div>
         <div class="popup">
             <div class="closeButtonContainer">
@@ -22,7 +22,15 @@
                 </button>
             </div>
 
+            <h1 class="popupTitle">Протокол нарушения: <span class="owner"></span></h1>
+            <div class="popup-content-not-center">
+                <p>Причина: <span class="reason"></span></p>
+                <p>Сумма: <span class="amount"></span></p>
+            </div>
+
         </div>
     </div>
+
+    <script src="{% static 'main/js/userFines.js' %}"></script>
 
 {% endblock %}
