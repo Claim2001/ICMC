@@ -3,6 +3,12 @@
 
 {% block content %}
 
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" id="backendErrorMessage">
+            {{ message }}
+        </div>
+    {% endfor %}
+
     {% include "main/search_bar.html" %}
 
     <table class="table table-bordered table-hover no-select">
@@ -40,6 +46,10 @@
 
             <div class="popup-content-not-center">
                 <form name="fineForm" action="" method="post">
+                    {% csrf_token %}
+
+                    <input type="hidden" value="" name="boat_id" class="boatID">
+
                     <div class="form-element">
                         <label for="reason">Причина: </label>
                         <input type="text" name="reason">
@@ -47,7 +57,7 @@
 
                     <div class="form-element">
                         <label for="reason">Сумма штрафа (сум): </label>
-                        <input type="number" name="reason">
+                        <input type="number" name="amount">
                     </div>
 
                     <div class="centerButtonContainer">

@@ -54,8 +54,8 @@ class UserView(UserMixin, View):
     login_url = "/login"
 
     def get_context_with_extra_data(self, context):
-        unwatched_notifications_count = Notification.objects.filter(watched=False, owner=self.request.user).count()
-        context["notifications_count"] = unwatched_notifications_count
+        context["notifications_count"] = Notification.objects.filter(watched=False, owner=self.request.user).count()
+        context["fines_count"] = Fine.objects.filter(owner=self.request.user, payed=False).count()
 
         return context
 
@@ -471,6 +471,23 @@ class AddFine(InspectorView):
             "engine_number": engine_number
         })
 
+        return render(request, "main/inspector_add_fine.html", context)
+
+    def post(self, request):
+        boat = get_object_or_404(Boat, pk=request.POST['boat_id'])
+        if boat.status != "accepted":
+            return HttpResponseNotFound("not found")
+
+        Fine(
+            owner=boat.owner,
+            boat=boat,
+            reason=request.POST.get("reason"),
+            amount=request.POST.get("amount")
+        ).save()
+
+        context = self.get_context_with_extra_data({})
+
+        messages.add_message(request, messages.SUCCESS, "Нарушение зарегистрировано и отправлено пользователю")
         return render(request, "main/inspector_add_fine.html", context)
 
 
