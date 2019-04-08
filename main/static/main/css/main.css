@@ -741,6 +741,15 @@ h1.final-form-title {
     margin-bottom: 50px;
 }
 
+.popup-content-not-center {
+    text-align: left;
+    padding: 0 50px;
+}
+
+.centerButtonContainer {
+    text-align: center;
+}
+
 /* ************************************* */
 /* just for a moment */
 h1 {

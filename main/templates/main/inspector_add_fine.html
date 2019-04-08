@@ -1,0 +1,63 @@
+{% extends 'main/inspector_base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+
+    {% include "main/search_bar.html" %}
+
+    <table class="table table-bordered table-hover no-select">
+        <thead>
+        <tr>
+            <th class="first" scope="col">#</th>
+            <th scope="col">Ф.И.О.</th>
+            <th scope="col">Тип и модель</th>
+            <th scope="col">IMO</th>
+            <th scope="col">Номера двигателей</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for boat in boats %}
+            <tr class="boatRow" data-id="{{ boat.pk }}" data-owner="{{ boat.owner.first_name }} {{ boat.owner.last_name }}">
+                <th class="first" scope="row">{{ forloop.counter }}</th>
+                <td>{{ boat.owner.first_name }} {{ boat.owner.last_name }}</td>
+                <td>{{ boat.model_type }}</td>
+                <td>{{ boat.imo }}</td>
+                <td>{{ boat.engine_number }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <div class="popup-window" id="addFinePopup">
+        <div class="popup-window-background"></div>
+        <div class="popup">
+            <div class="closeButtonContainer">
+                <button class="closeButton">
+                    <img src="{% static 'main/img/cancel.svg' %}" alt="">
+                </button>
+            </div>
+
+            <h1 class="popupTitle">Протокол нарушения - <span class="fullNameTitle"></span></h1>
+
+            <div class="popup-content-not-center">
+                <form name="fineForm" action="" method="post">
+                    <div class="form-element">
+                        <label for="reason">Причина: </label>
+                        <input type="text" name="reason">
+                    </div>
+
+                    <div class="form-element">
+                        <label for="reason">Сумма штрафа (сум): </label>
+                        <input type="number" name="reason">
+                    </div>
+
+                    <div class="centerButtonContainer">
+                        <button type="submit" class="btn">Отправить пользователю</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'main/js/addFine.js' %}"></script>
+
+{% endblock %}

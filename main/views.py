@@ -250,6 +250,19 @@ class InspectorView(InspectorMixin, View):
         return context
 
 
+def search_boat_by_owner(full_name, filtered_boats):
+    owners = Owner.objects.annotate(full_name=Concat("first_name", V(" "), "last_name")). \
+        filter(full_name__icontains=full_name)
+
+    boats_copy = filtered_boats.all()
+    boats = []
+
+    for owner in owners:
+        boats += list(boats_copy.filter(owner_id=owner.id))
+
+    return boats
+
+
 class Inspector(InspectorView):
     def get(self, request):
         waiting_requests = Boat.objects.filter(status="wait").order_by("-pk")
@@ -371,14 +384,7 @@ class PayedRequests(InspectorView):
         )
 
         if request.GET.get("full_name"):
-            owners = Owner.objects.annotate(full_name=Concat("first_name", V(" "), "last_name")).\
-                filter(full_name__icontains=request.GET.get("full_name"))
-
-            boats_copy = boats.all()
-            boats = []
-
-            for owner in owners:
-                boats += list(boats_copy.filter(owner_id=owner.id))
+            boats = search_boat_by_owner(full_name, boats)
 
         context = self.get_context_with_extra_data({
             "requests": boats,
@@ -439,6 +445,33 @@ class AcceptBoat(InspectorView):
 
         messages.add_message(request, messages.SUCCESS, "Судно успешно зарегестрировано в системе!")
         return redirect("main:payed_requests")
+
+
+class AddFine(InspectorView):
+    def get(self, request):
+        full_name = request.GET.get("full_name", "")
+        imo = request.GET.get("imo", "")
+        engine_number = request.GET.get("engine_number", "")
+
+        boats = []
+        if full_name or imo or engine_number:
+            boats = Boat.objects.filter(
+                status="accepted",
+                imo__icontains=imo,
+                engine_number__icontains=engine_number
+            )
+
+            if request.GET.get("full_name"):
+                boats = search_boat_by_owner(full_name, boats)
+
+        context = self.get_context_with_extra_data({
+            "boats": boats,
+            "full_name": full_name,
+            "imo": imo,
+            "engine_number": engine_number
+        })
+
+        return render(request, "main/inspector_add_fine.html", context)
 
 
 # Login, signup and etc.
