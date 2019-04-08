@@ -1,16 +1,28 @@
-{% extends 'main/user_base.html'  %}
+{% extends 'main/user_base.html' %}
+{% load staticfiles %}
 
 {% block content %}
 
-{% for fine in fines%}
-<div class="control-block">
-    <div class="control-title">
-        <p>Протокол нарушения</p>
+    {% for fine in fines %}
+        <div class="control-block">
+            <div class="control-title">
+                <p>Протокол нарушения №{{ fine.id }}</p>
+            </div>
+
+            <a href="#{{ fine.pk }}" class="btn">Просмотреть</a>
+        </div>
+    {% endfor %}
+
+    <div class="popup-window">
+        <div class="popup-window-background"></div>
+        <div class="popup">
+            <div class="closeButtonContainer">
+                <button class="closeButton">
+                    <img src="{% static 'main/img/cancel.svg' %}" alt="">
+                </button>
+            </div>
+
+        </div>
     </div>
 
-    <a href="#{{ fine.pk }}" class="btn">Посмотреть</a>
-    <a href="#{{ fine.pk }}" class="btn btn-warn">Оплатить</a>
-</div>
-{% endfor %}
-
-{% endblock  %}
+{% endblock %}
