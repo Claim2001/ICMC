@@ -83,6 +83,35 @@
         </div>
     </div>
 
+    <div class="popup-window bankPopup">
+        <div class="popup-window-background"></div>
+        <div class="popup">
+            <div class="closeButtonContainer">
+                <button class="closeButton">
+                    <img src="{% static 'main/img/cancel.svg' %}" alt="">
+                </button>
+            </div>
+            <h1 class="popupTitle">Оплата через банк или инфокиоск</h1>
+
+            <form action="" name="payForm" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="popupBlocks">
+
+                    <div class="popupBlock fileBox">
+                        +
+                        <span class="file-input-hint">Скан чека</span>
+                        <input type="file" class="ticketFileInput" name="checkScan">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-warn">Отправить</button>
+
+            </form>
+
+        </div>
+    </div>
+
+
     <script src="{% static 'main/js/popup.js' %}"></script>
 
 

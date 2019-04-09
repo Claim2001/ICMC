@@ -3,12 +3,13 @@ let removePopupWindow = document.querySelector(".remove-window"),
     closeButtons = Array.from(document.querySelectorAll(".closeButton")),
     removeOpenButtons = Array.from(document.querySelectorAll(".removeOpenButton")),
     techCheckOpenButtons = Array.from(document.querySelectorAll(".techCheckOpenButton")),
-    techCheckLink = document.querySelector("#techCheck"),
+    firstTechCheckLink = document.querySelector("#techCheck"),
     yearTechCheckLink = document.querySelector("#yearTechCheck"),
     removeForm = document.querySelector("#removeForm"),
     fileBox = document.querySelector(".fileBox"),
     fileInput = document.querySelector("input[type='file']"),
-    submitButton = document.querySelector("button[type='submit']");
+    submitButton = document.querySelector("button[type='submit']"),
+    bankPopup = document.querySelector(".bankPopup");
 
 
 removeOpenButtons.map(function (button) {
@@ -20,12 +21,26 @@ removeOpenButtons.map(function (button) {
    });
 });
 
+let techCheckBoatID = 0;
+
+firstTechCheckLink.addEventListener("click", function (evt) {
+    evt.preventDefault();
+    openBankPopup("/requests/" + techCheckBoatID + "/techCheck");
+});
+
+yearTechCheckLink.addEventListener("click", function (evt) {
+    evt.preventDefault();
+    openBankPopup("/requests/" + techCheckBoatID + "/yearTechCheck");
+});
+
+function openBankPopup() {
+    closePopups();
+    bankPopup.style.display = "block";
+}
+
 techCheckOpenButtons.map(function (button) {
     button.addEventListener('click', function () {
-        let boatID = button.dataset.id;
-        techCheckLink.href = "/requests/" + boatID + "/techCheck";
-        yearTechCheckLink.href = "/requests/" + boatID + "/yearTechCheck";
-
+        techCheckBoatID = button.dataset.id;
         techCheckPopupWindow.style.display = "flex"
     });
 });
@@ -40,11 +55,6 @@ document.addEventListener('keydown', function (evt) {
     }
 });
 
-function closePopups() {
-    removePopupWindow.style.display = "none";
-    techCheckPopupWindow.style.display = "none";
-}
-
 submitButton.addEventListener("click", function (evt) {
     evt.preventDefault();
 
@@ -52,6 +62,12 @@ submitButton.addEventListener("click", function (evt) {
         removeForm.submit();
     }
 });
+
+function closePopups() {
+    Array.from(document.querySelectorAll(".popup-window")).forEach(function (popup) {
+        popup.style.display = "none";
+    });
+}
 
 
 fileBox.addEventListener("click", function () {

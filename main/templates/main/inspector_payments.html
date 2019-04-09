@@ -36,6 +36,32 @@
     </div>
 
     <div class="tableBlock">
+        <h1 class="title">Оплата технического осмотра</h1>
+
+        <table class="table table-bordered table-hover no-select">
+            <thead>
+            <tr>
+                <th class="first" scope="col">#</th>
+                <th scope="col">Ф.И.О.</th>
+                <th scope="col">Тип и модель</th>
+                <th scope="col">IMO</th>
+                <th scope="col">Номера двигателей</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for payment in  fine_payments %}
+                <tr data-id="{{ payment.pk }}" data-check="{{ payment.check_scan.url }}" class="paymentRequest finePayment">
+                    <th class="first" scope="row">{{ forloop.counter }}</th>
+                    <td>{{ payment.fine.owner.first_name }} {{ payment.fine.owner.last_name }}</td>
+                    <td>{{ payment.fine.boat.model_type }}</td>
+                    <td>{{ payment.fine.boat.imo }}</td>
+                    <td>{{ payment.fine.boat.engine_number }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="tableBlock">
         <h1 class="title">Оплата штрафов</h1>
 
         <table class="table table-bordered table-hover no-select">
@@ -60,6 +86,7 @@
             {% endfor %}
         </table>
     </div>
+
 
 
 
