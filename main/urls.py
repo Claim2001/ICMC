@@ -22,6 +22,7 @@ urlpatterns = [
     path('requests/', views.UserBoatRequests.as_view(), name="boat_requests"),
     path('ships/', views.UserBoats.as_view(), name="boats"),
     path('fines/', views.UserFines.as_view(), name="fines"),
+    path('fines/<int:pk>/pay/', views.PayFine.as_view(), name="fine_pay"),
     path('activate/', views.ActivateAccount.as_view(), name="activate_account"),
     path('reactivate/', views.reactivate, name="reactivate"),
     path('inspector/request/looking/', views.AddRequestsToLooking.as_view(), name="add_looking_request"),

@@ -16,3 +16,12 @@ function closePopups() {
         popup.style.display = "none";
     });
 }
+
+function isAllowedFileFormat(filename) {
+    filename = filename.toLowerCase();
+
+    let allowed_extensions = ["jpeg", "png", "jpg", "pdf"],
+        extension = filename.split('.').pop();
+
+    return allowed_extensions.includes(extension);
+}

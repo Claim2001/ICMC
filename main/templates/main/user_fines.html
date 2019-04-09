@@ -3,6 +3,12 @@
 
 {% block content %}
 
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+
     {% for fine in fines %}
         <div class="control-block">
             <div class="control-title">
@@ -25,8 +31,57 @@
             <h1 class="popupTitle">Протокол нарушения: <span class="owner"></span></h1>
             <div class="popup-content-not-center">
                 <p>Причина: <span class="reason"></span></p>
-                <p>Сумма: <span class="amount"></span></p>
+                <p>Сумма: <span class="amount"></span> сум</p>
             </div>
+
+            <div class="centerButtonContainer">
+                <button class="btn openPayPopup">Оплатить</button>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="popup-window payPopup">
+        <div class="popup-window-background"></div>
+        <div class="popup">
+            <div class="closeButtonContainer">
+                <button class="closeButton">
+                    <img src="{% static 'main/img/cancel.svg' %}" alt="">
+                </button>
+            </div>
+            <h1 class="popupTitle">Выберите тип оплаты</h1>
+
+            <div class="popupBlocks">
+                <a href="#" class="popupBlock" id="online">Онлайн</a>
+                <a href="javascript:" class="popupBlock" id="bank">Через банк или инфокиоск</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="popup-window bankPopup">
+        <div class="popup-window-background"></div>
+        <div class="popup">
+            <div class="closeButtonContainer">
+                <button class="closeButton">
+                    <img src="{% static 'main/img/cancel.svg' %}" alt="">
+                </button>
+            </div>
+            <h1 class="popupTitle">Оплата через банк или инфокиоск</h1>
+
+            <form action="" name="payForm" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="popupBlocks">
+
+                    <div class="popupBlock fileBox">
+                        +
+                        <span class="file-input-hint">Скан чека</span>
+                        <input type="file" class="ticketFileInput" name="checkScan">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-warn">Отправить</button>
+
+            </form>
 
         </div>
     </div>

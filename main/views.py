@@ -111,7 +111,7 @@ class UserBoats(UserView):
 
 class UserFines(UserView):
     def get(self, request):
-        fines = Fine.objects.filter(owner=request.user)
+        fines = Fine.objects.filter(owner=request.user, payed=False)
         context = self.get_context_with_extra_data({"fines": fines})
 
         return render(request, "main/user_fines.html", context)
@@ -221,6 +221,30 @@ class PayRequest(UserView):
 
         messages.add_message(request, messages.SUCCESS, "Запрос отправлен и ожидает проверки")
         return redirect("main:boat_requests")
+
+
+class PayFine(UserView):
+    def post(self, request, pk):
+        fine = get_object_or_404(Fine, pk=pk)
+
+        if fine.payed:
+            messages.add_message(request, messages.WARNING, "Штраф уже оплачен")
+            return redirect("main:fines")
+
+        check_scan = request.FILES.get("checkScan")
+        if not check_scan:
+            messages.add_message(request, messages.WARNING, "Необходим скан чека!")
+            return redirect("main:fines")
+
+        if PaymentRequest.objects.filter(fine=fine, inspecting=True):
+            messages.add_message(request, messages.WARNING, "Оплата находится на проверке!")
+            return redirect("main:fines")
+
+        payment_request = PaymentRequest(owner=fine.owner, fine=fine, check_scan=check_scan)
+        payment_request.save()
+
+        messages.add_message(request, messages.SUCCESS, "Оплата отправлена на проверку!")
+        return redirect("main:fines")
 
 
 # Inspector views
