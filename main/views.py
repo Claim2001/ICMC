@@ -11,7 +11,7 @@ from django.contrib import messages
 from django.db.models import Value as V
 from django.db.models.functions import Concat
 
-from .models import Boat, Notification, Fine, Owner, RemoveRequest, TechCheckRequest, PaymentRequest
+from .models import Boat, Notification, Fine, Owner, RemoveRequest, TechCheckRequest, PaymentRequest, FinePaymentRequest
 from .forms import UserForm, BoatForm
 
 
@@ -55,7 +55,7 @@ class UserView(UserMixin, View):
 
     def get_context_with_extra_data(self, context):
         context["notifications_count"] = Notification.objects.filter(watched=False, owner=self.request.user).count()
-        context["fines_count"] = Fine.objects.filter(owner=self.request.user, payed=False).count()
+        context["fines_count"] = Fine.objects.filter(owner=self.request.user, payed=False, inspecting=False).count()
 
         return context
 
@@ -103,7 +103,7 @@ class UserBoatRequests(UserView):
 
 class UserBoats(UserView):
     def get(self, request):
-        boats = Boat.objects.filter(owner=request.user)
+        boats = Boat.objects.filter(owner=request.user, status="accepted")
         context = self.get_context_with_extra_data({"boats": boats})
 
         return render(request, "main/user_boats.html", context)
@@ -111,7 +111,7 @@ class UserBoats(UserView):
 
 class UserFines(UserView):
     def get(self, request):
-        fines = Fine.objects.filter(owner=request.user, payed=False)
+        fines = Fine.objects.filter(owner=request.user, payed=False, inspecting=False)
         context = self.get_context_with_extra_data({"fines": fines})
 
         return render(request, "main/user_fines.html", context)
@@ -236,12 +236,14 @@ class PayFine(UserView):
             messages.add_message(request, messages.WARNING, "Необходим скан чека!")
             return redirect("main:fines")
 
-        if PaymentRequest.objects.filter(fine=fine, inspecting=True):
+        if fine.inspecting:
             messages.add_message(request, messages.WARNING, "Оплата находится на проверке!")
             return redirect("main:fines")
 
-        payment_request = PaymentRequest(owner=fine.owner, fine=fine, check_scan=check_scan)
-        payment_request.save()
+        fine.inspecting = True
+        fine.save()
+
+        FinePaymentRequest(fine=fine, check_scan=check_scan).save()
 
         messages.add_message(request, messages.SUCCESS, "Оплата отправлена на проверку!")
         return redirect("main:fines")
@@ -268,7 +270,11 @@ class InspectorMixin(UserMixin):
 class InspectorView(InspectorMixin, View):
     def get_context_with_extra_data(self, context):
         context['waiting_requests'] = Boat.objects.filter(status="wait").count()
-        context['payment_requests'] = PaymentRequest.objects.filter(payed=False, rejected=False).count()
+
+        fines_payments = FinePaymentRequest.objects.filter(payed=False, inspecting=True).count()
+        registration_payments = PaymentRequest.objects.filter(payed=False, rejected=False).count()
+
+        context['payment_requests'] = fines_payments + registration_payments
         # TODO: add tech check requests
         # TODO: add remove requests
         return context
@@ -363,7 +369,12 @@ class RegistrationRequest(InspectorView):
 class PaymentRequests(InspectorView):
     def get(self, request):
         payments = PaymentRequest.objects.filter(payed=False, rejected=False)
-        context = self.get_context_with_extra_data({"payments": payments})
+        fine_payments = FinePaymentRequest.objects.filter(inspecting=True, payed=False)
+
+        context = self.get_context_with_extra_data({
+            "payments": payments,
+            "fine_payments": fine_payments,
+        })
 
         return render(request, "main/inspector_payments.html", context)
 
@@ -513,6 +524,42 @@ class AddFine(InspectorView):
 
         messages.add_message(request, messages.SUCCESS, "Нарушение зарегистрировано и отправлено пользователю")
         return render(request, "main/inspector_add_fine.html", context)
+
+
+class AcceptFinePayment(InspectorView):
+    def get(self, request, pk):
+        fine_payment = get_object_or_404(FinePaymentRequest, pk=pk)
+        if fine_payment.payed:
+            messages.add_message(request, messages.SUCCESS, "Нарушение уже оплачено")
+            return redirect("main:payment_requests")
+
+        fine_payment.payed = True
+        fine_payment.inspecting = False
+        fine_payment.save()
+
+        fine_payment.fine.payed = True
+        fine_payment.fine.inspecting = False
+        fine_payment.fine.save()
+
+        messages.add_message(request, messages.SUCCESS, "Оплата принята!")
+        return redirect("main:payment_requests")
+
+
+class RejectFinePayment(InspectorView):
+    def get(self, request, pk):
+        fine_payment = get_object_or_404(FinePaymentRequest, pk=pk)
+        if fine_payment.payed:
+            messages.add_message(request, messages.SUCCESS, "Нарушение уже оплачено")
+            return redirect("main:payment_requests")
+
+        fine_payment.inspecting = False
+        fine_payment.save()
+
+        fine_payment.fine.inspecting = False
+        fine_payment.fine.save()
+
+        messages.add_message(request, messages.SUCCESS, "Оплата отклонена!")
+        return redirect("main:payment_requests")
 
 
 # Login, signup and etc.

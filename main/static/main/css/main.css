@@ -513,6 +513,11 @@ input[type="radio"]:checked + span:before {
     color: rgba(0, 0, 0, 0.4);
 }
 
+.popupWithCheck a.popupBlock {
+    max-height: 300px;
+    overflow: hidden;
+}
+
 a.popupBlock:hover {
     text-decoration: none;
     color: #138cff;
@@ -737,8 +742,9 @@ label.final-form-label {
     background-color: #ffffff;
 }
 
-h1.final-form-title {
+h1.title {
     margin-bottom: 50px;
+    font-size: 25px;
 }
 
 .popup-content-not-center {
@@ -749,6 +755,12 @@ h1.final-form-title {
 .centerButtonContainer {
     text-align: center;
 }
+
+.tableBlock {
+    margin-bottom: 90px;
+}
+
+
 
 /* ************************************* */
 /* just for a moment */

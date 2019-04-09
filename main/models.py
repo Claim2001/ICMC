@@ -113,19 +113,28 @@ class Fine(models.Model):
     reason = models.CharField(max_length=500)
     amount = models.PositiveIntegerField("Сумма")
     payed = models.BooleanField(default=False)
+    inspecting = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.owner.email} - {str(self.amount)}"
 
 
+class FinePaymentRequest(models.Model):
+    fine = models.ForeignKey(Fine, on_delete=models.CASCADE)
+    check_scan = models.FileField(null=False, blank=False)
+    payed = models.BooleanField(default=False)
+    inspecting = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"{self.fine.owner} {self.fine.amount} сум"
+
+
 class PaymentRequest(models.Model):
     check_scan = models.FileField(null=False, blank=False)
-    boat = models.ForeignKey(Boat, null=True, blank=True, on_delete=models.CASCADE)
-    fine = models.ForeignKey(Fine, null=True, blank=True, on_delete=models.CASCADE)
+    boat = models.ForeignKey(Boat, on_delete=models.CASCADE)
     owner = models.ForeignKey(Owner, on_delete=models.CASCADE)
     payed = models.BooleanField(default=False)
     rejected = models.BooleanField(default=False)
-    inspecting = models.BooleanField(default=True)
 
     def __str__(self):
         return str(self.boat)

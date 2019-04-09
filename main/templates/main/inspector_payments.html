@@ -1,4 +1,4 @@
-{% extends 'main/inspector_base.html'  %}
+{% extends 'main/inspector_base.html' %}
 {% load staticfiles %}
 
 {% block content %}
@@ -9,27 +9,59 @@
         </div>
     {% endfor %}
 
-    <table class="table table-bordered table-hover no-select">
-        <thead>
-        <tr>
-            <th class="first" scope="col">#</th>
-            <th scope="col">Ф.И.О.</th>
-            <th scope="col">Тип и модель</th>
-            <th scope="col">IMO</th>
-            <th scope="col">Номера двигателей</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for request in payments %}
-            <tr data-id="{{ request.pk }}" data-check="{{ request.check_scan.url }}" class="paymentRequest">
-                <th class="first" scope="row">{{ forloop.counter }}</th>
-                <td>{{ request.owner.first_name }} {{ request.owner.last_name }}</td>
-                <td>{{ request.boat.model_type }}</td>
-                <td>{{ request.boat.imo }}</td>
-                <td>{{ request.boat.engine_number }}</td>
+    <div class="tableBlock">
+        <h1 class="title">Оплата пошлины за регистрацию</h1>
+
+        <table class="table table-bordered table-hover no-select">
+            <thead>
+            <tr>
+                <th class="first" scope="col">#</th>
+                <th scope="col">Ф.И.О.</th>
+                <th scope="col">Тип и модель</th>
+                <th scope="col">IMO</th>
+                <th scope="col">Номера двигателей</th>
             </tr>
-        {% endfor %}
-    </table>
+            </thead>
+            <tbody>
+            {% for request in payments %}
+                <tr data-id="{{ request.pk }}" data-check="{{ request.check_scan.url }}" class="paymentRequest">
+                    <th class="first" scope="row">{{ forloop.counter }}</th>
+                    <td>{{ request.owner.first_name }} {{ request.owner.last_name }}</td>
+                    <td>{{ request.boat.model_type }}</td>
+                    <td>{{ request.boat.imo }}</td>
+                    <td>{{ request.boat.engine_number }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="tableBlock">
+        <h1 class="title">Оплата штрафов</h1>
+
+        <table class="table table-bordered table-hover no-select">
+            <thead>
+            <tr>
+                <th class="first" scope="col">#</th>
+                <th scope="col">Ф.И.О.</th>
+                <th scope="col">Тип и модель</th>
+                <th scope="col">IMO</th>
+                <th scope="col">Номера двигателей</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for payment in  fine_payments %}
+                <tr data-id="{{ payment.pk }}" data-check="{{ payment.check_scan.url }}" class="paymentRequest finePayment">
+                    <th class="first" scope="row">{{ forloop.counter }}</th>
+                    <td>{{ payment.fine.owner.first_name }} {{ payment.fine.owner.last_name }}</td>
+                    <td>{{ payment.fine.boat.model_type }}</td>
+                    <td>{{ payment.fine.boat.imo }}</td>
+                    <td>{{ payment.fine.boat.engine_number }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+
 
     <div class="popup-window popupWithCheck">
         <div class="popup-window-background"></div>
@@ -47,7 +79,7 @@
 
             <div class="buttonsContainer">
                 <a href="#" id="rejectLink" class="btn btn-warn">Отклонить</a>
-                <a href="#" id="addressPopupLink" class="btn">Принять</a>
+                <a href="#" id="acceptPayment" class="btn">Принять</a>
             </div>
         </div>
     </div>

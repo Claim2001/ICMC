@@ -3,7 +3,7 @@ let popupWithCheck = document.querySelector(".popupWithCheck"),
     closeButtons = Array.from(document.querySelectorAll(".closeButton")),
     checkScanImage = document.querySelector("img.checkScan"),
     checkScanLink = document.querySelector("a.checkScanLink"),
-    showAddressPopupLink = document.querySelector("#addressPopupLink"),
+    acceptPayment = document.querySelector("#acceptPayment"),
     rejectLink = document.querySelector("a#rejectLink"),
     addressPopup = document.querySelector(".addressPopup");
 
@@ -23,12 +23,6 @@ function closePopups() {
     addressPopup.style.display = "none";
 }
 
-showAddressPopupLink.addEventListener("click", function (evt) {
-    evt.preventDefault();
-
-    closePopups();
-    addressPopup.style.display = "block";
-});
 
 paymentRequestRows.map(function (requestRow) {
     requestRow.addEventListener("click", function (evt) {
@@ -36,7 +30,26 @@ paymentRequestRows.map(function (requestRow) {
 
         checkScanLink.href = requestRow.dataset.check;
         document.acceptPaymentForm.action = "/inspector/payments/" + requestRow.dataset.id + "/accept/";
-        rejectLink.href = "/inspector/payments/" + requestRow.dataset.id + "/reject/";
+
+        if (requestRow.classList.contains("finePayment")) {
+            acceptPayment.addEventListener("click", function (evt) {
+                evt.preventDefault();
+                window.location.replace("/inspector/finePayment/" + requestRow.dataset.id + "/accept/");
+            });
+
+            rejectLink.href = "/inspector/finePayment/" + requestRow.dataset.id + "/reject/";
+        } else {
+            acceptPayment.addEventListener("click", function (evt) {
+                evt.preventDefault();
+
+                closePopups();
+                addressPopup.style.display = "block";
+
+                rejectLink.href = "/inspector/payments/" + requestRow.dataset.id + "/reject/";
+            });
+        }
+
+        checkScanImage.src = "";
 
         if (checkIfImage(requestRow.dataset.check)) {
             checkScanImage.src = requestRow.dataset.check;
