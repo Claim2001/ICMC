@@ -97,14 +97,14 @@
                 {% csrf_token %}
                 <div class="popupBlocks">
 
-                    <div class="popupBlock fileBox">
+                    <div class="popupBlock fileBox" id="techCheckPayment">
                         +
                         <span class="file-input-hint">Скан чека</span>
-                        <input type="file" class="ticketFileInput" name="checkScan">
+                        <input type="file" class="ticketFileInput techCheck" name="checkScan">
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-warn">Отправить</button>
+                <button type="submit" class="btn btn-warn" id="submitPaymentButton">Отправить</button>
 
             </form>
 

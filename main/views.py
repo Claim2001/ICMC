@@ -147,10 +147,10 @@ def logout_user(request):
 class TechCheckView(UserView):
     type = ""
 
-    def get(self, request, pk):
+    def post(self, request, pk):
         boat = get_object_or_404(Boat, pk=pk)
 
-        if TechCheckRequest.objects.filter(boat=boat, check_type=self.type):
+        if TechCheckRequest.objects.filter(boat=boat, check_type=self.type, payed=):
             messages.add_message(request, messages.WARNING, "Заявление на техосмотр уже находится в очереди")
             return redirect("main:boats")
 

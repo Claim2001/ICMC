@@ -1,6 +1,5 @@
 let removePopupWindow = document.querySelector(".remove-window"),
     techCheckPopupWindow = document.querySelector(".techCheck-window"),
-    closeButtons = Array.from(document.querySelectorAll(".closeButton")),
     removeOpenButtons = Array.from(document.querySelectorAll(".removeOpenButton")),
     techCheckOpenButtons = Array.from(document.querySelectorAll(".techCheckOpenButton")),
     firstTechCheckLink = document.querySelector("#techCheck"),
@@ -8,7 +7,10 @@ let removePopupWindow = document.querySelector(".remove-window"),
     removeForm = document.querySelector("#removeForm"),
     fileBox = document.querySelector(".fileBox"),
     fileInput = document.querySelector("input[type='file']"),
+    techCheckFileBox = document.querySelector(".fileBox#techCheckPayment"),
+    techCheckFileInput = document.querySelector("input[type='file'].techCheck")
     submitButton = document.querySelector("button[type='submit']"),
+    submitPaymentButton = document.querySelector("#submitPaymentButton"),
     bankPopup = document.querySelector(".bankPopup");
 
 
@@ -25,17 +27,18 @@ let techCheckBoatID = 0;
 
 firstTechCheckLink.addEventListener("click", function (evt) {
     evt.preventDefault();
-    openBankPopup("/requests/" + techCheckBoatID + "/techCheck");
+    openBankPopup("/requests/" + techCheckBoatID + "/techCheck/");
 });
 
 yearTechCheckLink.addEventListener("click", function (evt) {
     evt.preventDefault();
-    openBankPopup("/requests/" + techCheckBoatID + "/yearTechCheck");
+    openBankPopup("/requests/" + techCheckBoatID + "/yearTechCheck/");
 });
 
-function openBankPopup() {
+function openBankPopup(payURL) {
     closePopups();
     bankPopup.style.display = "block";
+    document.payForm.action = payURL;
 }
 
 techCheckOpenButtons.map(function (button) {
@@ -45,21 +48,21 @@ techCheckOpenButtons.map(function (button) {
     });
 });
 
-closeButtons.map(function (button) {
-    button.addEventListener("click", closePopups);
-});
-
-document.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === 27) {
-        closePopups();
-    }
-});
-
 submitButton.addEventListener("click", function (evt) {
     evt.preventDefault();
 
-    if (isAllowedFileFormat(fileInput.value)) {
+    if (isAllowedFileFormat(fileInput.value) || fileInput.value == "") {
         removeForm.submit();
+    }
+});
+
+submitPaymentButton.addEventListener("click", function (evt) {
+    evt.preventDefault();
+
+    if (isAllowedFileFormat(techCheckFileInput.value)) {
+        document.payForm.submit();
+    } else {
+        techCheckFileBox.className = "popupBlock fileBox incorrect";
     }
 });
 
@@ -76,6 +79,14 @@ fileBox.addEventListener("click", function () {
 
 fileInput.addEventListener("change", function () {
     fileBox.className = isAllowedFileFormat(fileInput.value) ? "popupBlock fileBox filled" : "popupBlock fileBox incorrect";
+});
+
+techCheckFileBox.addEventListener("click", function () {
+   techCheckFileInput.click();
+});
+
+techCheckFileInput.addEventListener("change", function () {
+    techCheckFileBox.className = isAllowedFileFormat(techCheckFileInput.value) ? "popupBlock fileBox filled" : "popupBlock fileBox incorrect";
 });
 
 function isAllowedFileFormat(filename) {
