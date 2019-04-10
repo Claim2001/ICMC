@@ -46,16 +46,18 @@
                 <th scope="col">Тип и модель</th>
                 <th scope="col">IMO</th>
                 <th scope="col">Номера двигателей</th>
+                <th scope="col">Тип осмотра</th>
             </tr>
             </thead>
             <tbody>
-            {% for payment in  fine_payments %}
-                <tr data-id="{{ payment.pk }}" data-check="{{ payment.check_scan.url }}" class="paymentRequest finePayment">
+            {% for tech_check_payment in  tech_check_payments %}
+                <tr data-id="{{ tech_check_payment.pk }}" data-check="{{ tech_check_payment.check_scan.url }}" class="paymentRequest techCheckPayment">
                     <th class="first" scope="row">{{ forloop.counter }}</th>
-                    <td>{{ payment.fine.owner.first_name }} {{ payment.fine.owner.last_name }}</td>
-                    <td>{{ payment.fine.boat.model_type }}</td>
-                    <td>{{ payment.fine.boat.imo }}</td>
-                    <td>{{ payment.fine.boat.engine_number }}</td>
+                    <td>{{ tech_check_payment.owner.first_name }} {{ tech_check_payment.owner.last_name }}</td>
+                    <td>{{ tech_check_payment.boat.model_type }}</td>
+                    <td>{{ tech_check_payment.boat.imo }}</td>
+                    <td>{{ tech_check_payment.boat.engine_number }}</td>
+                    <td>{{ tech_check_payment.get_check_type_display }}</td>
                 </tr>
             {% endfor %}
         </table>
@@ -72,6 +74,7 @@
                 <th scope="col">Тип и модель</th>
                 <th scope="col">IMO</th>
                 <th scope="col">Номера двигателей</th>
+                <th scope="col">Сумма</th>
             </tr>
             </thead>
             <tbody>
@@ -82,6 +85,7 @@
                     <td>{{ payment.fine.boat.model_type }}</td>
                     <td>{{ payment.fine.boat.imo }}</td>
                     <td>{{ payment.fine.boat.engine_number }}</td>
+                    <td>{{ payment.fine.amount }} сум</td>
                 </tr>
             {% endfor %}
         </table>
@@ -106,7 +110,7 @@
 
             <div class="buttonsContainer">
                 <a href="#" id="rejectLink" class="btn btn-warn">Отклонить</a>
-                <a href="#" id="acceptPayment" class="btn">Принять</a>
+                <a href="javascript:" id="acceptPayment" class="btn">Принять</a>
             </div>
         </div>
     </div>

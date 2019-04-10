@@ -8,7 +8,7 @@ let removePopupWindow = document.querySelector(".remove-window"),
     fileBox = document.querySelector(".fileBox"),
     fileInput = document.querySelector("input[type='file']"),
     techCheckFileBox = document.querySelector(".fileBox#techCheckPayment"),
-    techCheckFileInput = document.querySelector("input[type='file'].techCheck")
+    techCheckFileInput = document.querySelector("input[type='file'].techCheck"),
     submitButton = document.querySelector("button[type='submit']"),
     submitPaymentButton = document.querySelector("#submitPaymentButton"),
     bankPopup = document.querySelector(".bankPopup");
@@ -51,7 +51,7 @@ techCheckOpenButtons.map(function (button) {
 submitButton.addEventListener("click", function (evt) {
     evt.preventDefault();
 
-    if (isAllowedFileFormat(fileInput.value) || fileInput.value == "") {
+    if (isAllowedFileFormat(fileInput.value) || fileInput.value === "") {
         removeForm.submit();
     }
 });

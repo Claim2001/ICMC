@@ -11,6 +11,7 @@ from django.contrib import messages
 from django.db.models import Value as V
 from django.db.models.functions import Concat
 
+from . import models
 from .models import Boat, Notification, Fine, Owner, RemoveRequest, TechCheckRequest, PaymentRequest, FinePaymentRequest
 from .forms import UserForm, BoatForm
 
@@ -150,11 +151,16 @@ class TechCheckView(UserView):
     def post(self, request, pk):
         boat = get_object_or_404(Boat, pk=pk)
 
-        if TechCheckRequest.objects.filter(boat=boat, check_type=self.type, payed=):
+        if boat.status != "accepted":
+            messages.add_message(request, messages.WARNING, "Судно еще не зарегистрировано в системе")
+            return redirect("main:boats")
+
+        if TechCheckRequest.objects.filter(boat=boat, check_type=self.type, payed=False):
             messages.add_message(request, messages.WARNING, "Заявление на техосмотр уже находится в очереди")
             return redirect("main:boats")
 
-        tech_check_request = TechCheckRequest(boat=boat, check_type=self.type)
+        tech_check_request = TechCheckRequest(owner=boat.owner, boat=boat, check_scan=request.FILES['checkScan'],
+                                              check_type=self.type)
         tech_check_request.save()
 
         messages.add_message(request, messages.SUCCESS, "Заявление на техосмотр принято и находится в очереди")
@@ -273,9 +279,9 @@ class InspectorView(InspectorMixin, View):
 
         fines_payments = FinePaymentRequest.objects.filter(payed=False, inspecting=True).count()
         registration_payments = PaymentRequest.objects.filter(payed=False, rejected=False).count()
+        tech_check_payments = TechCheckRequest.objects.filter(payed=False, inspecting=True).count()
 
-        context['payment_requests'] = fines_payments + registration_payments
-        # TODO: add tech check requests
+        context['payment_requests'] = fines_payments + registration_payments + tech_check_payments
         # TODO: add remove requests
         return context
 
@@ -370,10 +376,12 @@ class PaymentRequests(InspectorView):
     def get(self, request):
         payments = PaymentRequest.objects.filter(payed=False, rejected=False)
         fine_payments = FinePaymentRequest.objects.filter(inspecting=True, payed=False)
+        tech_check_payments = TechCheckRequest.objects.filter(payed=False, inspecting=True)
 
         context = self.get_context_with_extra_data({
             "payments": payments,
             "fine_payments": fine_payments,
+            "tech_check_payments": tech_check_payments
         })
 
         return render(request, "main/inspector_payments.html", context)
@@ -454,7 +462,7 @@ class FinalBoatCheck(InspectorView):
             return redirect("main:payed_requests")
 
         form = BoatForm(request.POST, instance=boat)
-        
+
         if form.is_valid():
             boat = form.save(commit=False)
             boat.change_status("accepted")
@@ -557,6 +565,42 @@ class RejectFinePayment(InspectorView):
 
         fine_payment.fine.inspecting = False
         fine_payment.fine.save()
+
+        messages.add_message(request, messages.SUCCESS, "Оплата отклонена!")
+        return redirect("main:payment_requests")
+
+
+class AcceptTechCheckPayment(InspectorView):
+    def post(self, request, pk):
+        tech_check_request = get_object_or_404(TechCheckRequest, pk=pk)
+        if tech_check_request.payed:
+            messages.add_message(request, messages.WARNING, "Заявление уже принято!")
+            return redirect("main:payment_requests")
+
+        tech_check_request.payed = True
+        tech_check_request.inspecting = False
+        tech_check_request.save()
+
+        Notification(owner=tech_check_request.owner, boat=tech_check_request.boat,
+                     status=models.TECH_CHECK_PAYMENT_ACCEPTED,
+                     extra_data=request.POST['address']).save()
+
+        messages.add_message(request, messages.SUCCESS, "Оплата принята!")
+        return redirect("main:payment_requests")
+
+
+class RejectTechCheckPayment(InspectorView):
+    def get(self, request, pk):
+        tech_check_request = get_object_or_404(TechCheckRequest, pk=pk)
+        if tech_check_request.payed:
+            messages.add_message(request, messages.WARNING, "Заявление уже принято!")
+            return redirect("main:payment_requests")
+
+        tech_check_request.inspecting = False
+        tech_check_request.save()
+
+        Notification(owner=tech_check_request.owner, boat=tech_check_request.boat,
+                     status=models.TECH_CHECK_PAYMENT_REJECTED).save()
 
         messages.add_message(request, messages.SUCCESS, "Оплата отклонена!")
         return redirect("main:payment_requests")

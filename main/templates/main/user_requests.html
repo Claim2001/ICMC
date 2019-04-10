@@ -13,7 +13,7 @@
 
         <div class="control-block{% if notification.watched == False %} unwatched {% endif %}">
             <div class="notification-icon">
-                {% if notification.status == "looking" %}
+                {% if notification.status == "look" %}
                     <img src="{% static 'main/img/ship.svg' %}" alt="">
                 {% endif %}
 
@@ -36,11 +36,19 @@
                 {% if notification.status == "accepted" %}
                     <img src="{% static 'main/img/ship.svg' %}" alt="">
                 {% endif %}
+
+                {% if notification.status == "tech_check_payment_accepted" %}
+                    <img src="{% static 'main/img/wallet.svg' %}" alt="">
+                {% endif %}
+
+                {% if notification.status == "tech_check_payment_rejected" %}
+                    <img src="{% static 'main/img/exam.svg' %}" alt="">
+                {% endif %}
             </div>
 
             <div class="control-title">
                 {#            <p>{{ notification.status }}</p>#}
-                {% if notification.status == "looking" %}
+                {% if notification.status == "look" %}
                     Ваше заявление находится на стадии рассмотрения
                 {% endif %}
 
@@ -66,8 +74,16 @@
                     Оплата прошла успешно! Придите по адресу и дате: {{ notification.extra_data }} для проведения осмотра.
                 {% endif %}
 
+                {% if notification.status == "tech_check_payment_accepted" %}
+                    Оплата тех. осмотра прошла успешно! Придите по адресу и дате: {{ notification.extra_data }} для проведения осмотра.
+                {% endif %}
+
                 {% if notification.status == "accepted" %}
                     Судно {{ notification.boat }} успешно зарегистировано в системе!
+                {% endif %}
+
+                {% if notification.status == "tech_check_payment_rejected" %}
+                    Оплата тех. осмотра была отклонена. Попробуйте еще раз и используйте скан на котором чек виден отчетливо.
                 {% endif %}
             </div>
 

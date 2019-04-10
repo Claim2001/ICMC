@@ -163,17 +163,30 @@ TECH_CHECK_TYPE = (
 
 
 class TechCheckRequest(models.Model):
+    owner = models.ForeignKey(Owner, on_delete=models.CASCADE)
     boat = models.ForeignKey(Boat, on_delete=models.CASCADE)
     check_type = models.CharField(max_length=100, choices=TECH_CHECK_TYPE)
+    check_scan = models.FileField(null=False, blank=False)
+    payed = models.BooleanField(default=False)
+    inspecting = models.BooleanField(default=True)
 
     def __str__(self):
         return self.boat.name
 
 
+TECH_CHECK_PAYMENT_ACCEPTED = "tech_check_payment_accepted"
+TECH_CHECK_PAYMENT_REJECTED = "tech_check_payment_rejected"
+
+NOTIFICATION_STATUSES = [
+    (TECH_CHECK_PAYMENT_ACCEPTED, "tech check payment accepted"),
+    (TECH_CHECK_PAYMENT_REJECTED, "tech check payment rejected"),
+] + BOAT_STATUS
+
+
 class Notification(models.Model):
     owner = models.ForeignKey(Owner, on_delete=models.CASCADE)
     boat = models.ForeignKey(Boat, on_delete=models.CASCADE)
-    status = models.CharField(max_length=250, choices=BOAT_STATUS)
+    status = models.CharField(max_length=250, choices=NOTIFICATION_STATUSES)
     watched = models.BooleanField(default=False)
     extra_data = models.TextField(null=True, blank=True)
 

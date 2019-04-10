@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
 from main.forms import OwnerChangeForm
-from .models import Owner, Boat, Notification, Fine, RemoveRequest, PaymentRequest
+from .models import Owner, Boat, Notification, Fine, RemoveRequest, PaymentRequest, TechCheckRequest
 
 
 class OwnerAdmin(UserAdmin):
@@ -17,3 +17,4 @@ admin.site.register(Notification)
 admin.site.register(Fine)
 admin.site.register(RemoveRequest)
 admin.site.register(PaymentRequest)
+admin.site.register(TechCheckRequest)

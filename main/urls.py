@@ -19,6 +19,8 @@ urlpatterns = [
     path('requests/<int:pk>/techCheck/', views.FirstTechCheck.as_view(), name="tech_check"),
     path('requests/<int:pk>/yearTechCheck/', views.YearTechCheck.as_view(), name="year_tech_check"),
     path('requests/<int:pk>/pay/', views.PayRequest.as_view(), name="request_pay"),
+    path('requests/<int:pk>/techCheck/', views.FirstTechCheck.as_view(), name="first_tech_check"),
+    path('requests/<int:pk>/yearTechCheck/', views.YearTechCheck.as_view(), name="year_tech_check"),
     path('requests/', views.UserBoatRequests.as_view(), name="boat_requests"),
     path('ships/', views.UserBoats.as_view(), name="boats"),
     path('fines/', views.UserFines.as_view(), name="fines"),
@@ -37,6 +39,6 @@ urlpatterns = [
     path('inspector/addFine/', views.AddFine.as_view(), name="add_fine"),
     path('inspector/finePayment/<int:pk>/accept/', views.AcceptFinePayment.as_view(), name="accept_fine"),
     path('inspector/finePayment/<int:pk>/reject/', views.RejectFinePayment.as_view(), name="reject_fine"),
-    path('requests/<int:pk>/techCheck/', views.FirstTechCheck.as_view(), name="first_tech_check"),
-    path('requests/<int:pk>/yearTechCheck/', views.YearTechCheck.as_view(), name="year_tech_check"),
+    path('inspector/techCheckPayment/<int:pk>/accept/', views.AcceptTechCheckPayment.as_view(), name="accept_tech_check"),
+    path('inspector/techCheckPayment/<int:pk>/reject/', views.RejectTechCheckPayment.as_view(), name="reject_tech_check"),
 ]

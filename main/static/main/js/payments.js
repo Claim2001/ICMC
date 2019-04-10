@@ -38,15 +38,30 @@ paymentRequestRows.map(function (requestRow) {
             });
 
             rejectLink.href = "/inspector/finePayment/" + requestRow.dataset.id + "/reject/";
-        } else {
+
+        } else if (requestRow.classList.contains("techCheckPayment")) {
+
             acceptPayment.addEventListener("click", function (evt) {
                 evt.preventDefault();
 
                 closePopups();
                 addressPopup.style.display = "block";
-
-                rejectLink.href = "/inspector/payments/" + requestRow.dataset.id + "/reject/";
+                document.acceptPaymentForm.action = "/inspector/techCheckPayment/" + requestRow.dataset.id + "/accept/";
             });
+
+            rejectLink.href = "/inspector/techCheckPayment/" + requestRow.dataset.id + "/reject/";
+
+        } else {
+
+            acceptPayment.addEventListener("click", function (evt) {
+                evt.preventDefault();
+
+                closePopups();
+                addressPopup.style.display = "block";
+                document.acceptPaymentForm.action = "/inspector/payments/" + requestRow.dataset.id + "/accept/"
+            });
+
+            rejectLink.href = "/inspector/payments/" + requestRow.dataset.id + "/reject/";
         }
 
         checkScanImage.src = "";
