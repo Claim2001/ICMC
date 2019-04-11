@@ -155,7 +155,7 @@ class TechCheckView(UserView):
             messages.add_message(request, messages.WARNING, "Судно еще не зарегистрировано в системе")
             return redirect("main:boats")
 
-        if TechCheckRequest.objects.filter(boat=boat, check_type=self.type, payed=False):
+        if TechCheckRequest.objects.filter(boat=boat, check_type=self.type, inspecting=True):
             messages.add_message(request, messages.WARNING, "Заявление на техосмотр уже находится в очереди")
             return redirect("main:boats")
 
