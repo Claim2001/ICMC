@@ -275,14 +275,14 @@ class InspectorMixin(UserMixin):
 
 class InspectorView(InspectorMixin, View):
     def get_context_with_extra_data(self, context):
-        context['waiting_requests'] = Boat.objects.filter(status="wait").count()
-
         fines_payments = FinePaymentRequest.objects.filter(payed=False, inspecting=True).count()
         registration_payments = PaymentRequest.objects.filter(payed=False, rejected=False).count()
         tech_check_payments = TechCheckRequest.objects.filter(payed=False, inspecting=True).count()
 
-        context['payment_requests'] = fines_payments + registration_payments + tech_check_payments
-        # TODO: add remove requests
+        context['waiting_requests_count'] = Boat.objects.filter(status="wait").count()
+        context['payment_requests_count'] = fines_payments + registration_payments + tech_check_payments
+        context['remove_requests_count'] = RemoveRequest.objects.all().count()
+
         return context
 
 
@@ -321,6 +321,20 @@ class RequestRemove(InspectorView):
         context = self.get_context_with_extra_data({"requests": remove_boat_request})
 
         return render(request, "main/inspector_remove_requests.html", context)
+
+
+class AcceptRemoveRequest(InspectorView):
+    def get(self, request, pk):
+        remove_request = get_object_or_404(RemoveRequest, pk=pk)
+
+        Notification(owner=remove_request.owner,
+                     status=models.REMOVE_REQUEST_ACCEPTED,
+                     extra_data=remove_request.boat.name).save()
+
+        remove_request.boat.delete()
+
+        messages.add_message(request, messages.SUCCESS, "Судно успешно снято с учета и удалено с системы!")
+        return redirect("main:remove_requests")
 
 
 class AddRequestsToLooking(InspectorView):

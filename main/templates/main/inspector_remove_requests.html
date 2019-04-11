@@ -1,7 +1,13 @@
 {% extends "main/inspector_base.html" %}
+{% load staticfiles %}
 
 {% block content %}
 
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert" id="backendErrorMessage">
+            {{ message }}
+        </div>
+    {% endfor %}
 
     {% for request in requests %}
 
@@ -9,9 +15,51 @@
             <div class="control-title">
                 <p>{{ request.boat.owner.first_name }} {{ request.boat.owner.last_name }} - {{ request.boat.name }}</p>
             </div>
-            <a href="#" class="btn">Просмотреть</a>
+            <button class="btn openRemoveRequestPopup" data-id="{{ request.pk }}" data-reason="{{ request.get_reason_display }}" data-engine="{{ request.boat.engine_number }}" data-boat="{{ request.boat.name }}" data-owner="{{ request.boat.owner.first_name }} {{ request.boat.owner.last_name }}">
+                Просмотреть
+            </button>
         </div>
 
     {% endfor %}
+
+    <div class="popup-window" id="removePopup">
+        <div class="popup-window-background"></div>
+        <div class="popup">
+            <div class="closeButtonContainer">
+                <button class="closeButton">
+                    <img src="{% static 'main/img/cancel.svg' %}" alt="">
+                </button>
+            </div>
+            <h1 class="popupTitle">Снятие с учета</h1>
+            <div class="popup-content-not-center">
+                <p>Владелец: <strong><span class="owner"></span></strong></p>
+                <p>Название судна: <strong><span class="boatName"></span></strong></p>
+                <p>Номера двигателей: <strong><span class="engineNumber"></span></strong></p>
+                <p>Причина: <strong><span class="reason"></span></strong></p>
+            </div>
+
+            <div class="centerButtonContainer">
+                <a href="#" id="removeRequestButton" class="btn btn-warn">Принять и удалить судно с системы</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let removeRequestButton = Array.from(document.querySelectorAll(".openRemoveRequestPopup")),
+            removePopup = document.querySelector("#removePopup");
+
+        removeRequestButton.forEach(function (button) {
+            button.addEventListener("click", function () {
+                removePopup.style.display = "block";
+
+                document.querySelector(".owner").innerHTML = button.dataset.owner;
+                document.querySelector(".engineNumber").innerHTML = button.dataset.engine;
+                document.querySelector(".reason").innerHTML = button.dataset.reason;
+                document.querySelector(".boatName").innerHTML = button.dataset.boat;
+
+                document.querySelector("#removeRequestButton").href = button.dataset.id + "/accept/";
+            });
+        });
+    </script>
 
 {% endblock %}

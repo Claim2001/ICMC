@@ -2,7 +2,6 @@ from django.urls import path
 
 from . import views
 
-
 app_name = "main"
 
 urlpatterns = [
@@ -30,6 +29,8 @@ urlpatterns = [
     path('inspector/request/looking/', views.AddRequestsToLooking.as_view(), name="add_looking_request"),
     path('inspector/inspectingRequests/', views.InspectingRequests.as_view(), name="inspecting_requests"),
     path('inspector/removeRequests/', views.RequestRemove.as_view(), name="remove_requests"),
+    path('inspector/removeRequests/<int:pk>/accept/', views.AcceptRemoveRequest.as_view(),
+         name="accept_remove_request"),
     path('inspector/payments/', views.PaymentRequests.as_view(), name="payment_requests"),
     path('inspector/payments/<int:pk>/accept/', views.AcceptPayment.as_view(), name="accept_payment"),
     path('inspector/payments/<int:pk>/reject/', views.RejectPayment.as_view(), name="reject_payment"),
@@ -39,6 +40,8 @@ urlpatterns = [
     path('inspector/addFine/', views.AddFine.as_view(), name="add_fine"),
     path('inspector/finePayment/<int:pk>/accept/', views.AcceptFinePayment.as_view(), name="accept_fine"),
     path('inspector/finePayment/<int:pk>/reject/', views.RejectFinePayment.as_view(), name="reject_fine"),
-    path('inspector/techCheckPayment/<int:pk>/accept/', views.AcceptTechCheckPayment.as_view(), name="accept_tech_check"),
-    path('inspector/techCheckPayment/<int:pk>/reject/', views.RejectTechCheckPayment.as_view(), name="reject_tech_check"),
+    path('inspector/techCheckPayment/<int:pk>/accept/', views.AcceptTechCheckPayment.as_view(),
+         name="accept_tech_check"),
+    path('inspector/techCheckPayment/<int:pk>/reject/', views.RejectTechCheckPayment.as_view(),
+         name="reject_tech_check"),
 ]
