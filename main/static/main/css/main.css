@@ -213,7 +213,7 @@ html {
 
 .fileBox.filled {
     /*border: 1px solid lightgreen;*/
-    background-color: rgba(0, 250, 0, 0.3);
+    /* background-color: rgba(0, 250, 0, 0.3); */
     color: rgba(0, 136, 0, 0.9);
 }
 
@@ -771,10 +771,14 @@ h1.title {
     height: 100%;
     background-repeat: no-repeat;
     border-radius: 7px;
+    top: 0;
+    left: 0;
+    background-color: white;
+    display: none;
+    background-position: center;
 }
 
 .fileInputText {
-    background: #ffffff;
     width: 100%;
     height: 100%;
     display: flex;
