@@ -129,7 +129,7 @@ class BoatRemoveRequest(UserView):
             reason = request.POST["reason"]
             ticket = request.FILES.get("ticket")
 
-            remove_request = RemoveRequest(boat=boat, reason=reason, ticket=ticket)
+            remove_request = RemoveRequest(owner=boat.owner, boat=boat, reason=reason, ticket=ticket)
             remove_request.save()
 
             messages.add_message(request, messages.SUCCESS, "Ваше заявление на снятие судна с учета отправлено!")
