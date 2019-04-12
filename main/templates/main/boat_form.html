@@ -4,7 +4,7 @@
 {% block content %}
 
     {% for message in messages %}
-        <div class="alert alert-{{ message.tags }}" role="alert">
+        <div class="alert alert-{{ message.tags }}" role="alert" xmlns:https="http://www.w3.org/1999/xhtml">
             {{ message }}
         </div>
     {% endfor %}
@@ -188,10 +188,13 @@
                     <div class="form-element">
                         <p>Скан паспорта</p>
                         <div class="fileBox {% if 'passport_image' in form.instance.get_incorrect_field_names %}incorrect{% endif %}">
-                            <p>+</p>
+                            <div class="background"></div>
+                            <div class="fileInputText">
+                                <p>+</p>
+                            </div>
                         </div>
 
-                        <input type="file" name="passport_image" class="formFileInput" required>
+                        <input type="file" accept="image/*" name="passport_image" class="formFileInput" required>
                     </div>
 
                 </div>
@@ -202,9 +205,12 @@
                     <div class="form-element">
                         <p>Другие документы</p>
                         <div class="fileBox {% if 'other_files' in form.instance.get_incorrect_field_names%}incorrect{% endif %}">
-                            <p>+</p>
+                            <div class="background"></div>
+                            <div class="fileInputText">
+                                <p>+</p>
+                            </div>
                         </div>
-                        <input type="file" name="other_files" class="formFileInput">
+                        <input type="file" accept="image/*" name="other_files" class="formFileInput">
                     </div>
 
                 </div>

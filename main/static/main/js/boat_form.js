@@ -105,24 +105,27 @@ fileBoxes.map(function (box) {
 
 fileFields.map(function (field) {
     field.addEventListener("change", function () {
-        let fileBox = field.parentElement.getElementsByClassName("fileBox")[0];
+        let fileBox = field.parentElement.getElementsByClassName("fileBox")[0],
+            backgroundImage = field.parentElement.getElementsByClassName("background")[0];
 
         if (!isAllowedFileFormat(field.value)) {
             fileBox.className = "fileBox incorrect";
             toggleErrorMessage(true);
-
-            return
+        } else {
+            // if user selected a file then change the class name
+            fileBox.className = field.value === "" ? "fileBox" : "fileBox filled";
         }
 
-        // if user selected a file then change the class name
-        fileBox.className = field.value === "" ? "fileBox" : "fileBox filled";
+        let imageURL = URL.createObjectURL(field.files[0]);
+        backgroundImage.style.backgroundImage = 'url(' + imageURL + ')';
+        console.log(backgroundImage.style.backgroundImage)
     })
 });
 
 function isAllowedFileFormat(filename) {
     filename = filename.toLowerCase();
 
-    let allowed_extensions = ["jpeg", "png", "jpg", "pdf", "docx", "doc"],
+    let allowed_extensions = ["jpeg", "png", "jpg", "pdf", "docx", "doc", "bmp"],
         extension = filename.split('.').pop();
 
     return allowed_extensions.includes(extension);

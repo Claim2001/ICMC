@@ -112,8 +112,11 @@ ul.user-navigation-list li.selected a {
     width: 100%;
     background-color: #ffffff;
     border: 1px solid lightgray;
-    padding: 5px 10px;
     border-radius: 7px;
+}
+
+.form-element input {
+    padding: 5px 10px;
 }
 
 .form-element select {
@@ -195,20 +198,21 @@ html {
 }
 
 .fileBox {
-  display: inline-flex;
-  flex-direction: column;
-  justify-content: center;
-  border: 1px solid lightgray;
-  color: lightgray;
-  font-weight: 100;
-  cursor: pointer;
-  width: 100%;
-  text-align: center;
-  height: 305px;
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    border: 1px solid lightgray;
+    color: lightgray;
+    font-weight: 100;
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
+    height: 305px;
+    position: relative;
 }
 
 .fileBox.filled {
-    border: 1px solid lightgreen;
+    /*border: 1px solid lightgreen;*/
     background-color: rgba(0, 250, 0, 0.3);
     color: rgba(0, 136, 0, 0.9);
 }
@@ -758,6 +762,26 @@ h1.title {
 
 .tableBlock {
     margin-bottom: 90px;
+}
+
+.fileBox .background {
+    position: absolute;
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    border-radius: 7px;
+}
+
+.fileInputText {
+    background: #ffffff;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-radius: 7px;
+    color: lightgray;
 }
 
 
