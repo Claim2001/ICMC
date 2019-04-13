@@ -39,6 +39,9 @@ bankPayLink.addEventListener("click", function (evt) {
     closePopups();
 
     bankPopup.style.display = "block";
+    fileInput.value = "";
+    fileBoxBackground.style.backgroundImage = "url()";
+    fileBoxBackground.style.display = "none";
 });
 
 submitButton.addEventListener("click", function (evt) {
