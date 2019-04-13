@@ -6,6 +6,11 @@ let pages = Array.from(document.querySelectorAll(".page")),
     errorMessage = document.querySelector("#clientErrorMessage");
 
 
+////////////////////////////////////
+// Debugging
+movePage(true);
+
+
 nextFormPageButton.addEventListener("click", function () {
     if (checkFieldsFilled() && checkFileFormats()) {
         toggleErrorMessage(false);
@@ -110,10 +115,12 @@ fileFields.map(function (field) {
 
         if (!isAllowedFileFormat(field.value)) {
             fileBox.className = "fileBox incorrect";
+            backgroundImage.style.display = "none";
             toggleErrorMessage(true);
         } else {
             // if user selected a file then change the class name
             fileBox.className = field.value === "" ? "fileBox" : "fileBox filled";
+            backgroundImage.style.display = "block";
         }
 
         let imageURL = URL.createObjectURL(field.files[0]);
