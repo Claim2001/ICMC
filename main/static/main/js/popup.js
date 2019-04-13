@@ -11,7 +11,9 @@ let removePopupWindow = document.querySelector(".remove-window"),
     techCheckFileInput = document.querySelector("input[type='file'].techCheck"),
     submitButton = document.querySelector("button[type='submit']"),
     submitPaymentButton = document.querySelector("#submitPaymentButton"),
-    bankPopup = document.querySelector(".bankPopup");
+    bankPopup = document.querySelector(".bankPopup"),
+    fileBoxBackground = document.querySelector(".fileBox .background.techCheck"),
+    ticketBackground = document.querySelector(".fileBox .background.ticket");
 
 
 removeOpenButtons.map(function (button) {
@@ -20,6 +22,10 @@ removeOpenButtons.map(function (button) {
        removeForm.action = "/requests/" + boatID + "/remove/";
 
        removePopupWindow.style.display = "flex";
+
+       ticketBackground.style.display = "none";
+       ticketBackground.style.backgroundImage = "url()";
+       fileInput.value = "";
    });
 });
 
@@ -39,6 +45,10 @@ function openBankPopup(payURL) {
     closePopups();
     bankPopup.style.display = "block";
     document.payForm.action = payURL;
+
+    fileBoxBackground.style.display = "none";
+    fileBoxBackground.style.backgroundImage = "url()";
+    techCheckFileInput.value = "";
 }
 
 techCheckOpenButtons.map(function (button) {
@@ -79,6 +89,16 @@ fileBox.addEventListener("click", function () {
 
 fileInput.addEventListener("change", function () {
     fileBox.className = isAllowedFileFormat(fileInput.value) ? "popupBlock fileBox filled" : "popupBlock fileBox incorrect";
+
+    let imageURL = "";
+    if (fileInput.files[0]) {
+        imageURL = URL.createObjectURL(fileInput.files[0]);
+        ticketBackground.style.display = "block";
+        ticketBackground.style.backgroundImage = 'url(' + imageURL + ')';
+    } else {
+        ticketBackground.style.display = 'none';
+    }
+
 });
 
 techCheckFileBox.addEventListener("click", function () {
@@ -87,6 +107,15 @@ techCheckFileBox.addEventListener("click", function () {
 
 techCheckFileInput.addEventListener("change", function () {
     techCheckFileBox.className = isAllowedFileFormat(techCheckFileInput.value) ? "popupBlock fileBox filled" : "popupBlock fileBox incorrect";
+
+    let imageURL = "";
+    if (techCheckFileInput.files[0]) {
+        imageURL = URL.createObjectURL(techCheckFileInput.files[0]);
+        fileBoxBackground.style.display = "block";
+        fileBoxBackground.style.backgroundImage = 'url(' + imageURL + ')';
+    } else {
+        fileBoxBackground.style.display = 'none';
+    }
 });
 
 function isAllowedFileFormat(filename) {
