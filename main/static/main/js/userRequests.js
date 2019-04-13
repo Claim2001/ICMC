@@ -7,7 +7,7 @@ let payButtons = Array.from(document.querySelectorAll(".payButton")),
     fileBox = document.querySelector(".fileBox"),
     fileInput = document.querySelector("input[type='file']"),
     submitButton = document.querySelector("button[type='submit']"),
-    fileBoxBackground = document.querySelector(".fileBox .background"),
+    fileBoxBackground = document.querySelector(".fileBox .background");
 
 
 closeButtons.map(function (button) {

@@ -9,7 +9,8 @@ let showFineButtons = Array.from(document.querySelectorAll(".showFineButton")),
     bankPopup = document.querySelector(".bankPopup"),
     fileBox = document.querySelector(".fileBox"),
     fileInput = document.querySelector("input[type='file']"),
-    submitButton = document.querySelector("button[type='submit']");
+    submitButton = document.querySelector("button[type='submit']"),
+    fileBoxBackground = document.querySelector(".fileBox .background");
 
 showFineButtons.forEach(function (button) {
     button.addEventListener("click", function () {
@@ -41,6 +42,9 @@ openBankPopupLink.addEventListener("click", function (evt) {
 
     closePopups();
     bankPopup.style.display = "block";
+    fileInput.value = "";
+    fileBoxBackground.style.backgroundImage = "url()";
+    fileBoxBackground.style.display = "none";
 });
 
 fileBox.addEventListener("click", function () {
@@ -49,4 +53,13 @@ fileBox.addEventListener("click", function () {
 
 fileInput.addEventListener("change", function () {
     fileBox.className = isAllowedFileFormat(fileInput.value) ? "popupBlock fileBox filled" : "popupBlock fileBox incorrect";
+
+    let imageURL = "";
+    if (fileInput.files[0]) {
+        imageURL = URL.createObjectURL(fileInput.files[0]);
+        fileBoxBackground.style.display = "block";
+        fileBoxBackground.style.backgroundImage = 'url(' + imageURL + ')';
+    } else {
+        fileBoxBackground.style.display = 'none';
+    }
 });
