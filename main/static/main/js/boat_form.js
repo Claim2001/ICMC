@@ -5,12 +5,6 @@ let pages = Array.from(document.querySelectorAll(".page")),
     submitButton = document.querySelector("#submitButton"),
     errorMessage = document.querySelector("#clientErrorMessage");
 
-
-////////////////////////////////////
-// Debugging
-movePage(true);
-
-
 nextFormPageButton.addEventListener("click", function () {
     if (checkFieldsFilled() && checkFileFormats()) {
         toggleErrorMessage(false);
