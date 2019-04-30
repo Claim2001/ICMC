@@ -4,6 +4,7 @@ from . import views
 
 app_name = "main"
 
+
 urlpatterns = [
     path('', views.RegisterBoat.as_view(), name="index"),
     path('login/', views.Login.as_view(), name="login"),
@@ -44,5 +45,6 @@ urlpatterns = [
          name="accept_tech_check"),
     path('inspector/techCheckPayment/<int:pk>/reject/', views.RejectTechCheckPayment.as_view(),
          name="reject_tech_check"),
-    path('inspector/boats/all/', views.AllBoats.as_view(), name="all_boats")
+    path('inspector/boats/all/', views.AllBoats.as_view(), name="all_boats"),
+    path('inspector/boats/<int:pk>/', views.InspectorBoat.as_view(), name="inspector_boat")
 ]

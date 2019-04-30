@@ -294,7 +294,7 @@ def search_boat_by_owner(full_name, filtered_boats):
     boats = []
 
     for owner in owners:
-        boats += list(boats_copy.filter(owner_id=owner.id))
+        boats += list(boats_copy.filter(status="accepted", owner_id=owner.id))
 
     return boats
 
@@ -646,6 +646,16 @@ class AllBoats(InspectorView):
         })
 
         return render(request, "main/inspector_all_boats.html", context)
+
+
+class InspectorBoat(InspectorView):
+    def get(self, request, pk):
+        boat = get_object_or_404(Boat, pk=pk)
+        form = BoatForm(instance=boat)
+
+        context = self.get_context_with_extra_data({"form": form})
+
+        return render(request, "main/inspector_boat.html", context)
 
 
 # Login, signup and etc.
