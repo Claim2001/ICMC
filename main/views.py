@@ -620,6 +620,34 @@ class RejectTechCheckPayment(InspectorView):
         return redirect("main:payment_requests")
 
 
+class AllBoats(InspectorView):
+    def get(self, request):
+        full_name = request.GET.get("full_name", "")
+        imo = request.GET.get("imo", "")
+        engine_number = request.GET.get("engine_number", "")
+
+        if full_name or imo or engine_number:
+            boats = Boat.objects.filter(
+                status="accepted",
+                imo__icontains=imo,
+                engine_number__icontains=engine_number
+            )
+
+            if request.GET.get("full_name"):
+                boats = search_boat_by_owner(full_name, boats)
+        else:
+            boats = Boat.objects.filter(status="accepted").order_by("-id")[:20]
+
+        context = self.get_context_with_extra_data({
+            "boats": boats,
+            "full_name": full_name,
+            "imo": imo,
+            "engine_number": engine_number
+        })
+
+        return render(request, "main/inspector_all_boats.html", context)
+
+
 # Login, signup and etc.
 
 class Login(View):

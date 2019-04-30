@@ -19,6 +19,7 @@
 
                     <ul class="user-navigation-list">
                         {% with url_name=request.resolver_match.url_name %}
+                            <li class="{% if url_name == 'all_boats'%}selected{% endif %}"><a href="{% url 'main:all_boats' %}">Все суднa</a></li>
                             <li class="{% if url_name == 'inspector' %}selected{% endif %}"><a href="{% url 'main:inspector' %}">Поступившие  {% if waiting_requests_count > 0 %}<span class="count">{{ waiting_requests_count }}</span>{% endif %}заявления</a>
                             </li>
                             <li class="{% if url_name == 'inspecting_requests' or url_name == 'register_request' %}selected{% endif %}"><a href="{% url 'main:inspecting_requests' %}">Рассматриваемые заявления</a></li>

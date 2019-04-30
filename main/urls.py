@@ -44,4 +44,5 @@ urlpatterns = [
          name="accept_tech_check"),
     path('inspector/techCheckPayment/<int:pk>/reject/', views.RejectTechCheckPayment.as_view(),
          name="reject_tech_check"),
+    path('inspector/boats/all/', views.AllBoats.as_view(), name="all_boats")
 ]
