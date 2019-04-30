@@ -636,7 +636,7 @@ class Login(View):
             login(request, authenticated_user)
             return redirect("main:index")
 
-        messages.add_message(request, messages.ERROR, "Неверный e-адрес или пароль")
+        messages.add_message(request, messages.ERROR, "Неверный эл. адрес или пароль")
         return render(request, "main/login.html", {"email": email})
 
 
