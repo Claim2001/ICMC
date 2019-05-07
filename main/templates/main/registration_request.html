@@ -20,7 +20,7 @@
             {% for field in form %}
 
                 <div class="form-element">
-                    <label><input type="checkbox" class="fieldCheckbox" name="incorrect_fields" value="{{ field.name }}"><span></span>{{ field.label }}: </label>
+                    <label><input type="checkbox" class="fieldCheckbox" name="incorrect_fields" value="{{ field.name }}"><span></span><strong>{{ field.label }}: </strong></label>
                     {% if field.name == "passport_image" %}
                         <a href="{{ form.instance.passport_image.url}}">{{ field.value }}</a>
                     {% elif field.name == "other_files" %}
