@@ -1,5 +1,4 @@
 import json
-import requests
 from random import randint
 
 from django.http import HttpResponseNotFound
@@ -14,11 +13,7 @@ from django.db.models.functions import Concat
 from . import models
 from .models import Boat, Notification, Fine, Owner, RemoveRequest, TechCheckRequest, PaymentRequest, FinePaymentRequest
 from .forms import UserForm, BoatForm
-
-
-def send_sms(number, message):
-    link = f"https://cdn.osg.uz/sms/?phone={number}&id=2342&message={message}"
-    requests.get(link)
+from .helpers import send_sms
 
 
 # User views

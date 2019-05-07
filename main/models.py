@@ -4,6 +4,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser, PermissionsMixin
 from django.contrib.auth.base_user import AbstractBaseUser
 
+from .helpers import send_sms
+
 
 class Owner(AbstractUser):
     first_name = models.CharField("Имя", max_length=250)
@@ -43,6 +45,23 @@ BOAT_STATUS = [
     ("inspector_check", "waiting for data check"),
     ("accepted", "accepted"),
 ]
+
+
+def get_message_text_by_status(status, boat_name, extra_data=""):
+    message_notifications = {
+        "look": f"Ваше судно {boat_name} находится на стадии рассмотрения",
+        "rejected": f"Ваше судно {boat_name} имеет неправильно заполненные поля, исправьте их и попробуйте снова",
+        "payment": f"Ваше судно {boat_name} успешно прошло проверку и ожидает оплаты",
+        "payment_rejected": f"Оплата судна {boat_name} не прошла успешно. Попробуйте еще раз.",
+        "inspector_check": f"Оплата судна {boat_name} прошла успешно! Пожалуйста придите по адресу и дате: {extra_data}"
+        f" для проведения осмотра",
+    }
+
+    if status in message_notifications:
+        return message_notifications[status]
+
+    else:
+        return False
 
 
 class Boat(models.Model):
@@ -92,6 +111,12 @@ class Boat(models.Model):
             if self.status not in not_send_notification_statuses:
                 notification = Notification(owner=self.owner, boat=self, status=self.status)
                 notification.save()
+
+                sms_message = get_message_text_by_status(status=self.status,
+                                                         boat_name=self.name, extra_data=notification.extra_data)
+
+                if sms_message:
+                    send_sms(self.owner.phone_number, sms_message)
 
                 if notification.status == "payment_rejected":
                     notification.boat.change_status("payment")
