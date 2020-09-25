@@ -1,5 +1,5 @@
 from django.urls import path
-
+from .decorators import check_recaptcha
 from . import views
 
 app_name = "main"
@@ -8,7 +8,7 @@ app_name = "main"
 urlpatterns = [
     path('', views.RegisterBoat.as_view(), name="index"),
     path('login/', views.Login.as_view(), name="login"),
-    path('signup/', views.SignUp.as_view(), name="signup"),
+    path('signup/', check_recaptcha(views.SignUp.as_view()), name="signup"),
     path('edit/', views.UserEdit.as_view(), name="user_edit"),
     path('logout/', views.logout_user, name="logout"),
     path('register/', views.RegisterBoat.as_view(), name="register"),
@@ -46,5 +46,7 @@ urlpatterns = [
     path('inspector/techCheckPayment/<int:pk>/reject/', views.RejectTechCheckPayment.as_view(),
          name="reject_tech_check"),
     path('inspector/boats/all/', views.AllBoats.as_view(), name="all_boats"),
-    path('inspector/boats/<int:pk>/', views.InspectorBoat.as_view(), name="inspector_boat")
+    path('inspector/boats/<int:pk>/', views.InspectorBoat.as_view(), name="inspector_boat"),
+    path('public_offer/', views.Public_offer.as_view(), name="public_offer")
+
 ]

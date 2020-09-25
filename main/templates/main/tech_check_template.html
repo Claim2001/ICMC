@@ -1,5 +1,5 @@
 {% extends 'main/user_base.html' %}
-{% load staticfiles %}
+{% load static %}
 
 {% block content %}
 
@@ -40,7 +40,7 @@
                     </div>
 
                     <div class="form-element">
-                        <p>Идентификационный (IMO)</p>
+                        <p>Идентификационный номер (IMO)</p>
                         <input type="text" name="imo" maxlength="250" required id="id_imo">
                     </div>
 
@@ -112,7 +112,7 @@
 
 
                     <div class="form-element">
-                        <p>Район и условия плавания</p>
+                        <p>Район и условия хождения(плавания)</p>
                         <input type="text" name="swimming_place" maxlength="300" required id="id_swimming_place">
                     </div>
 

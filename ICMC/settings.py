@@ -25,7 +25,7 @@ SECRET_KEY = 'cpie)82c&3hm5^!&m7qsu8&y_u6w%bcwy-*%h!c9asc+pw8p#b'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["80.80.218.227"]
+ALLOWED_HOSTS = ["127.0.0.1"]
 
 if DEBUG is True:
     ALLOWED_HOSTS.append("localhost")
@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'main',
+
 ]
 
 MIDDLEWARE = [
@@ -129,7 +130,9 @@ USE_TZ = True
 AUTH_USER_MODEL = 'main.Owner'
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+GOOGLE_RECAPTCHA_SECRET_KEY = '6Ld0XtAZAAAAAD0bY99ln2joY077SwKq1MZpF3VM'

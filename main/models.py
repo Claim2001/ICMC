@@ -10,6 +10,7 @@ from .helpers import send_sms
 class Owner(AbstractUser):
     first_name = models.CharField("Имя", max_length=250)
     last_name = models.CharField("Фамилия", max_length=250)
+    father_name = models.CharField("Отчество", max_length=250)
     gender = models.CharField("Пол", max_length=20, null=True, blank=True, choices=[("Мужской", "Мужской"),
                                                                                     ("Женский", "Женский")])
     name_of_organization = models.CharField("Название организации", max_length=250, null=True, blank=True)
@@ -27,7 +28,7 @@ class Owner(AbstractUser):
     activated = models.BooleanField("Активирован", default=False)
 
     def __str__(self):
-        return f"{self.first_name} {self.last_name}"
+        return f"{self.first_name} {self.last_name} {self.father_name}"
 
 
 BOAT_MATERIAL_TYPES = [
@@ -49,11 +50,11 @@ BOAT_STATUS = [
 
 def get_message_text_by_status(status, boat_name, extra_data=""):
     message_notifications = {
-        "look": f"Ваше судно {boat_name} находится на стадии рассмотрения",
-        "rejected": f"Ваше судно {boat_name} имеет неправильно заполненные поля, исправьте их и попробуйте снова",
-        "payment": f"Ваше судно {boat_name} успешно прошло проверку и ожидает оплаты",
-        "payment_rejected": f"Оплата судна {boat_name} не прошла успешно. Попробуйте еще раз.",
-        "inspector_check": f"Оплата судна {boat_name} прошла успешно! Пожалуйста придите по адресу и дате: {extra_data}"
+        "look": f"Ваша заявка по судну {boat_name} находится на стадии рассмотрения",
+        "rejected": f"Ваша заявка по судну {boat_name} имеет неправильно заполненные поля, исправьте их и попробуйте снова",
+        "payment": f"Ваша заявка по судну {boat_name} успешно прошла проверку и ожидает оплаты",
+        "payment_rejected": f"Оплата заявки по судну {boat_name} не прошла успешно. Попробуйте еще раз.",
+        "inspector_check": f"Оплата заявки по судну {boat_name} прошла успешно. Пожалуйста придите по адресу и дате: {extra_data}"
         f" для проведения осмотра",
     }
 
@@ -68,18 +69,18 @@ class Boat(models.Model):
     owner = models.ForeignKey(Owner, on_delete=models.CASCADE)
     model_type = models.CharField("Тип и модель", max_length=300)  # need choices here
     name = models.CharField("Наименование", max_length=250)
-    imo = models.CharField("Идентификационный (IMO)", max_length=250)
-    build_place = models.CharField("Место постройки", max_length=300)
-    build_year = models.PositiveIntegerField("Год постройки")
+    imo = models.CharField("Идентификационный номер (IMO)", max_length=250)
+    build_place = models.CharField("Место создания", max_length=300)
+    build_year = models.PositiveIntegerField("Год создания")
     material = models.CharField("Материал корпуса", max_length=200, choices=BOAT_MATERIAL_TYPES)
     length = models.PositiveIntegerField("Длина (м)")
     width = models.PositiveIntegerField("Ширина (м)")
     height_board = models.PositiveIntegerField("Высота борта (м)")
-    height_second_board = models.PositiveIntegerField("высота надв. Борта (м)")
+    height_second_board = models.PositiveIntegerField("Высота надводного борта (м)")
     capacity = models.PositiveIntegerField("Вместимость (тонн)")
-    capacity_load = models.PositiveIntegerField("Грузоподъемность (кг)")
-    passenger_awn = models.PositiveIntegerField("Пассажировместимость (чел.)")
-    swimming_place = models.CharField("Район и условия плавания", max_length=300)
+    capacity_load = models.PositiveIntegerField("Грузоподъемность судна (кг)")
+    passenger_awn = models.PositiveIntegerField("Пассажировместимость судна (чел.)")
+    swimming_place = models.CharField("Район и условия хождения(плавания)", max_length=300)
     engine_type = models.CharField("Тип главного двигателя", max_length=300)  # TODO: add choices
     engine_model = models.CharField("Марка двигателя", max_length=300)
     engine_number = models.CharField("Заводские номера двигателей", max_length=300)

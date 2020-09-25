@@ -1,8 +1,8 @@
 {% extends "main/header_template.html" %}
-{% load staticfiles %}
+{% load static %}
 
 {% block header %}
-    <h1><a href="{% url 'main:index' %}">Активация</a></h1>
+    <h1><a href="{% url 'main:index' %}">Активация пользователя</a></h1>
     <a href="{% url 'main:logout' %}" class="logout">
         <img src="{% static 'main/img/exit.svg' %}" alt="" class="exit-icon">
         Выход

@@ -1,5 +1,5 @@
 {% extends 'main/user_base.html' %}
-{% load staticfiles %}
+{% load static %}
 
 {% block content %}
 
@@ -41,7 +41,7 @@
                     </div>
 
                     <div class="form-element">
-                        <p>Идентификационный (IMO)</p>
+                        <p>Идентификационный номер (IMO)</p>
                         <input type="text" name="imo" maxlength="250" required id="id_imo" value="{{ form.imo.value|default_if_none:'' }}" class="{% if 'imo' in form.instance.get_incorrect_field_names %}incorrect{% endif %}">
                     </div>
 
@@ -59,8 +59,8 @@
                         <p>Материал корпуса</p>
                         <div class="dropdown">
                             <select name="material" required id="id_material">
-                                <option value="wood" {% if form.material.value == 'woord' %}selected{% endif %}>wood</option>
-                                <option value="other" {% if form.material.value == 'other' %}selected{% endif %}>other</option>
+                                <option value="wood" {% if form.material.value == 'wood' %}selected{% endif %}>Древесина</option>
+                                <option value="other" {% if form.material.value == 'other' %}selected{% endif %}>Другое</option>
                             </select>
                         </div>
                     </div>
@@ -86,7 +86,7 @@
                     </div>
 
                     <div class="form-element">
-                        <p>Высота надв. Борта (м)</p>
+                        <p>Высота надводного борта (м)</p>
                         <input type="number" name="height_second_board" min="0" required id="id_height_second_board" value="{{ form.height_second_board.value|default_if_none:'' }}" class="{% if 'height_second_board' in form.instance.get_incorrect_field_names %}incorrect{% endif %}">
                     </div>
 
@@ -112,7 +112,7 @@
 
 
                     <div class="form-element">
-                        <p>Район и условия плавания</p>
+                        <p>Район и условия хождения(плавания)</p>
                         <input type="text" name="swimming_place" maxlength="300" required id="id_swimming_place" value="{{ form.swimming_place.value|default_if_none:'' }}" class="{% if 'swimming_place' in form.instance.get_incorrect_field_names %}incorrect{% endif %}">
                     </div>
 

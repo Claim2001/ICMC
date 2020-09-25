@@ -1,4 +1,4 @@
-{% load staticfiles %}
+{% load static %}
 
 <div class="content">
     <div class="container">
@@ -29,6 +29,11 @@
                     <div class="form-element">
                         <p><label for="id_last_name">Фамилия:</label></p>
                         <input type="text" name="last_name" maxlength="250" required id="id_last_name" value="{{ form.last_name.value|default_if_none:"" }}">
+                    </div>
+
+                    <div class="form-element">
+                        <p><label for="id_father_name">Отчество:</label></p>
+                        <input type="text" name="father_name" maxlength="250" required id="id_father_name" value="{{ form.father_name.value|default_if_none:"" }}">
                     </div>
 
                     <div class="form-element">
@@ -69,7 +74,7 @@
                     </div>
 
                     <div class="form-element">
-                        <p><label for="id_inn">Inn:</label></p>
+                        <p><label for="id_inn">ИНН:</label></p>
                         <input type="text" name="inn" maxlength="250" required id="id_inn" value="{{ form.inn.value|default_if_none:"" }}">
                     </div>
 
@@ -108,8 +113,19 @@
                         <input type="password" id="passwordCheck">
                     </div>
 
-                </div>
 
+                    <script src='https://www.google.com/recaptcha/api.js'></script>
+                    <div class="form-group g-recaptcha" data-sitekey="6Ld0XtAZAAAAAHmWJ3Tb6rKhsCl6JCaAXSUzOrcq"></div>
+                </div>
+                    <div class="public-offer">
+                        <form action class="offer_form">
+                            <input type="checkbox" name="display_type" value="public_offer">
+                            <span class="offer__checkbox">
+                                Нажимая на кнопку подтвердить, вы соглашаетесь с условиями
+                                <a href="{% url "main:public_offer" %}" target="_blank">публичной оферты</a>
+                            </span>
+                        </form>
+                    </div>
 
                 <div class="form-buttons signup-buttons">
                     <button class="btn" type="submit" id="submitButton">Сохранить</button>

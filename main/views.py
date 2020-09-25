@@ -1,6 +1,5 @@
 import json
 from random import randint
-
 from django.http import HttpResponseNotFound
 from django.contrib.auth.mixins import LoginRequiredMixin, AccessMixin
 from django.shortcuts import render, redirect, get_object_or_404
@@ -9,7 +8,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.db.models import Value as V
 from django.db.models.functions import Concat
-
+from django.conf.urls import url
 from . import models
 from .models import Boat, Notification, Fine, Owner, RemoveRequest, TechCheckRequest, PaymentRequest, FinePaymentRequest
 from .forms import UserForm, BoatForm
@@ -673,6 +672,11 @@ class Login(View):
         return render(request, "main/login.html", {"email": email})
 
 
+class Public_offer(View):
+    def get(self, request):
+        return render(request, "main/offer.html")
+
+
 class SignUp(View):
     template_name = "main/signup.html"
 
@@ -682,8 +686,8 @@ class SignUp(View):
 
     def post(self, request):
         form = UserForm(request.POST)
-
-        if form.is_valid():
+        display_type = request.POST.get("display_type", None)
+        if form.is_valid() and self.request.recaptcha_is_valid and display_type in ["public_offer"]:
             user = form.save(commit=False)
             user.username = form.cleaned_data['email']
             user.set_password(form.cleaned_data['password'])
@@ -704,6 +708,10 @@ class SignUp(View):
         user_with_same_number = Owner.objects.filter(phone_number=request.POST['phone_number'])
         if user_with_same_number:
             messages.add_message(request, messages.ERROR, "Пользователь с таким номером телефона уже зарегестрирован")
+            return render(request, self.template_name, {"form": form})
+
+        if not display_type in ["public_offer"]:
+            messages.add_message(request, messages.ERROR, "Публичная оферта не была соглашена вами")
             return render(request, self.template_name, {"form": form})
 
         messages.add_message(request, messages.ERROR, "Произошла какая-то ошибка")
