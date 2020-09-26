@@ -190,11 +190,13 @@ class EditRequest(UserView):
         form = BoatForm(request.POST, request.FILES, instance=boat)
 
         if form.is_valid():
-            edited_boat = form.save(commit=False)
-            edited_boat.change_status("wait")
-            edited_boat.save()
+            if self.request.recaptcha_is_valid:
+                edited_boat = form.save(commit=False)
+                edited_boat.change_status("wait")
+                edited_boat.save()
 
-            messages.add_message(request, messages.SUCCESS, "Ваше заявление принято и повторно отправлено!")
+                messages.add_message(request, messages.SUCCESS, "Ваше заявление принято и повторно отправлено!")
+            return redirect("main:boat_requests")
         else:
             messages.add_message(request, messages.ERROR, "Что-то пошло не так")
 
