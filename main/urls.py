@@ -6,9 +6,9 @@ app_name = "main"
 
 
 urlpatterns = [
-    path('', views.RegisterBoat.as_view(), name="index"),
+    path('', check_recaptcha(views.RegisterBoat.as_view()), name="index"),
     path('login/', views.Login.as_view(), name="login"),
-    path('signup/', check_recaptcha(views.SignUp.as_view()), name="signup"),
+    path('signup/', views.SignUp.as_view(), name="signup"),
     path('edit/', views.UserEdit.as_view(), name="user_edit"),
     path('logout/', views.logout_user, name="logout"),
     path('register/', views.RegisterBoat.as_view(), name="register"),
@@ -25,7 +25,7 @@ urlpatterns = [
     path('ships/', views.UserBoats.as_view(), name="boats"),
     path('fines/', views.UserFines.as_view(), name="fines"),
     path('fines/<int:pk>/pay/', views.PayFine.as_view(), name="fine_pay"),
-    path('activate/', views.ActivateAccount.as_view(), name="activate_account"),
+    path('activate/', check_recaptcha(views.ActivateAccount.as_view()), name="activate_account"),
     path('reactivate/', views.reactivate, name="reactivate"),
     path('inspector/request/looking/', views.AddRequestsToLooking.as_view(), name="add_looking_request"),
     path('inspector/inspectingRequests/', views.InspectingRequests.as_view(), name="inspecting_requests"),

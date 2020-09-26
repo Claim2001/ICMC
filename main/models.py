@@ -21,6 +21,8 @@ class Owner(AbstractUser):
     country = models.CharField("Страна", max_length=250, null=True, blank=True)
     city = models.CharField("Город", max_length=250, null=True, blank=True)
     email = models.EmailField("Email", max_length=300, unique=True, null=False)
+    subject = models.CharField("Вид субъекта", max_length=40, null=True, blank=True, choices=[("Физ. лицо", "Физ.лицо"),
+                                                                                              ("Юрид. лицо", "Юрид. лицо")])
     is_inspector = models.BooleanField("Является инспектором", default=False)
     phone_number = models.CharField("Номер телефона", max_length=100, default="", null=True, blank=True)
     is_staff = models.BooleanField(default=False)
@@ -29,6 +31,7 @@ class Owner(AbstractUser):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name} {self.father_name}"
+
 
 
 BOAT_MATERIAL_TYPES = [
@@ -72,7 +75,7 @@ class Boat(models.Model):
     imo = models.CharField("Идентификационный номер (IMO)", max_length=250)
     build_place = models.CharField("Место создания", max_length=300)
     build_year = models.PositiveIntegerField("Год создания")
-    material = models.CharField("Материал корпуса", max_length=200, choices=BOAT_MATERIAL_TYPES)
+    material = models.CharField("Материал корпуса", max_length=200)
     length = models.PositiveIntegerField("Длина (м)")
     width = models.PositiveIntegerField("Ширина (м)")
     height_board = models.PositiveIntegerField("Высота борта (м)")

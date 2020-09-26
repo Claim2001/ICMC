@@ -57,12 +57,8 @@
 
                     <div class="form-element">
                         <p>Материал корпуса</p>
-                        <div class="dropdown">
-                            <select name="material" required id="id_material">
-                                <option value="wood" {% if form.material.value == 'wood' %}selected{% endif %}>Древесина</option>
-                                <option value="other" {% if form.material.value == 'other' %}selected{% endif %}>Другое</option>
-                            </select>
-                        </div>
+                        <input type="text" name="material" maxlength="250" required id="id_material" value="{{ form.material.value|default_if_none:'' }}" class="{% if 'material' in form.instance.get_incorrect_field_names %}incorrect{% endif %}">
+
                     </div>
 
                 </div>
@@ -223,7 +219,8 @@
                 <button class="btn" type="submit" id="submitButton">Сохранить</button>
             </div>
         </div>
-
+            <script src='https://www.google.com/recaptcha/api.js'></script>
+            <div class="form-group g-recaptcha" data-sitekey="6Ld0XtAZAAAAAHmWJ3Tb6rKhsCl6JCaAXSUzOrcq"></div>
     </form>
 
     <script src="{% static 'main/js/boat_form.js' %}"></script>

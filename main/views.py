@@ -71,13 +71,15 @@ class RegisterBoat(UserView):
     def post(self, request):
         form = BoatForm(request.POST, request.FILES)
         if form.is_valid():
-            boat = form.save(commit=False)
-            boat.owner = request.user
-            boat.save()
+            if self.request.recaptcha_is_valid:
+                boat = form.save(commit=False)
+                boat.owner = request.user
+                boat.save()
 
-            messages.add_message(request, messages.SUCCESS, "Ваше заявление принято и находится в очереди")
+                messages.add_message(request, messages.SUCCESS, "Ваше заявление принято и находится в очереди")
+                return redirect("main:index")
+            messages.add_message(request, messages.ERROR, "Капча не выполнена или была выполнена неправильно")
             return redirect("main:index")
-
         messages.add_message(request, messages.WARNING, "Произошла какая-то ошибка")
         return redirect("main:index")
 
@@ -687,7 +689,7 @@ class SignUp(View):
     def post(self, request):
         form = UserForm(request.POST)
         display_type = request.POST.get("display_type", None)
-        if form.is_valid() and self.request.recaptcha_is_valid and display_type in ["public_offer"]:
+        if form.is_valid() and display_type in ["public_offer"]:
             user = form.save(commit=False)
             user.username = form.cleaned_data['email']
             user.set_password(form.cleaned_data['password'])
@@ -777,18 +779,21 @@ class ActivateAccount(View):
 
     def post(self, request):
         if request.user.is_authenticated:
-            user_code = int(request.POST['activation_code'])
+            if request.POST['activation_code'].isdigit():
+                user_code = int(request.POST['activation_code'])
+                if request.user.activation_code == user_code:
+                    if self.request.recaptcha_is_valid:
+                        user = Owner.objects.get(email=request.user.email)
+                        user.activated = True
+                        user.save()
 
-            if request.user.activation_code == user_code:
-                user = Owner.objects.get(email=request.user.email)
-                user.activated = True
-                user.save()
-
-                return redirect("main:index")
-
+                        return redirect("main:index")
+                    messages.add_message(request, messages.ERROR, "Неверная капча")
+                    return render(request, "main/activation.html", {})
+                messages.add_message(request, messages.ERROR, "Неверный код")
+                return render(request, "main/activation.html", {})
             messages.add_message(request, messages.ERROR, "Неверный код")
             return render(request, "main/activation.html", {})
-
         return redirect("main:login")
 
 
