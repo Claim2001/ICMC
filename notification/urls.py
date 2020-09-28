@@ -11,5 +11,7 @@ urlpatterns = [
     path('requests/<int:pk>/techCheck/', views.FirstTechCheck.as_view(), name="tech_check"),
     path('requests/<int:pk>/yearTechCheck/', views.YearTechCheck.as_view(), name="year_tech_check"),
     path('requests/<int:pk>/techCheck/', views.FirstTechCheck.as_view(), name="first_tech_check"),
+    path('requests/<int:pk>/pay/', views.PayRequest.as_view(), name="request_pay"),
+    path('fines/<int:pk>/pay/', views.PayFine.as_view(), name="fine_pay"),
 
 ]

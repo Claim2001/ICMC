@@ -2,7 +2,7 @@ from django.shortcuts import render
 from main.views import UserMixin
 from django.views.generic import View
 from .models import Notification
-from main.models import Fine, RemoveRequest, TechCheckRequest
+from main.models import Fine, RemoveRequest, TechCheckRequest, PaymentRequest, FinePaymentRequest
 from django.http import HttpResponseNotFound
 from boat.models import Boat
 from django.shortcuts import render, redirect, get_object_or_404
@@ -99,3 +99,53 @@ class FirstTechCheck(TechCheckView):
 
 class YearTechCheck(TechCheckView):
     type = "year"
+
+
+class PayRequest(UserView):
+    def post(self, request, pk):
+        boat = get_object_or_404(Boat, pk=pk)
+
+        if boat.status != "payment":
+            message = "Запрос уже отправлен"
+
+            if PaymentRequest.objects.filter(boat=boat, payed=True):
+                message = "Заявление уже оплачено"
+
+            if boat.status == "wait" or boat.status == "look":
+                message = "Заявление еще не прошло проверку"
+
+            messages.add_message(request, messages.WARNING, message)
+            return redirect("notification:boat_requests")
+
+        pay_request = PaymentRequest(boat=boat, owner=boat.owner, check_scan=request.FILES['checkScan'])
+        boat.change_status("payment_check")
+        pay_request.save()
+
+        messages.add_message(request, messages.SUCCESS, "Запрос отправлен и ожидает проверки")
+        return redirect("notification:boat_requests")
+
+
+class PayFine(UserView):
+    def post(self, request, pk):
+        fine = get_object_or_404(Fine, pk=pk)
+
+        if fine.payed:
+            messages.add_message(request, messages.WARNING, "Штраф уже оплачен")
+            return redirect("notification:fines")
+
+        check_scan = request.FILES.get("checkScan")
+        if not check_scan:
+            messages.add_message(request, messages.WARNING, "Необходим скан чека!")
+            return redirect("notification:fines")
+
+        if fine.inspecting:
+            messages.add_message(request, messages.WARNING, "Оплата находится на проверке!")
+            return redirect("notification:fines")
+
+        fine.inspecting = True
+        fine.save()
+
+        FinePaymentRequest(fine=fine, check_scan=check_scan).save()
+
+        messages.add_message(request, messages.SUCCESS, "Оплата отправлена на проверку!")
+        return redirect("notification:fines")
