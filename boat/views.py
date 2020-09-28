@@ -1,6 +1,7 @@
 from django.shortcuts import render
-from main.views import UserView, InspectorView
+from main.views import InspectorView
 from .forms import BoatForm
+from notification.views import UserView
 from django.http import HttpResponseNotFound
 import json
 from .models import Boat

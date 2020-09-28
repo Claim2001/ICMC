@@ -9,6 +9,8 @@ from django.contrib import messages
 from django.db.models import Value as V
 from django.db.models.functions import Concat
 from django.conf.urls import url
+
+from notification.models import Notification
 from . import models
 from .models import Boat, Fine, RemoveRequest, TechCheckRequest, PaymentRequest, FinePaymentRequest
 from .helpers import send_sms
