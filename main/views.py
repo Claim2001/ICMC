@@ -10,12 +10,11 @@ from django.db.models import Value as V
 from django.db.models.functions import Concat
 from django.conf.urls import url
 from . import models
-from .models import Boat, Notification, Fine, Owner, RemoveRequest, TechCheckRequest, PaymentRequest, FinePaymentRequest
-from .forms import UserForm, BoatForm
+from .models import Boat, Notification, Fine, RemoveRequest, TechCheckRequest, PaymentRequest, FinePaymentRequest
 from .helpers import send_sms
+from owner.models import Owner
 
 
-# User views
 class UserMixin(AccessMixin):
     def handle_not_authenticated(self):
         return redirect("main:login")
@@ -55,33 +54,7 @@ class UserView(UserMixin, View):
         return context
 
 
-class RegisterBoat(UserView):
-    def get(self, request):
-        form = BoatForm()
 
-        context = {
-            "user": request.user,
-            "form": form
-        }
-
-        context = self.get_context_with_extra_data(context)
-
-        return render(request, "main/boat_form.html", context)
-
-    def post(self, request):
-        form = BoatForm(request.POST, request.FILES)
-        if form.is_valid():
-            if self.request.recaptcha_is_valid:
-                boat = form.save(commit=False)
-                boat.owner = request.user
-                boat.save()
-
-                messages.add_message(request, messages.SUCCESS, "Ваше заявление принято и находится в очереди")
-                return redirect("main:index")
-            messages.add_message(request, messages.ERROR, "Капча не выполнена или была выполнена неправильно")
-            return redirect("main:index")
-        messages.add_message(request, messages.WARNING, "Произошла какая-то ошибка")
-        return redirect("main:index")
 
 
 class UserBoatRequests(UserView):
@@ -171,36 +144,7 @@ class YearTechCheck(TechCheckView):
     type = "year"
 
 
-class EditRequest(UserView):
-    def get(self, request, pk):
-        boat = get_object_or_404(Boat, owner=request.user, pk=pk)
 
-        if boat.status == "looking":
-            messages.add_message(request, messages.WARNING, "Вы не можете изменять заявления, которые находятся на "
-                                                            "рассмотрении")
-            return redirect("main:boat_requests")
-
-        form = BoatForm(instance=boat)
-        context = self.get_context_with_extra_data({"form": form})
-
-        return render(request, "main/boat_form.html", context)
-
-    def post(self, request, pk):
-        boat = get_object_or_404(Boat, owner=request.user, pk=pk)
-        form = BoatForm(request.POST, request.FILES, instance=boat)
-
-        if form.is_valid():
-            if self.request.recaptcha_is_valid:
-                edited_boat = form.save(commit=False)
-                edited_boat.change_status("wait")
-                edited_boat.save()
-
-                messages.add_message(request, messages.SUCCESS, "Ваше заявление принято и повторно отправлено!")
-            return redirect("main:boat_requests")
-        else:
-            messages.add_message(request, messages.ERROR, "Что-то пошло не так")
-
-        return redirect("main:boat_requests")
 
 
 class PayRequest(UserView):
@@ -256,7 +200,7 @@ class PayFine(UserView):
 # Inspector views
 class InspectorMixin(UserMixin):
     def handle_basic_user(self):
-        return redirect("main:index")
+        return redirect("boat:index")
 
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
@@ -349,39 +293,7 @@ class AddRequestsToLooking(InspectorView):
         return redirect("main:inspector")
 
 
-class RegistrationRequest(InspectorView):
-    def get(self, request, pk):
-        boat = get_object_or_404(Boat, pk=pk)
-        if boat.status != "look":
-            messages.add_message(request, messages.WARNING, "Заявление не находится на рассмотрении")
-            return redirect("main:inspector")
 
-        form = BoatForm(instance=boat)
-
-        context = self.get_context_with_extra_data({"form": form})
-
-        return render(request, "main/registration_request.html", context)
-
-    def post(self, request, pk):
-        incorrect_fields = request.POST.getlist("incorrect_fields")
-        incorrect_fields_json = json.dumps(incorrect_fields)
-
-        boat = get_object_or_404(Boat, pk=pk)
-        if boat.status != "look":
-            messages.add_message(request, messages.WARNING, "Заявление не находится на рассмотрении")
-            return redirect("main:inspector")
-
-        boat.incorrect_fields = incorrect_fields_json
-        boat.save()
-
-        status = "payment"
-
-        if incorrect_fields:
-            status = "rejected"
-
-        boat.change_status(status)
-
-        return redirect("main:inspecting_requests")
 
 
 class PaymentRequests(InspectorView):
@@ -451,40 +363,7 @@ class PayedRequests(InspectorView):
         return render(request, "main/inspector_payed_requests.html", context)
 
 
-class FinalBoatCheck(InspectorView):
-    def get(self, request, pk):
-        boat = get_object_or_404(Boat, pk=pk)
 
-        if boat.status != "inspector_check":
-            messages.add_message(request, messages.WARNING, "Судно еще не прошло оплату")
-            return redirect("main:payed_requests")
-
-        form = BoatForm(instance=boat)
-
-        context = self.get_context_with_extra_data({"form": form})
-        return render(request, "main/inspector_final_boat_check.html", context)
-
-    def post(self, request, pk):
-        boat = get_object_or_404(Boat, pk=pk)
-
-        print(request.POST)
-
-        if boat.status != "inspector_check":
-            messages.add_message(request, messages.WARNING, "Судно еще не прошло оплату")
-            return redirect("main:payed_requests")
-
-        form = BoatForm(request.POST, instance=boat)
-
-        if form.is_valid():
-            boat = form.save(commit=False)
-            boat.change_status("accepted")
-            boat.save()
-
-            messages.add_message(request, messages.SUCCESS, "Судно успешно зарегестрировано в системе")
-            return redirect("main:payed_requests")
-
-        messages.add_message(request, messages.ERROR, "Некоторые поля заполнены неверно")
-        return redirect("main:final_boat_check", pk=pk)
 
 
 class AcceptBoat(InspectorView):
@@ -646,18 +525,6 @@ class AllBoats(InspectorView):
         return render(request, "main/inspector_all_boats.html", context)
 
 
-class InspectorBoat(InspectorView):
-    def get(self, request, pk):
-        boat = get_object_or_404(Boat, pk=pk)
-        form = BoatForm(instance=boat)
-
-        context = self.get_context_with_extra_data({"form": form})
-
-        return render(request, "main/inspector_boat.html", context)
-
-
-# Login, signup and etc.
-
 class Login(View):
     def get(self, request):
         return render(request, "main/login.html", {})
@@ -670,7 +537,7 @@ class Login(View):
 
         if authenticated_user:
             login(request, authenticated_user)
-            return redirect("main:index")
+            return redirect("boat:index")
 
         messages.add_message(request, messages.ERROR, "Неверный эл. адрес или пароль")
         return render(request, "main/login.html", {"email": email})
@@ -681,94 +548,6 @@ class Public_offer(View):
         return render(request, "main/offer.html")
 
 
-class SignUp(View):
-    template_name = "main/signup.html"
-
-    def get(self, request):
-        form = UserForm()
-        return render(request, self.template_name, {"form": form})
-
-    def post(self, request):
-        form = UserForm(request.POST)
-        display_type = request.POST.get("display_type", None)
-        if form.is_valid() and display_type in ["public_offer"]:
-            user = form.save(commit=False)
-            user.username = form.cleaned_data['email']
-            user.set_password(form.cleaned_data['password'])
-            user.activation_code = randint(1000, 9999)
-            user.save()
-
-            login(request, user)
-
-            send_sms(request.user.phone_number, message=str(request.user.activation_code))
-
-            return redirect("main:activate_account")
-
-        user_with_same_email = Owner.objects.filter(email=request.POST['email'])
-        if user_with_same_email:
-            messages.add_message(request, messages.ERROR, "Пользователь с таким эл. адресом уже зарегестрирован")
-            return render(request, self.template_name, {"form": form})
-
-        user_with_same_number = Owner.objects.filter(phone_number=request.POST['phone_number'])
-        if user_with_same_number:
-            messages.add_message(request, messages.ERROR, "Пользователь с таким номером телефона уже зарегестрирован")
-            return render(request, self.template_name, {"form": form})
-
-        if not display_type in ["public_offer"]:
-            messages.add_message(request, messages.ERROR, "Публичная оферта не была соглашена вами")
-            return render(request, self.template_name, {"form": form})
-
-        messages.add_message(request, messages.ERROR, "Произошла какая-то ошибка")
-        return render(request, self.template_name, {"form": form})
-
-
-class UserEdit(LoginRequiredMixin, View):
-    template_name = "main/edit_user.html"
-
-    def get(self, request):
-        if request.user.activated:
-            return redirect("main:index")
-
-        form = UserForm(instance=request.user)
-
-        context = {
-            "form": form
-        }
-
-        return render(request, self.template_name, context)
-
-    def post(self, request):
-        if request.user.activated:
-            return redirect("main:index")
-
-        form = UserForm(request.POST, instance=request.user)
-
-        if form.is_valid():
-            user = form.save(commit=False)
-            user.set_password(form.cleaned_data['password'])
-            user.activation_code = randint(1000, 9999)
-            user.save()
-
-            login(request, user)
-
-            send_sms(request.user.phone_number, message=str(request.user.activation_code))
-
-            return redirect("main:activate_account")
-
-        user_with_same_email = Owner.objects.filter(email=request.POST['email'])
-        if user_with_same_email is not request.user:
-            messages.add_message(request, messages.ERROR, "Пользователь с таким эл. адресом уже зарегестрирован")
-            return render(request, self.template_name, {"form": form})
-
-        user_with_same_number = Owner.objects.filter(phone_number=request.POST['phone_number'])
-        if user_with_same_number is not request.user:
-            messages.add_message(request, messages.ERROR, "Пользователь с таким номером телефона уже зарегестрирован")
-            return render(request, self.template_name, {"form": form})
-
-        messages.add_message(request, messages.ERROR, "Some error")
-        return render(request, self.template_name, {"form": form})
-
-
 class ActivateAccount(View):
     def get(self, request):
         if request.user.is_authenticated and not request.user.activated:
@@ -777,7 +556,7 @@ class ActivateAccount(View):
 
             return render(request, "main/activation.html", {})
 
-        return redirect("main:index")
+        return redirect("boat:index")
 
     def post(self, request):
         if request.user.is_authenticated:
@@ -789,7 +568,7 @@ class ActivateAccount(View):
                         user.activated = True
                         user.save()
 
-                        return redirect("main:index")
+                        return redirect("boat:index")
                     messages.add_message(request, messages.ERROR, "Неверная капча")
                     return render(request, "main/activation.html", {})
                 messages.add_message(request, messages.ERROR, "Неверный код")

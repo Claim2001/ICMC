@@ -15,13 +15,13 @@
         <tbody>
         {% for request in requests %}
             <tr>
-                <th class="first" scope="row"><a href="{% url 'main:register_request' pk=request.pk %}">{{ forloop.counter }}</a></th>
+                <th class="first" scope="row"><a href="{% url 'boat:register_request' pk=request.pk %}">{{ forloop.counter }}</a></th>
                 <td>
-                    <a href="{% url 'main:register_request' pk=request.pk %}">{{ request.owner.first_name }} {{ request.owner.last_name }}</a>
+                    <a href="{% url 'boat:register_request' pk=request.pk %}">{{ request.owner.first_name }} {{ request.owner.last_name }}</a>
                 </td>
-                <td><a href="{% url 'main:register_request' pk=request.pk %}">{{ request.model_type }}</a></td>
-                <td><a href="{% url 'main:register_request' pk=request.pk %}">{{ request.imo }}</a></td>
-                <td><a href="{% url 'main:register_request' pk=request.pk %}">{{ request.engine_number }}</a></td>
+                <td><a href="{% url 'boat:register_request' pk=request.pk %}">{{ request.model_type }}</a></td>
+                <td><a href="{% url 'boat:register_request' pk=request.pk %}">{{ request.imo }}</a></td>
+                <td><a href="{% url 'boat:register_request' pk=request.pk %}">{{ request.engine_number }}</a></td>
             </tr>
         {% endfor %}
     </table>

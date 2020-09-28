@@ -17,13 +17,13 @@
         {% for boat in boats %}
             <tr>
                 <th class="first" scope="row"><a
-                        href="{% url 'main:inspector_boat' pk=boat.pk %}">{{ forloop.counter }}</a></th>
+                        href="{% url 'boat:inspector_boat' pk=boat.pk %}">{{ forloop.counter }}</a></th>
                 <td>
-                    <a href="{% url 'main:inspector_boat' pk=boat.pk %}">{{ boat.owner.first_name }} {{ boat.owner.last_name }}</a>
+                    <a href="{% url 'boat:inspector_boat' pk=boat.pk %}">{{ boat.owner.first_name }} {{ boat.owner.last_name }}</a>
                 </td>
-                <td><a href="{% url 'main:inspector_boat' pk=boat.pk %}">{{ boat.model_type }}</a></td>
-                <td><a href="{% url 'main:inspector_boat' pk=boat.pk %}">{{ boat.imo }}</a></td>
-                <td><a href="{% url 'main:inspector_boat' pk=boat.pk %}">{{ boat.engine_number }}</a></td>
+                <td><a href="{% url 'boat:inspector_boat' pk=boat.pk %}">{{ boat.model_type }}</a></td>
+                <td><a href="{% url 'boat:inspector_boat' pk=boat.pk %}">{{ boat.imo }}</a></td>
+                <td><a href="{% url 'boat:inspector_boat' pk=boat.pk %}">{{ boat.engine_number }}</a></td>
             </tr>
         {% endfor %}
     </table>

@@ -4,7 +4,7 @@
 
     {% block title %}
 
-        <a href="{% url 'main:index' %}">Личный кабинет</a>
+        <a href="{% url 'boat:index' %}">Личный кабинет</a>
 
     {% endblock %}
 
@@ -19,7 +19,7 @@
 
                 <ul class="user-navigation-list">
                     {% with url_name=request.resolver_match.url_name %}
-                    <li class="{% if url_name == 'index' %}selected{% endif %}"><a href="{% url 'main:index' %}">Регистрация маломерного судна</a></li>
+                    <li class="{% if url_name == 'index' %}selected{% endif %}"><a href="{% url 'boat:index' %}">Регистрация маломерного судна</a></li>
                     <li class="{% if url_name == 'boat_requests' %}selected{% endif %}">
 			            <a href="{% url 'main:boat_requests' %}">Мои заявления </a>{% if notifications_count > 0 %}
                         <span class="count">{{ notifications_count }}</span>{% endif %}

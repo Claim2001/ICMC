@@ -99,7 +99,7 @@
 
             <div class="control-button">
                 {% if notification.status == "rejected" %}
-                    <a href="{% url 'main:edit_request' pk=notification.boat.pk %}"
+                    <a href="{% url 'boat:edit_request' pk=notification.boat.pk %}"
                        class="btn {% if notification.watched == False %}btn-warn{% endif %}">
                         Изменить
                     </a>
