@@ -10,7 +10,7 @@ from django.db.models import Value as V
 from django.db.models.functions import Concat
 from django.conf.urls import url
 from . import models
-from .models import Boat, Notification, Fine, RemoveRequest, TechCheckRequest, PaymentRequest, FinePaymentRequest
+from .models import Boat, Fine, RemoveRequest, TechCheckRequest, PaymentRequest, FinePaymentRequest
 from .helpers import send_sms
 from owner.models import Owner
 
@@ -44,104 +44,12 @@ class UserMixin(AccessMixin):
         return super(UserMixin, self).dispatch(request, *args, **kwargs)
 
 
-class UserView(UserMixin, View):
-    login_url = "/login"
-
-    def get_context_with_extra_data(self, context):
-        context["notifications_count"] = Notification.objects.filter(watched=False, owner=self.request.user).count()
-        context["fines_count"] = Fine.objects.filter(owner=self.request.user, payed=False, inspecting=False).count()
-
-        return context
-
-
-
-
-
-class UserBoatRequests(UserView):
-    def get(self, request):
-        notifications = list(Notification.objects.filter(owner=request.user).order_by("-pk")).copy()
-        unwatched_notifications = Notification.objects.filter(owner=request.user, watched=False)
-
-        context = self.get_context_with_extra_data({"notifications": notifications})
-
-        for notification in unwatched_notifications:
-            notification.watched = True
-            notification.save()
-
-        return render(request, "main/user_requests.html", context)
-
-
-class UserBoats(UserView):
-    def get(self, request):
-        boats = Boat.objects.filter(owner=request.user, status="accepted")
-        context = self.get_context_with_extra_data({"boats": boats})
-
-        return render(request, "main/user_boats.html", context)
-
-
-class UserFines(UserView):
-    def get(self, request):
-        fines = Fine.objects.filter(owner=request.user, payed=False, inspecting=False)
-        context = self.get_context_with_extra_data({"fines": fines})
-
-        return render(request, "main/user_fines.html", context)
-
-
-class BoatRemoveRequest(UserView):
-    def get(self, request, pk):
-        return HttpResponseNotFound()
-
-    def post(self, request, pk):
-        boat = get_object_or_404(Boat, owner=request.user, pk=pk)
-
-        if not RemoveRequest.objects.filter(boat=boat):
-            reason = request.POST["reason"]
-            ticket = request.FILES.get("ticket")
-
-            remove_request = RemoveRequest(owner=boat.owner, boat=boat, reason=reason, ticket=ticket)
-            remove_request.save()
-
-            messages.add_message(request, messages.SUCCESS, "Ваше заявление на снятие судна с учета отправлено!")
-
-        else:
-            messages.add_message(request, messages.WARNING, "Ваше заявление на снятие судна с учета уже отправлено!")
-
-        return redirect("main:boats")
-
-
 def logout_user(request):
     logout(request)
     return redirect("main:login")
 
 
-class TechCheckView(UserView):
-    type = ""
 
-    def post(self, request, pk):
-        boat = get_object_or_404(Boat, pk=pk)
-
-        if boat.status != "accepted":
-            messages.add_message(request, messages.WARNING, "Судно еще не зарегистрировано в системе")
-            return redirect("main:boats")
-
-        if TechCheckRequest.objects.filter(boat=boat, check_type=self.type, inspecting=True):
-            messages.add_message(request, messages.WARNING, "Заявление на техосмотр уже находится в очереди")
-            return redirect("main:boats")
-
-        tech_check_request = TechCheckRequest(owner=boat.owner, boat=boat, check_scan=request.FILES['checkScan'],
-                                              check_type=self.type)
-        tech_check_request.save()
-
-        messages.add_message(request, messages.SUCCESS, "Заявление на техосмотр принято и находится в очереди")
-        return redirect("main:boats")
-
-
-class FirstTechCheck(TechCheckView):
-    type = "first"
-
-
-class YearTechCheck(TechCheckView):
-    type = "year"
 
 
 
@@ -161,14 +69,14 @@ class PayRequest(UserView):
                 message = "Заявление еще не прошло проверку"
 
             messages.add_message(request, messages.WARNING, message)
-            return redirect("main:boat_requests")
+            return redirect("notification:boat_requests")
 
         pay_request = PaymentRequest(boat=boat, owner=boat.owner, check_scan=request.FILES['checkScan'])
         boat.change_status("payment_check")
         pay_request.save()
 
         messages.add_message(request, messages.SUCCESS, "Запрос отправлен и ожидает проверки")
-        return redirect("main:boat_requests")
+        return redirect("notification:boat_requests")
 
 
 class PayFine(UserView):
@@ -177,16 +85,16 @@ class PayFine(UserView):
 
         if fine.payed:
             messages.add_message(request, messages.WARNING, "Штраф уже оплачен")
-            return redirect("main:fines")
+            return redirect("notification:fines")
 
         check_scan = request.FILES.get("checkScan")
         if not check_scan:
             messages.add_message(request, messages.WARNING, "Необходим скан чека!")
-            return redirect("main:fines")
+            return redirect("notification:fines")
 
         if fine.inspecting:
             messages.add_message(request, messages.WARNING, "Оплата находится на проверке!")
-            return redirect("main:fines")
+            return redirect("notification:fines")
 
         fine.inspecting = True
         fine.save()
@@ -194,7 +102,7 @@ class PayFine(UserView):
         FinePaymentRequest(fine=fine, check_scan=check_scan).save()
 
         messages.add_message(request, messages.SUCCESS, "Оплата отправлена на проверку!")
-        return redirect("main:fines")
+        return redirect("notification:fines")
 
 
 # Inspector views

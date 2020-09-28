@@ -44,7 +44,7 @@ class EditRequest(UserView):
         if boat.status == "looking":
             messages.add_message(request, messages.WARNING, "Вы не можете изменять заявления, которые находятся на "
                                                             "рассмотрении")
-            return redirect("main:boat_requests")
+            return redirect("notification:boat_requests")
 
         form = BoatForm(instance=boat)
         context = self.get_context_with_extra_data({"form": form})
@@ -63,11 +63,11 @@ class EditRequest(UserView):
 
                 messages.add_message(request, messages.SUCCESS, "Ваше заявление принято и повторно отправлено!")
             messages.add_message(request, messages.ERROR, "Капча неверна или была заполнена неправильно")
-            return redirect("main:boat_requests")
+            return redirect("notification:boat_requests")
         else:
             messages.add_message(request, messages.ERROR, "Что-то пошло не так")
 
-        return redirect("main:boat_requests")
+        return redirect("notification:boat_requests")
 
 
 class RegistrationRequest(InspectorView):

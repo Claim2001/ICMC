@@ -8,6 +8,7 @@ urlpatterns = [
     path('', include("main.urls")),
     path('boat/', include("boat.urls")),
     path('owner/', include("owner.urls")),
+    path('notification/', include("notification.urls")),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
