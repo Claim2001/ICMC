@@ -32,8 +32,6 @@ class RegisterBoat(UserView):
 
                 messages.add_message(request, messages.SUCCESS, "Ваше заявление принято и находится в очереди")
                 return redirect("boat:index")
-            messages.add_message(request, messages.ERROR, "Капча не выполнена или была выполнена неправильно")
-            return redirect("boat:index")
         messages.add_message(request, messages.WARNING, "Произошла какая-то ошибка")
         return redirect("boat:index")
 
@@ -112,7 +110,7 @@ class FinalBoatCheck(InspectorView):
 
         if boat.status != "inspector_check":
             messages.add_message(request, messages.WARNING, "Судно еще не прошло оплату")
-            return redirect("main:inspector_boats")
+            return redirect("main:inspector")
 
         form = BoatForm(instance=boat)
 
@@ -126,7 +124,7 @@ class FinalBoatCheck(InspectorView):
 
         if boat.status != "inspector_check":
             messages.add_message(request, messages.WARNING, "Судно еще не прошло оплату")
-            return redirect("main:inspector_boats")
+            return redirect("main:inspector")
 
         form = BoatForm(request.POST, instance=boat)
 
@@ -136,7 +134,7 @@ class FinalBoatCheck(InspectorView):
             boat.save()
 
             messages.add_message(request, messages.SUCCESS, "Судно успешно зарегестрировано в системе")
-            return redirect("main:inspector_boats")
+            return redirect("main:inspector")
 
         messages.add_message(request, messages.ERROR, "Некоторые поля заполнены неверно")
         return redirect("boat:final_boat_check", pk=pk)

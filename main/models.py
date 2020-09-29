@@ -5,6 +5,7 @@ from django.contrib.auth.models import AbstractUser, PermissionsMixin
 from django.contrib.auth.base_user import AbstractBaseUser
 from .helpers import send_sms
 from owner.models import Owner
+from notification.models import Notification, TECH_CHECK_PAYMENT_REJECTED, TECH_CHECK_PAYMENT_ACCEPTED, REMOVE_REQUEST_ACCEPTED
 
 
 class Fine(models.Model):
