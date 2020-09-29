@@ -1,8 +1,6 @@
-from django.shortcuts import render
-from main.views import InspectorView
+from addrequestions.views import InspectorView
 from .forms import BoatForm
 from notification.views import UserView
-from django.http import HttpResponseNotFound
 import json
 from .models import Boat
 from django.contrib import messages
@@ -74,7 +72,7 @@ class RegistrationRequest(InspectorView):
         boat = get_object_or_404(Boat, pk=pk)
         if boat.status != "look":
             messages.add_message(request, messages.WARNING, "Заявление не находится на рассмотрении")
-            return redirect("main:inspector")
+            return redirect("addrequestions:inspector")
 
         form = BoatForm(instance=boat)
 
@@ -89,7 +87,7 @@ class RegistrationRequest(InspectorView):
         boat = get_object_or_404(Boat, pk=pk)
         if boat.status != "look":
             messages.add_message(request, messages.WARNING, "Заявление не находится на рассмотрении")
-            return redirect("main:inspector")
+            return redirect("addrequestions:inspector")
 
         boat.incorrect_fields = incorrect_fields_json
         boat.save()
@@ -101,7 +99,7 @@ class RegistrationRequest(InspectorView):
 
         boat.change_status(status)
 
-        return redirect("main:inspecting_requests")
+        return redirect("addrequestions:inspecting_requests")
 
 
 class FinalBoatCheck(InspectorView):
@@ -110,7 +108,7 @@ class FinalBoatCheck(InspectorView):
 
         if boat.status != "inspector_check":
             messages.add_message(request, messages.WARNING, "Судно еще не прошло оплату")
-            return redirect("main:inspector")
+            return redirect("addrequestions:inspector")
 
         form = BoatForm(instance=boat)
 
@@ -124,7 +122,7 @@ class FinalBoatCheck(InspectorView):
 
         if boat.status != "inspector_check":
             messages.add_message(request, messages.WARNING, "Судно еще не прошло оплату")
-            return redirect("main:inspector")
+            return redirect("addrequestions:inspector")
 
         form = BoatForm(request.POST, instance=boat)
 
@@ -134,7 +132,7 @@ class FinalBoatCheck(InspectorView):
             boat.save()
 
             messages.add_message(request, messages.SUCCESS, "Судно успешно зарегестрировано в системе")
-            return redirect("main:inspector")
+            return redirect("addrequestions:inspector")
 
         messages.add_message(request, messages.ERROR, "Некоторые поля заполнены неверно")
         return redirect("boat:final_boat_check", pk=pk)

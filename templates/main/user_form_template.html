@@ -90,7 +90,7 @@
 
                     <div class="form-element">
                         <p><label for="id_phone_number">Номер телефона:</label></p>
-                        <input type="tel" name="phone_number" maxlength="100" required id="id_phone_number" pattern="[\+]\d{2}[\(]\d{2}[\)]\d{4}[\-]\d{4}" value="{{ form.phone_number.value|default_if_none:"" }}">
+                        <input type="tel" name="phone_number" maxlength="100" required id="id_phone_number" value="{{ form.phone_number.value|default_if_none:"" }}">
                     </div>
 
                 </div>
@@ -131,7 +131,7 @@
                             <input type="checkbox" name="display_type" value="public_offer">
                             <span class="offer__checkbox">
                                 Нажимая на кнопку подтвердить, вы соглашаетесь с условиями
-                                <a href="{% url "main:public_offer" %}" target="_blank">публичной оферты</a>
+                                <a href="{% url "addrequestions:public_offer" %}" target="_blank">публичной оферты</a>
                             </span>
                         </form>
                     </div>

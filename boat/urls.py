@@ -1,5 +1,5 @@
 from django.urls import path
-from main.decorators import check_recaptcha
+from addrequestions.decorators import check_recaptcha
 from . import views
 app_name = "boat"
 

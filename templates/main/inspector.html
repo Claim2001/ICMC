@@ -9,7 +9,7 @@
         </div>
     {% endfor %}
 
-    <form action="{% url 'main:add_looking_request' %}" method="post">
+    <form action="{% url 'addrequestions:add_looking_request' %}" method="post">
         {% csrf_token %}
 
         <div class="table-container">

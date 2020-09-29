@@ -1,7 +1,8 @@
 from django.urls import path
-from .decorators import check_recaptcha
-from . import views
-app_name = "main"
+from addrequestions.decorators import check_recaptcha
+from addrequestions import views
+
+app_name = "addrequestions"
 
 
 urlpatterns = [

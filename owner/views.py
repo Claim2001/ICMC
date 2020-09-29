@@ -1,10 +1,9 @@
-from django.shortcuts import render
 from .forms import UserForm
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from random import randint
 from django.views.generic import View
-from django.contrib.auth import authenticate, login, logout
-from main.helpers import send_sms
+from django.contrib.auth import login
+from addrequestions.helpers import send_sms
 from .models import Owner
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -31,7 +30,7 @@ class SignUp(View):
 
             send_sms(request.user.phone_number, message=str(request.user.activation_code))
 
-            return redirect("main:activate_account")
+            return redirect("addrequestions:activate_account")
 
         user_with_same_email = Owner.objects.filter(email=request.POST['email'])
         if user_with_same_email:
@@ -82,7 +81,7 @@ class UserEdit(LoginRequiredMixin, View):
 
             send_sms(request.user.phone_number, message=str(request.user.activation_code))
 
-            return redirect("main:activate_account")
+            return redirect("addrequestions:activate_account")
 
         user_with_same_email = Owner.objects.filter(email=request.POST['email'])
         if user_with_same_email is not request.user:

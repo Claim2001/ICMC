@@ -1,34 +1,32 @@
-import json
 from random import randint
-from django.http import HttpResponseNotFound
-from django.contrib.auth.mixins import LoginRequiredMixin, AccessMixin
+from django.contrib.auth.mixins import AccessMixin
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import View
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.db.models import Value as V
 from django.db.models.functions import Concat
-from django.conf.urls import url
 from notification.models import Notification
-from . import models
-from .models import Boat, RemoveRequest, TechCheckRequest, PaymentRequest
-from .helpers import send_sms
+from addrequestions import models
+from addrequestions.models import RemoveRequest, TechCheckRequest, PaymentRequest
+from addrequestions.helpers import send_sms
 from owner.models import Owner
-from fine.models import Fine,FinePaymentRequest
+from fine.models import FinePaymentRequest
+from boat.models import Boat
 
 
 class UserMixin(AccessMixin):
     def handle_not_authenticated(self):
-        return redirect("main:login")
+        return redirect("addrequestions:login")
 
     def handle_user_inspector(self):
-        return redirect("main:inspector")
+        return redirect("addrequestions:inspector")
 
     def handle_user_admin(self):
         return redirect("/admin")
 
     def handle_not_activated(self):
-        return redirect("main:activate_account")
+        return redirect("addrequestions:activate_account")
 
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
@@ -48,7 +46,7 @@ class UserMixin(AccessMixin):
 
 def logout_user(request):
     logout(request)
-    return redirect("main:login")
+    return redirect("addrequestions:login")
 
 
 # Inspector views
@@ -130,7 +128,7 @@ class AcceptRemoveRequest(InspectorView):
         remove_request.boat.delete()
 
         messages.add_message(request, messages.SUCCESS, "Судно успешно снято с учета и удалено с системы!")
-        return redirect("main:remove_requests")
+        return redirect("addrequestions:remove_requests")
 
 
 class AddRequestsToLooking(InspectorView):
@@ -144,10 +142,7 @@ class AddRequestsToLooking(InspectorView):
         if waiting_requests_ids:
             messages.add_message(request, messages.SUCCESS, "Добавлено в 'рассматриваемые'")
 
-        return redirect("main:inspector")
-
-
-
+        return redirect("addrequestions:inspector")
 
 
 class PaymentRequests(InspectorView):
@@ -177,7 +172,7 @@ class AcceptPayment(InspectorView):
         notification.save()
 
         messages.add_message(request, messages.SUCCESS, "Оплата принята и пользователь уведомлен!")
-        return redirect("main:payment_requests")
+        return redirect("addrequestions:payment_requests")
 
 
 class RejectPayment(InspectorView):
@@ -189,7 +184,7 @@ class RejectPayment(InspectorView):
         payment.boat.change_status("payment_rejected")
 
         messages.add_message(request, messages.SUCCESS, "Оплата отклонена и пользователь уведомлен!")
-        return redirect("main:payment_requests")
+        return redirect("addrequestions:payment_requests")
 
 
 class PayedRequests(InspectorView):
@@ -226,13 +221,13 @@ class AcceptBoat(InspectorView):
 
         if boat.status != "inspector_check":
             messages.add_message(request, messages.WARNING, "Судно еще не прошло оплату")
-            return redirect("main:inspector")
+            return redirect("addrequestions:inspector")
 
         boat.status = "accepted"
         boat.save()
 
         messages.add_message(request, messages.SUCCESS, "Судно успешно зарегестрировано в системе!")
-        return redirect("main:payed_requests")
+        return redirect("addrequestions:payed_requests")
 
 
 class AcceptTechCheckPayment(InspectorView):
@@ -240,7 +235,7 @@ class AcceptTechCheckPayment(InspectorView):
         tech_check_request = get_object_or_404(TechCheckRequest, pk=pk)
         if tech_check_request.payed:
             messages.add_message(request, messages.WARNING, "Заявление уже принято!")
-            return redirect("main:payment_requests")
+            return redirect("addrequestions:payment_requests")
 
         tech_check_request.payed = True
         tech_check_request.inspecting = False
@@ -251,7 +246,7 @@ class AcceptTechCheckPayment(InspectorView):
                      extra_data=request.POST['address']).save()
 
         messages.add_message(request, messages.SUCCESS, "Оплата принята!")
-        return redirect("main:payment_requests")
+        return redirect("addrequestions:payment_requests")
 
 
 class RejectTechCheckPayment(InspectorView):
@@ -259,7 +254,7 @@ class RejectTechCheckPayment(InspectorView):
         tech_check_request = get_object_or_404(TechCheckRequest, pk=pk)
         if tech_check_request.payed:
             messages.add_message(request, messages.WARNING, "Заявление уже принято!")
-            return redirect("main:payment_requests")
+            return redirect("addrequestions:payment_requests")
 
         tech_check_request.inspecting = False
         tech_check_request.save()
@@ -268,7 +263,7 @@ class RejectTechCheckPayment(InspectorView):
                      status=models.TECH_CHECK_PAYMENT_REJECTED).save()
 
         messages.add_message(request, messages.SUCCESS, "Оплата отклонена!")
-        return redirect("main:payment_requests")
+        return redirect("addrequestions:payment_requests")
 
 
 class AllBoats(InspectorView):
@@ -326,7 +321,7 @@ class ActivateAccount(View):
     def get(self, request):
         if request.user.is_authenticated and not request.user.activated:
             if request.user.is_inspector:
-                return redirect("main:inspector")
+                return redirect("addrequestions:inspector")
 
             return render(request, "main/activation.html", {})
 
@@ -349,16 +344,16 @@ class ActivateAccount(View):
                 return render(request, "main/activation.html", {})
             messages.add_message(request, messages.ERROR, "Неверный код")
             return render(request, "main/activation.html", {})
-        return redirect("main:login")
+        return redirect("addrequestions:login")
 
 
 def reactivate(request):
     if not request.user.is_authenticated:
-        return redirect("main:login")
+        return redirect("addrequestions:login")
 
     request.user.activation_code = randint(1000, 9999)
     request.user.save()
 
     send_sms(request.user.phone_number, message=str(request.user.activation_code))
 
-    return redirect("main:activate_account")
+    return redirect("addrequestions:activate_account")

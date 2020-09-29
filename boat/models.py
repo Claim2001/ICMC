@@ -1,7 +1,7 @@
 from django.db import models
-import main.models
+import addrequestions.models
 import json
-from main.helpers import send_sms
+from addrequestions.helpers import send_sms
 # Create your models here.
 BOAT_STATUS = [
     ("wait", "wait"),

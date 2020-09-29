@@ -3,7 +3,7 @@
 
 {% block header %}
     <h1><a href="{% url 'boat:index' %}">Активация пользователя</a></h1>
-    <a href="{% url 'main:logout' %}" class="logout">
+    <a href="{% url 'addrequestions:logout' %}" class="logout">
         <img src="{% static 'main/img/exit.svg' %}" alt="" class="exit-icon">
         Выход
     </a>
@@ -37,7 +37,7 @@
                 </div>
 
                 <div class="loginFormLink">
-                    <a href="{% url 'main:reactivate' %}">Отправить код повторно</a><br>
+                    <a href="{% url 'addrequestions:reactivate' %}">Отправить код повторно</a><br>
                     <a href="{% url 'owner:user_edit' %}">Изменить личные данные</a>
                 </div>
                 <script src='https://www.google.com/recaptcha/api.js'></script>

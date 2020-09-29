@@ -1,6 +1,5 @@
-from django.shortcuts import render
 from boat.models import Boat
-from main.views import InspectorView, search_boat_by_owner
+from addrequestions.views import InspectorView, search_boat_by_owner
 from .models import Fine, FinePaymentRequest
 from django.http import HttpResponseNotFound
 from django.shortcuts import render, redirect, get_object_or_404
@@ -56,7 +55,7 @@ class AcceptFinePayment(InspectorView):
         fine_payment = get_object_or_404(FinePaymentRequest, pk=pk)
         if fine_payment.payed:
             messages.add_message(request, messages.SUCCESS, "Нарушение уже оплачено")
-            return redirect("main:payment_requests")
+            return redirect("addrequestions:payment_requests")
 
         fine_payment.payed = True
         fine_payment.inspecting = False
@@ -67,7 +66,7 @@ class AcceptFinePayment(InspectorView):
         fine_payment.fine.save()
 
         messages.add_message(request, messages.SUCCESS, "Оплата принята!")
-        return redirect("main:payment_requests")
+        return redirect("addrequestions:payment_requests")
 
 
 class RejectFinePayment(InspectorView):
@@ -75,7 +74,7 @@ class RejectFinePayment(InspectorView):
         fine_payment = get_object_or_404(FinePaymentRequest, pk=pk)
         if fine_payment.payed:
             messages.add_message(request, messages.SUCCESS, "Нарушение уже оплачено")
-            return redirect("main:payment_requests")
+            return redirect("addrequestions:payment_requests")
 
         fine_payment.inspecting = False
         fine_payment.save()
@@ -84,4 +83,4 @@ class RejectFinePayment(InspectorView):
         fine_payment.fine.save()
 
         messages.add_message(request, messages.SUCCESS, "Оплата отклонена!")
-        return redirect("main:payment_requests")
+        return redirect("addrequestions:payment_requests")

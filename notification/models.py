@@ -1,10 +1,18 @@
 from django.db import models
-from boat.models import BOAT_STATUS
 
 TECH_CHECK_PAYMENT_ACCEPTED = "tech_check_payment_accepted"
 TECH_CHECK_PAYMENT_REJECTED = "tech_check_payment_rejected"
 REMOVE_REQUEST_ACCEPTED = "remove_request_accepted"
-
+BOAT_STATUS = [
+    ("wait", "wait"),
+    ("look", "look"),
+    ("rejected", "rejected"),
+    ("payment", "waiting for payment"),
+    ("payment_check", "waiting for payment check"),
+    ("payment_rejected", "payment rejected"),
+    ("inspector_check", "waiting for data check"),
+    ("accepted", "accepted"),
+]
 NOTIFICATION_STATUSES = [(TECH_CHECK_PAYMENT_ACCEPTED, "tech check payment accepted"),
                          (TECH_CHECK_PAYMENT_REJECTED, "tech check payment rejected"),
                          (REMOVE_REQUEST_ACCEPTED, "remove request accepted")
