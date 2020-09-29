@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'boat',
     'owner',
     'notification',
+    'fine',
 ]
 
 MIDDLEWARE = [

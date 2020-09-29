@@ -11,9 +11,10 @@ from django.db.models.functions import Concat
 from django.conf.urls import url
 from notification.models import Notification
 from . import models
-from .models import Boat, Fine, RemoveRequest, TechCheckRequest, PaymentRequest, FinePaymentRequest
+from .models import Boat, RemoveRequest, TechCheckRequest, PaymentRequest
 from .helpers import send_sms
 from owner.models import Owner
+from fine.models import Fine,FinePaymentRequest
 
 
 class UserMixin(AccessMixin):
@@ -232,86 +233,6 @@ class AcceptBoat(InspectorView):
 
         messages.add_message(request, messages.SUCCESS, "Судно успешно зарегестрировано в системе!")
         return redirect("main:payed_requests")
-
-
-class AddFine(InspectorView):
-    def get(self, request):
-        full_name = request.GET.get("full_name", "")
-        imo = request.GET.get("imo", "")
-        engine_number = request.GET.get("engine_number", "")
-
-        boats = []
-        if full_name or imo or engine_number:
-            boats = Boat.objects.filter(
-                status="accepted",
-                imo__icontains=imo,
-                engine_number__icontains=engine_number
-            )
-
-            if request.GET.get("full_name"):
-                boats = search_boat_by_owner(full_name, boats)
-
-        context = self.get_context_with_extra_data({
-            "boats": boats,
-            "full_name": full_name,
-            "imo": imo,
-            "engine_number": engine_number
-        })
-
-        return render(request, "main/inspector_add_fine.html", context)
-
-    def post(self, request):
-        boat = get_object_or_404(Boat, pk=request.POST['boat_id'])
-        if boat.status != "accepted":
-            return HttpResponseNotFound("not found")
-
-        Fine(
-            owner=boat.owner,
-            boat=boat,
-            reason=request.POST.get("reason"),
-            amount=request.POST.get("amount")
-        ).save()
-
-        context = self.get_context_with_extra_data({})
-
-        messages.add_message(request, messages.SUCCESS, "Нарушение зарегистрировано и отправлено пользователю")
-        return render(request, "main/inspector_add_fine.html", context)
-
-
-class AcceptFinePayment(InspectorView):
-    def get(self, request, pk):
-        fine_payment = get_object_or_404(FinePaymentRequest, pk=pk)
-        if fine_payment.payed:
-            messages.add_message(request, messages.SUCCESS, "Нарушение уже оплачено")
-            return redirect("main:payment_requests")
-
-        fine_payment.payed = True
-        fine_payment.inspecting = False
-        fine_payment.save()
-
-        fine_payment.fine.payed = True
-        fine_payment.fine.inspecting = False
-        fine_payment.fine.save()
-
-        messages.add_message(request, messages.SUCCESS, "Оплата принята!")
-        return redirect("main:payment_requests")
-
-
-class RejectFinePayment(InspectorView):
-    def get(self, request, pk):
-        fine_payment = get_object_or_404(FinePaymentRequest, pk=pk)
-        if fine_payment.payed:
-            messages.add_message(request, messages.SUCCESS, "Нарушение уже оплачено")
-            return redirect("main:payment_requests")
-
-        fine_payment.inspecting = False
-        fine_payment.save()
-
-        fine_payment.fine.inspecting = False
-        fine_payment.fine.save()
-
-        messages.add_message(request, messages.SUCCESS, "Оплата отклонена!")
-        return redirect("main:payment_requests")
 
 
 class AcceptTechCheckPayment(InspectorView):

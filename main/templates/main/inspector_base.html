@@ -26,7 +26,7 @@
                             <li class="{% if url_name == 'payed_requests' or url_name == 'final_boat_check' %}selected{% endif %}"><a href="{% url 'main:payed_requests' %}">Оплаченные заявления</a></li>
                             <li class="{% if url_name == 'remove_requests' %}selected{% endif %}"><a href="{% url 'main:remove_requests' %}">Заявления на {% if remove_requests_count > 0 %}<span class="count">{{ remove_requests_count}}</span>{% endif %} снятие с учета</a></li>
                             <li class="{% if url_name == 'payment_requests' %}selected{% endif %}"><a href="{% url 'main:payment_requests' %}">Оплата</a> {% if payment_requests_count > 0 %}<span class="count">{{ payment_requests_count }}</span>{% endif %}</li>
-                            <li class="{% if url_name == 'add_fine' %}selected{% endif %}"><a href="{% url 'main:add_fine' %}">Зарегистрировать нарушение</a></li>
+                            <li class="{% if url_name == 'add_fine' %}selected{% endif %}"><a href="{% url 'fine:add_fine' %}">Зарегистрировать нарушение</a></li>
                         {% endwith %}
                     </ul>
 

@@ -9,6 +9,7 @@ urlpatterns = [
     path('', include("boat.urls")),
     path('', include("owner.urls")),
     path('', include("notification.urls")),
+    path('', include("fine.urls")),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

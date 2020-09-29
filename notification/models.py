@@ -1,5 +1,5 @@
 from django.db import models
-from boat.models import BOAT_STATUS, Boat
+from boat.models import BOAT_STATUS
 
 TECH_CHECK_PAYMENT_ACCEPTED = "tech_check_payment_accepted"
 TECH_CHECK_PAYMENT_REJECTED = "tech_check_payment_rejected"
@@ -13,7 +13,7 @@ NOTIFICATION_STATUSES = [(TECH_CHECK_PAYMENT_ACCEPTED, "tech check payment accep
 
 class Notification(models.Model):
     owner = models.ForeignKey(to='owner.Owner', on_delete=models.CASCADE)
-    boat = models.ForeignKey(Boat, null=True, blank=True, on_delete=models.CASCADE)
+    boat = models.ForeignKey(to='boat.Boat', null=True, blank=True, on_delete=models.CASCADE)
     status = models.CharField(max_length=250, choices=NOTIFICATION_STATUSES)
     watched = models.BooleanField(default=False)
     extra_data = models.TextField(null=True, blank=True)

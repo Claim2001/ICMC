@@ -2,11 +2,12 @@ from django.shortcuts import render
 from main.views import UserMixin
 from django.views.generic import View
 from .models import Notification
-from main.models import Fine, RemoveRequest, TechCheckRequest, PaymentRequest, FinePaymentRequest
+from main.models import RemoveRequest, TechCheckRequest, PaymentRequest
 from django.http import HttpResponseNotFound
 from boat.models import Boat
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+from fine.models import Fine, FinePaymentRequest
 
 
 class UserView(UserMixin, View):
