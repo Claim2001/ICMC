@@ -1,0 +1,13 @@
+README.md
+setup.py
+icmc/manage.py
+icmc.egg-info/PKG-INFO
+icmc.egg-info/SOURCES.txt
+icmc.egg-info/dependency_links.txt
+icmc.egg-info/requires.txt
+icmc.egg-info/top_level.txt
+icmc/ICMC/__init__.py
+icmc/ICMC/asgi.py
+icmc/ICMC/settings.py
+icmc/ICMC/urls.py
+icmc/ICMC/wsgi.py
