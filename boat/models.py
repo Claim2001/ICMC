@@ -2,7 +2,8 @@ from django.db import models
 import addrequestions.models
 import json
 from addrequestions.helpers import send_sms
-# Create your models here.
+from notification.models import Notification
+
 BOAT_STATUS = [
     ("wait", "wait"),
     ("look", "look"),
@@ -77,7 +78,7 @@ class Boat(models.Model):
             self.save()
 
             if self.status not in not_send_notification_statuses:
-                notification = main.models.Notification(owner=self.owner, boat=self, status=self.status)
+                notification = Notification(owner=self.owner, boat=self, status=self.status)
                 notification.save()
 
                 sms_message = get_message_text_by_status(status=self.status,
